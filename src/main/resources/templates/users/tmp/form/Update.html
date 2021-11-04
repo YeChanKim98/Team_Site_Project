@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>Title</title>
+	<meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
+	<title>Join</title>
 </head>
 <body>
+<div class="container">
+	<form  class="/users/Update" method="post">
+		<div calss="form-group">
+			<label for="id">ID</label>
+			<input type="text" id="id" name="id" th:value="${id}"><br>
+			<label for="name">Name</label>
+			<input type="text" id="name" name="name" th:value="${name}"><br>
+			<label for="nick">닉네임</label>
+			<input type="text" id="nick" name="nick" th:value="${nick}">
 
+			<input type="hidden" id="email" name="email" th:value="test">
+			<input type="hidden" id="pw" name="pw" th:value="Update_Email">
+			<input type="hidden" id="phone" name="phone" th:value="111-1111-1111">
+		</div>
+		<button type="submit">Join</button>
+	</form>
+</div>
 </body>
 </html>
+

@@ -1,11 +1,13 @@
 package com.teamboard.TeamBoard.user;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
+@Transactional
 public class User {
 // Column어노테이션 생략 : DB와 객체내부 변수이름 통일
     @Id
@@ -46,9 +48,7 @@ public class User {
         this.pw = pw;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
     public void setName(String name) {
         this.name = name;

@@ -1,6 +1,6 @@
 package com.teamboard.TeamBoard.controller;
 
-import com.teamboard.TeamBoard.user.form.FindForm;
+import com.teamboard.TeamBoard.user.form.SelOneForm;
 import com.teamboard.TeamBoard.user.form.JoinForm;
 import com.teamboard.TeamBoard.user.User;
 import com.teamboard.TeamBoard.user.UserService;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -45,7 +46,8 @@ public class UserController {
 
 
     // Select All User : 검색 후 바로 출력
-    @GetMapping("/users/SelAll")
+    @PostMapping("/users/SelAll")
+    @RequestMapping("/users/SelAll")
     public String findAllUser(Model userList){ // 인자가 들어가는 이유
         List<User> users = userService.findAllUser();
         userList.addAttribute("users",users);
@@ -53,38 +55,50 @@ public class UserController {
     }
 
 
-    // Select One User : ID / Email 받은 후 결과 리턴
+    // Select One User : ID 받은 후 결과 리턴
     @GetMapping("/users/SelOne")
     public String findForm(){
-        return "users/tmp/SelOneForm";
+        return "users/tmp/form/SelOneForm";
     }
 
 
     @PostMapping("/users/SelOne") // 리퀘스트 맵핑?
-    public String findOneUser(@RequestParam("findForm") FindForm findForm, Model model){ // FindForm 제작
-        Optional<User> user = userService.findOneUser(findForm.getId());
-        model.addAttribute("user",user);
-        return "users/tmp/SelOne";
+    public String findOneUser(@RequestParam("id") String id, Model model){ // 리퀘스트 파라미터 어노테이션으로 인해 폼html에서 타임리프 사용
+        Optional<User> user = userService.findOneUser(id);
+        model.addAttribute("input",id); // 확인용 속성추가 : 일단 유지
+        model.addAttribute("user",user.get()); // 옵셔널로 감싸져 있으므로 get메소드를 통해서 꺼내줘야함
+        return "/users/tmp/SelOne";
     }
 
 
-    // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서 삭제
+    // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서s 삭제
+    // GetMapping은 임시용. 실제 유저는 버튼클릭 후 인증을 통해서 바로 삭제
     @GetMapping("/users/Delete")
-    public String delete(){
-        return "redirect:/";
+    public String deleteForm(){
+        return "/users/tmp/form/DeleteForm";
+    }
+
+    @PostMapping("/users/Delete") // 리퀘스트 맵핑?
+    public String delete(@RequestParam("id") String id){
+        userService.deleteUser(id);
+        return "redirect:/users/SelAll";
     }
 
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
     // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
     @GetMapping("/users/Update")
-    public String list(Model model){
-        // 값을 받아와서 모델에 넣어서 전달
-        return "users/tmp/Update";
+    public String updateForm(Model model){
+        User user = userService.findOneUser("test").get(); // 업데이트 테스트용 임시 케이스 -> 원래는 현재 유저 ID를 받아와서 입력
+        model.addAttribute("id",user.getId());
+        model.addAttribute("name",user.getName());
+        model.addAttribute("nick",user.getNick());
+        return "users/tmp/form/Update";
     }
 
     @PostMapping("/users/Update")
-    public String findOneUser(@RequestParam("updateForm") UpdateForm updateForm){ // UpdateForm 제작
-        
-        return "users/tmp/Update"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함
+    public String findOneUser(UpdateForm updateForm){
+        System.out.println("입력된 UpdateForm 값 확인"+updateForm.toString());
+        userService.update(updateForm);
+        return "redirect:/users/SelAll"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함
     }
 }

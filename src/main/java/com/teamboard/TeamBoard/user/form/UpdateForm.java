@@ -2,11 +2,20 @@ package com.teamboard.TeamBoard.user.form;
 
 public class UpdateForm {
 
-    private String id;
-    private String pw;
-    private String name;
-    private String email;
-    private String nick;
+    private String id = null;
+    private String pw = null;
+    private String name = null;
+    private String email = null;
+    private String nick = null;
+    private String phone = null;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getId() {
         return id;
