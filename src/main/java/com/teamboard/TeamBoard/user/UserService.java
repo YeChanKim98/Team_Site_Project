@@ -22,18 +22,14 @@ public class UserService {
 
     // 가입
     public String join(User user) {
-        ChkOver(user);
-        userRepository.join(user);
-        return user.getName();
-    }
-
-    // ID중복확인
-    private void ChkOver(User user) {
-        userRepository.findById(user.getId()) // ifPresent는 값이 있을경우 원하는 동작을 하도록 지정한다
-                .ifPresent(m -> {
-                    // 중복으로 확인시 동작 : 현재는 익셉션
-                    throw new IllegalStateException("Already Exist Account !");
-                });
+        int chkRes = ChkOver_Id(user);
+        if(chkRes==1) {
+            userRepository.join(user);
+            return user.getName();
+        }
+        else{
+            return "Join Fail";
+        }
     }
 
     // 모든 유저 출력
@@ -55,6 +51,30 @@ public class UserService {
         return userRepository.update(user);
     }
 
+    // 추후 통합사용 가능여부 확인
+    // ID 중복확인
+    private int ChkOver_Id(User user) {
+        if(userRepository.findById(user.getId()).isPresent()){
+            return -1;
+        }
+        return 1;
+    }
+
+    // 닉네임 중복확인
+    private int ChkOver_Nick(User user) {
+        if(userRepository.findById(user.getNick()).isPresent()){
+            return -2;
+        }
+        return 1;
+    }
+
+    // Email 중복확인
+    private int ChkOver_Email(User user) {
+        if(userRepository.findById(user.getEmail()).isPresent()){
+            return -3;
+        }
+        return 1;
+    }
 
 }
 

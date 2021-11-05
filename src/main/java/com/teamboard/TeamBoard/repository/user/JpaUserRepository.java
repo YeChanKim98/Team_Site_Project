@@ -25,18 +25,14 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public User join(User user) {
         em.persist(user);
-        // 오토 인크리먼트 재정렬 추가
         return user;
     }
 
     @Override
-//    @Modifying
-//    @Transactional
     public void delete(String id) {
         em.createQuery("delete from User u where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("id",id)
                 .executeUpdate();
-        // 삭제 후 검증할까....?
     }
 
     @Override
@@ -44,11 +40,11 @@ public class JpaUserRepository implements UserRepository {
         //UPDATE [테이블] SET [열] = '변경할값' WHERE [조건]
         int updateRes = em.createQuery("update User u set u.id=:id, u.pw=:pw, u.name=:name,u.email =:email, u.nick=:nick, u.phone=:phone where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("id",user.getId())
-                .setParameter("pw","Update Pass") // 패스워드 받아와서 변수로 추가
+                .setParameter("pw","Update Pass")
                 .setParameter("name",user.getName())
-                .setParameter("email",user.getEmail()) // Email 정정시 인증기능 추가
-                .setParameter("nick",user.getNick()) // Email 정정시 인증기능 추가
-                .setParameter("phone",user.getPhone()) // Email 정정시 인증기능 추가
+                .setParameter("email",user.getEmail())
+                .setParameter("nick",user.getNick())
+                .setParameter("phone",user.getPhone())
                 .executeUpdate();
         if(updateRes==1){
             System.out.println("회원정보 변경 성공!");
@@ -64,7 +60,7 @@ public class JpaUserRepository implements UserRepository {
                 .setParameter("id",id)
                 .getResultList().stream().findAny();
 //        User user = em.find(User.class,id); // 인자로 어떠한 엔티티를 찾을것인지, PK 총 2개의 인자를 넘겨서 select를 실행한다
-        return user; // 널 값이 있을 수 있으니
+        return user;
     }
 
 

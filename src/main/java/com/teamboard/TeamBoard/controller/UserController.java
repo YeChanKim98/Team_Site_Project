@@ -8,10 +8,7 @@ import com.teamboard.TeamBoard.user.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -86,19 +83,20 @@ public class UserController {
 
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
     // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
-    @GetMapping("/users/Update")
-    public String updateForm(Model model){
-        User user = userService.findOneUser("test").get(); // 업데이트 테스트용 임시 케이스 -> 원래는 현재 유저 ID를 받아와서 입력
+    @GetMapping("/users/Update/{updateId}")
+    public String updateForm(@PathVariable String updateId, Model model){
+        User user = userService.findOneUser(updateId).get(); // 업데이트 테스트용 임시 케이스 -> 원래는 현재 유저 ID를 받아와서 입력
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getName());
         model.addAttribute("nick",user.getNick());
         return "users/tmp/form/Update";
     }
 
-    @PostMapping("/users/Update")
-    public String findOneUser(UpdateForm updateForm){
-        System.out.println("입력된 UpdateForm 값 확인"+updateForm.toString());
-        userService.update(updateForm);
+    @PostMapping("/users/Update/{updateId}")
+    public String update(UpdateForm updateForm){
+        int res  = userService.update(updateForm); // 1성공 0실패
+        if(res==1) System.out.println("계정정보 업데이트 성공!");
+        else System.out.println("계정정보 업데이트 실패!");
         return "redirect:/users/SelAll"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함
     }
 }

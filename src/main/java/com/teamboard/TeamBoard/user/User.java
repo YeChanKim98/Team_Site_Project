@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Transactional
@@ -19,8 +20,7 @@ public class User {
     private String email;
     private String nick;
     private String phone;
-    @CreatedDate
-    private Date date;
+    private LocalDateTime date; // 게터 세터 없음
 
     
     // 게터세터는 필요여부 확인 후 삭제
@@ -78,11 +78,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Date getDate() {
-        return date;
-    }
+    public LocalDateTime getDate() { return date; }
 
-    public void setDate(Date date) {
-        this.date = date;
+    // 시간 자동 생성
+    @PrePersist
+    public void createDate(){
+        this.date = LocalDateTime.now();
     }
 }
