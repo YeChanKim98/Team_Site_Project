@@ -2,7 +2,6 @@ package com.teamboard.TeamBoard.user;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -26,10 +25,6 @@ public class User {
     // 게터세터는 필요여부 확인 후 삭제
     public int getPid() {
         return pid;
-    }
-
-    public void setPid(int pid) {
-        this.pid = pid;
     }
 
     public String getId() {

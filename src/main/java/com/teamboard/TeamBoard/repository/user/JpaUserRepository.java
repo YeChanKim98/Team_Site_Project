@@ -4,7 +4,6 @@ import com.teamboard.TeamBoard.user.User;
 import com.teamboard.TeamBoard.user.form.UpdateForm;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
