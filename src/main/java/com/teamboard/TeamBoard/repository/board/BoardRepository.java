@@ -1,16 +1,15 @@
 package com.teamboard.TeamBoard.repository.board;
 
-import com.teamboard.TeamBoard.board.Board;
+import com.teamboard.TeamBoard.board.Form.WriteForm;
+import com.teamboard.TeamBoard.board.free_Board;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BoardRepository {
-    Board write(Board board);
+    void write(free_Board freeBoard);
     int delete(int fboard_num);
-    int update(int fboard_num);
-    List<Board> findAll();
-    Board findOne(int fboard_num);
-    Board findByContent(String keyword);
-    Board findByWriter(String keyword);
+    int update(WriteForm writeForm);
+    free_Board view(int fboard_num);
+    List<free_Board> findAll();
+    List<free_Board> findBoard(String keyword, String std);
 }

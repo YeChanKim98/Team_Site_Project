@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
-    User join(User user);
-    void delete(String id); // User객체를 넘길 필요가 있는지 확인
+    User join(User user); // 리턴 값 void로 해도 됨
+    int delete(String id);
     int update(UpdateForm user);
     Optional<User> findById(String id);
     Optional<User> findByName(String name);

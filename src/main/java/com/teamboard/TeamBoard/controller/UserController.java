@@ -9,16 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class UserController {
 
+    // 성공 후 반환에 대한 전반적인 재작성 필요
     private final UserService userService;
-
-
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -77,8 +75,9 @@ public class UserController {
 
     @PostMapping("/users/Delete") // 리퀘스트 맵핑?
     public String delete(@RequestParam("id") String id){
-        userService.deleteUser(id);
-        return "redirect:/users/SelAll";
+        int res = userService.deleteUser(id);
+        if (res==1) return "redirect:/users/SelAll";
+        else return "Fail";
     }
 
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시

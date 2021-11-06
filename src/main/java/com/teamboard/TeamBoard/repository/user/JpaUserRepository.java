@@ -28,8 +28,8 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public void delete(String id) {
-        em.createQuery("delete from User u where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
+    public int delete(String id) {
+        return em.createQuery("delete from User u where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("id",id)
                 .executeUpdate();
     }
@@ -37,7 +37,7 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public int update(UpdateForm user) {
         //UPDATE [테이블] SET [열] = '변경할값' WHERE [조건]
-        int updateRes = em.createQuery("update User u set u.id=:id, u.pw=:pw, u.name=:name,u.email =:email, u.nick=:nick, u.phone=:phone where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
+        return em.createQuery("update User u set u.id=:id, u.pw=:pw, u.name=:name,u.email =:email, u.nick=:nick, u.phone=:phone where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("id",user.getId())
                 .setParameter("pw","Update Pass")
                 .setParameter("name",user.getName())
@@ -45,12 +45,6 @@ public class JpaUserRepository implements UserRepository {
                 .setParameter("nick",user.getNick())
                 .setParameter("phone",user.getPhone())
                 .executeUpdate();
-        if(updateRes==1){
-            System.out.println("회원정보 변경 성공!");
-            return 1;
-        }else{
-            return 0;
-        }
     }
 
     @Override

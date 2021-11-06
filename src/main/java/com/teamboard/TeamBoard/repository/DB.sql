@@ -30,8 +30,8 @@ create table FREE_BOARD(
     FBOARD_WRITER varchar(25) not null,
     FBOARD_TITLE varchar(50) not null,
     FBOARD_CONTENT varchar(1500) not null,
-    FBOARD_VIEW_COUNT int(1000) not null,
-    FBOARD_Comment_COUNT int(1000) not null, --> 댓글 카운터 추가
+    FBOARD_VIEW_COUNT int(5) DEFAULT 0 not null,
+    FBOARD_Comment_COUNT int(5) DEFAULT 0 not null, --> 댓글 카운터 추가
     FBOARD_REG_DATE datetime not null,
     FBOARD_UPDATE_DATE datetime
 );

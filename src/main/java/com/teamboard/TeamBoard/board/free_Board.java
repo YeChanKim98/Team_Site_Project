@@ -7,16 +7,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Transactional
-public class Board {
+public class free_Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int fboard_num;
-    private String fboard_writer;
-    private String fboard_title;
-    private String fboard_content;
-    private int fboard_view_count;
-    private int fboard_comment_counter;
-    private LocalDateTime fboard_reg_date;
+    private int fboard_num; // 자동
+    private String fboard_writer; // 입력
+    private String fboard_title; // 입력
+    private String fboard_content; // 입력
+    private int fboard_view_count; // 자동
+    private int fboard_comment_counter; // 자동
+    private LocalDateTime fboard_reg_date; // 자동
     // 수정일 추가
 
 

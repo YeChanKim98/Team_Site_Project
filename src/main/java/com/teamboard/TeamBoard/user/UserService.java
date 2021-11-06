@@ -38,8 +38,8 @@ public class UserService {
     }
 
     // id를 통한 유저 삭제
-    public void deleteUser(String id){
-        userRepository.delete(id);
+    public int deleteUser(String id){
+        return userRepository.delete(id);
     }
 
     // ID를 통한 유저 확인
