@@ -16,8 +16,9 @@ public class JpaBoardRepository implements BoardRepository{
 
     // 작성
     @Override
-    public void write(free_Board freeBoard) {
+    public free_Board write(free_Board freeBoard) {
         em.persist(freeBoard);
+        return  freeBoard;
     }
 
     // 삭제 : DB이동 -> 조건추가 : num이랑 세션이 가진 작성자랑 같으면 넘어오도록 컨트롤러에 추가

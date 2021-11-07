@@ -6,7 +6,7 @@ import com.teamboard.TeamBoard.board.free_Board;
 import java.util.List;
 
 public interface BoardRepository {
-    void write(free_Board freeBoard);
+    free_Board write(free_Board freeBoard);
     int delete(int fboard_num);
     int update(WriteForm writeForm);
     free_Board view(int fboard_num);

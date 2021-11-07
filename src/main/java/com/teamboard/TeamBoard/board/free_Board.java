@@ -15,7 +15,7 @@ public class free_Board {
     private String fboard_title; // 입력
     private String fboard_content; // 입력
     private int fboard_view_count; // 자동
-    private int fboard_comment_counter; // 자동
+    private int fboard_comment_count; // 자동
     private LocalDateTime fboard_reg_date; // 자동
     // 수정일 추가
 
@@ -56,12 +56,12 @@ public class free_Board {
         this.fboard_view_count = fboard_view_count;
     }
 
-    public int getFboard_comment_counter() {
-        return fboard_comment_counter;
+    public int getFboard_comment_count() {
+        return fboard_comment_count;
     }
 
-    public void setFboard_comment_counter(int fboard_comment_counter) {
-        this.fboard_comment_counter = fboard_comment_counter;
+    public void setFboard_comment_count(int fboard_comment_counter) {
+        this.fboard_comment_count = fboard_comment_counter;
     }
 
     public LocalDateTime getFboard_reg_date() {

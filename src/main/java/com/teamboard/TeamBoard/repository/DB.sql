@@ -35,6 +35,8 @@ create table FREE_BOARD(
     FBOARD_REG_DATE datetime not null,
     FBOARD_UPDATE_DATE datetime
 );
+--H2용 테스트 생성
+insert into free_board(fboard_writer,fboard_title,fboard_content,fboard_reg_date) values('INH2','INH2','INH2',now());
 
 create table DEL_BOARD(
     DBOARD_NUM int auto_increment not null primary key,

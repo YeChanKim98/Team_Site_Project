@@ -18,8 +18,9 @@ public class BoardService {
     public BoardService(BoardRepository boardRepository) {this.boardRepository = boardRepository;}
 
     // 작성
-    public void writeBoard(free_Board free_board){
+    public free_Board writeBoard(free_Board free_board){
         boardRepository.write(free_board);
+        return free_board;
     }
 
     // 삭제
