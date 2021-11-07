@@ -10,14 +10,13 @@ import java.time.LocalDateTime;
 public class free_Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int fboard_num; // 자동
-    private String fboard_writer; // 입력
-    private String fboard_title; // 입력
-    private String fboard_content; // 입력
-    private int fboard_view_count; // 자동
-    private int fboard_comment_count; // 자동
+    private int fboard_num; // 자동, PK
+    private String fboard_writer; // 입력, not null
+    private String fboard_title; // 입력, not null
+    private String fboard_content; // 입력, not null
+    private int fboard_view_count; // 자동, default 0
+    private int fboard_comment_count; // 자동, default 0
     private LocalDateTime fboard_reg_date; // 자동
-    // 수정일 추가
 
 
     public int getFboard_num() {

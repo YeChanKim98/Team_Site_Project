@@ -12,13 +12,13 @@ public class User {
 // Column어노테이션 생략 : DB와 객체내부 변수이름 통일
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pid;
-    private String id;
-    private String pw;
-    private String name;
-    private String email;
-    private String nick;
-    private String phone;
+    private int pid; // 자동, PK
+    private String id; // 입력, not null
+    private String pw; //입력, not null
+    private String name; // 입력, not null
+    private String email; // 입력, not null
+    private String nick; // 입력, not null
+    private String phone; // 입력
     private LocalDateTime date; // 게터 세터 없음
 
     

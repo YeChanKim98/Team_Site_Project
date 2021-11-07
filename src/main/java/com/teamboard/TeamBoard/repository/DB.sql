@@ -4,7 +4,7 @@ create table USER(
     ID varchar(20) not null,
     PW varchar(200) not null,
     NAME varchar(20) not null,
-    EMAIL varchar(30),
+    EMAIL varchar(30) not null,
     NICK varchar(25) not null,
     DATE TIMESTAMP DEFAULT NOW(), -- 확인 필요 / MySQL용
     PHONE varchar(20)

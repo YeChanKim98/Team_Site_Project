@@ -25,8 +25,8 @@ public class BoardController {
     @GetMapping("freeBoard/view/main") // 페이지 받아서 페이징 기능 추가
     public String freeBoardMain(Model model){
         List<free_Board> boardList = boardService.findAllBoard();
-        model.addAttribute("bostList",boardList);
-        return "redirect:/"; // 메인페이지로 이동
+        model.addAttribute("boardList",boardList);
+        return "boards/tmp/FreeBoardMain"; // 메인페이지로 이동
     }
 
     // 작성

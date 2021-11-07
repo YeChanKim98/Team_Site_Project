@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
+	<title>Title</title>
+	<style>
+        table {
+            width: 100%;
+            border: 1px solid #444444;
+        }
+        th, td {
+            border: 1px solid #444444;
+        }
+	</style>
+</head>
+<body>
+<table>
+	<thead>
+	<tr>
+		<th>Num</th>
+		<th>Writer</th>
+		<th>Title</th>
+		<th>Content</th>
+		<th>ViewCount</th>
+		<th>CommentCount</th>
+		<th>Reg_Date</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr th:each="board : ${boardList}">
+		<td th:text="${board.fboard_num}"></td>
+		<td th:text="${board.fboard_writer}"></td>
+		<td th:text="${board.fboard_title}"></td>
+		<td th:text="${board.fboard_content}"></td>
+		<td th:text="${board.fboard_view_count}"></td>
+		<td th:text="${board.fboard_comment_count}"></td>
+		<td th:text="${board.fboard_reg_date}"></td>
+	</tr>
+	</tbody>
+</table>
+</body>
+</html>

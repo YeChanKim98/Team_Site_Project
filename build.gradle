@@ -25,6 +25,14 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// 타입리프 레이아웃용
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	
+	// 부트스트랩을 위한 JSP
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'javax.servlet:jstl'
+	runtimeOnly 'org.webjars:bootstrap:4.5.0'
+
 	// JPA를 위한 MySQL의존성 추가
 	//implementation 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2' // 테스트용 임시 DB
