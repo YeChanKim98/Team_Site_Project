@@ -31,7 +31,7 @@ dependencies {
 	// 부트스트랩을 위한 JSP
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'javax.servlet:jstl'
-	runtimeOnly 'org.webjars:bootstrap:4.5.0'
+	implementation 'org.webjars:bootstrap:4.5.0'
 
 	// JPA를 위한 MySQL의존성 추가
 	//implementation 'mysql:mysql-connector-java'
