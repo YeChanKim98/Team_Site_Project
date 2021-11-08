@@ -39,6 +39,18 @@ public class UserController {
         return "redirect:/";
     }
 
+    @PostMapping("/users/login")
+    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model){
+        String findpw = userService.findOneUser(id).get().getPw();
+        if(pw.equals(findpw)){
+            // 세션 생성
+            return "redirect:/";
+        }else{
+            return null; // alert
+        }
+    }
+
+
 
     // Select All User : 검색 후 바로 출력
     @PostMapping("/users/SelAll")

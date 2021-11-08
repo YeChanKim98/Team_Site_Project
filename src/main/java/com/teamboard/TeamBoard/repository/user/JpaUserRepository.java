@@ -47,6 +47,7 @@ public class JpaUserRepository implements UserRepository {
                 .executeUpdate();
     }
 
+
     @Override
     public Optional<User> findById(String id) {
         Optional<User> user = em.createQuery("select u from User u where u.id = :id", User.class)
