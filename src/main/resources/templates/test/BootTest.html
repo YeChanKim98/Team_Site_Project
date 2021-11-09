@@ -1,240 +1,51 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Login Page</title>
-    <!-- Bootstrap core CSS-->
-    <link href="/static/asset/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Login Page</title>
+        <!-- Bootstrap core CSS-->
+        <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    </head>
 
-<body>
-
-<!--클래식-->
-클래식
-<div style="width:30%;">
-    <div>
-        <label for="recipient-name2" class="col-form-label">ID</label>
-        <input type="text" class="form-control" id="recipient-name2">
-    </div>
-    <div>
-        <label for="recipient-passwd2" class="col-form-label">PW</label>
-        <input type="text" class="form-control" id="recipient-passwd2">
-    </div><br>
-    <div>
-        <button type="button" class="btn btn-primary">Login</button>
-    </div>
-</div>
-
-<!--모달-->
-
-<hr style="background-color:black;">
-모달식
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Open modal for @mdo</button>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group" style="display:flex">
-                        <div style="width:35px;">
-                            <label for="recipient-name" class="col-form-label">ID</label>
-                        </div>
-                        <div>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
+    <body>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Open modal for @mdo</button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="width:50%">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="margin-left:10%;">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="form-group" style="display:flex;">
-                        <div div style="width:35px;">
-                            <label for="recipient-passwd" class="col-form-label">PW</label>
-                        </div>
-                        <div>
-                            <input type="text" class="form-control" id="recipient-passwd">
-                        </div>
+                    <div class="modal-body" style="margin:0 auto;width:80%;">
+                        <form action="/users/Login" method="post">
+                            <div class="form-group" style="display:flex; text-align:center;">
+                                <input type="text" class="form-control" id="recipient-name" name="id" placeholder="아이디">
+                            </div>
+                            <div class="form-group" style="display:flex; text-align:center;">
+                                <input type="text" class="form-control" id="recipient-passwd" name="pw" placeholder="비밀번호">
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+                            </div>
+                            <div style="margin-top:10px;">
+        <!--                        파이프라인 위치가 이상해서 리스트 혹은 div로 변경하고 선을 회색으로-->
+                                <a href="#"> 계정 찾기 </a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#"> 회원가입 </a>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        <a href="#">회원가입</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">ID찾기</a>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Login</button>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<hr style="background-color:black;">
-
-
-가입01
-<script src="/static/asset/jquery/jquery.min.js"></script>
-<link rel="stylesheet" href="/static/asset/css/bootstrap.min.css">
-<script src="/static/asset/js/bootstrap.min.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-
-
-<div class="container-fluid">
-    <div class="container">
-        <h2 class="text-center" id="title">Facundo farm and Resort</h2>
-        <p class="text-center">
-            <small id="passwordHelpInline" class="text-muted"> Developer: follow me on facebook <a href="https://www.facebook.com/JheanYu"> John niro yumang</a> inspired from <a href="https://p.w3layouts.com/">https://p.w3layouts.com/</a>.</small>
-        </p>
-        <hr>
-        <div class="row">
-            <div class="col-md-5">
-                <form role="form" method="post" action="register.php">
-                    <fieldset>
-                        <p class="text-uppercase pull-center"> SIGN UP.</p>
-                        <div class="form-group">
-                            <input type="text" name="username" id="username" class="form-control input-lg" placeholder="username">
-                        </div>
-
-                        <div class="form-group">
-                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password2" id="password2" class="form-control input-lg" placeholder="Password2">
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input">
-                                By Clicking register you're agree to our policy &amp; terms
-                            </label>
-                        </div>
-                        <div>
-                            <input type="submit" class="btn btn-lg btn-primary">
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-
-            <div class="col-md-2">
-                <!-------null------>
-            </div>
-
-            <div class="col-md-5">
-                <form role="form">
-                    <fieldset>
-                        <p class="text-uppercase"> Login using your account: </p>
-
-                        <div class="form-group">
-                            <input type="email" name="username" id="username0" class="form-control input-lg" placeholder="username">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" id="password0" class="form-control input-lg" placeholder="Password">
-                        </div>
-                        <div>
-                            <input type="submit" class="btn btn-md" value="Sign In">
-                        </div>
-
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>
-    <p class="text-center">
-        <small id="passwordHelpInline2" class="text-muted"> Developer:<a href="http://www.psau.edu.ph/"> Pampanga state agricultural university ?</a> BS. Information and technology students @2017 Credits: <a href="https://v4-alpha.getbootstrap.com/">boostrap v4.</a></small>
-    </p>
-</div>
-<hr style="background-color:black;">
-
-
-가입 02
-<meta name="viewport" content="width=device-width, initial-scale=1" style="user-select: auto;">
-<link rel="stylesheet" type="text/css" href="/static/asset/css/bootstrap.css" style="user-select: auto;">
-<link rel="stylesheet" type="text/css" href="/static/asset/css/bootstrap.min.css" style="user-select: auto;">
-
-
-<div class="container" style="user-select: auto;">
-    <div class="row main" style="user-select: auto;">
-        <div class="panel-heading" style="user-select: auto;">
-            <div class="panel-title text-center" style="user-select: auto;">
-                <h1 class="title" style="user-select: auto;">Company Name</h1>
-                <hr style="user-select: auto;">
-            </div>
-        </div>
-        <div class="main-login main-center" style="user-select: auto;">
-            <form class="form-horizontal" method="post" action="#" style="user-select: auto;">
-
-                <div class="form-group" style="user-select: auto;">
-                    <label for="name" class="cols-sm-2 control-label" style="user-select: auto;">Your Name</label>
-                    <div class="cols-sm-10" style="user-select: auto;">
-                        <div class="input-group" style="user-select: auto;">
-                            <span class="input-group-addon" style="user-select: auto;"><i class="fa fa-user fa" aria-hidden="true" style="user-select: auto;"></i></span>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Enter your Name" style="user-select: auto; background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: pointer;">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group" style="user-select: auto;">
-                    <label for="email" class="cols-sm-2 control-label" style="user-select: auto;">Your Email</label>
-                    <div class="cols-sm-10" style="user-select: auto;">
-                        <div class="input-group" style="user-select: auto;">
-                            <span class="input-group-addon" style="user-select: auto;"><i class="fa fa-envelope fa" aria-hidden="true" style="user-select: auto;"></i></span>
-                            <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" style="user-select: auto;">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group" style="user-select: auto;">
-                    <label for="username" class="cols-sm-2 control-label" style="user-select: auto;">Username</label>
-                    <div class="cols-sm-10" style="user-select: auto;">
-                        <div class="input-group" style="user-select: auto;">
-                            <span class="input-group-addon" style="user-select: auto;"><i class="fa fa-users fa" aria-hidden="true" style="user-select: auto;"></i></span>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your Username" style="user-select: auto;">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group" style="user-select: auto;">
-                    <label for="password" class="cols-sm-2 control-label" style="user-select: auto;">Password</label>
-                    <div class="cols-sm-10" style="user-select: auto;">
-                        <div class="input-group" style="user-select: auto;">
-                            <span class="input-group-addon" style="user-select: auto;"><i class="fa fa-lock fa-lg" aria-hidden="true" style="user-select: auto;"></i></span>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Enter your Password" style="user-select: auto; background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIUlEQVQ4EX2TOYhTURSG87IMihDsjGghBhFBmHFDHLWwSqcikk4RRKJgk0KL7C8bMpWpZtIqNkEUl1ZCgs0wOo0SxiLMDApWlgOPrH7/5b2QkYwX7jvn/uc//zl3edZ4PPbNGvF4fC4ajR5VrNvt/mo0Gr1ZPOtfgWw2e9Lv9+chX7cs64CS4Oxg3o9GI7tUKv0Q5o1dAiTfCgQCLwnOkfQOu+oSLyJ2A783HA7vIPLGxX0TgVwud4HKn0nc7Pf7N6vV6oZHkkX8FPG3uMfgXC0Wi2vCg/poUKGGcagQI3k7k8mcp5slcGswGDwpl8tfwGJg3xB6Dvey8vz6oH4C3iXcFYjbwiDeo1KafafkC3NjK7iL5ESFGQEUF7Sg+ifZdDp9GnMF/KGmfBdT2HCwZ7TwtrBPC7rQaav6Iv48rqZwg+F+p8hOMBj0IbxfMdMBrW5pAVGV/ztINByENkU0t5BIJEKRSOQ3Aj+Z57iFs1R5NK3EQS6HQqF1zmQdzpFWq3W42WwOTAf1er1PF2USFlC+qxMvFAr3HcexWX+QX6lUvsKpkTyPSEXJkw6MQ4S38Ljdbi8rmM/nY+CvgNcQqdH6U/xrYK9t244jZv6ByUOSiDdIfgBZ12U6dHEHu9TpdIr8F0OP692CtzaW/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group" style="user-select: auto;">
-                    <label for="confirm" class="cols-sm-2 control-label" style="user-select: auto;">Confirm Password</label>
-                    <div class="cols-sm-10" style="user-select: auto;">
-                        <div class="input-group" style="user-select: auto;">
-                            <span class="input-group-addon" style="user-select: auto;"><i class="fa fa-lock fa-lg" aria-hidden="true" style="user-select: auto;"></i></span>
-                            <input type="password" class="form-control" name="confirm" id="confirm" placeholder="Confirm your Password" style="user-select: auto; background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIUlEQVQ4EX2TOYhTURSG87IMihDsjGghBhFBmHFDHLWwSqcikk4RRKJgk0KL7C8bMpWpZtIqNkEUl1ZCgs0wOo0SxiLMDApWlgOPrH7/5b2QkYwX7jvn/uc//zl3edZ4PPbNGvF4fC4ajR5VrNvt/mo0Gr1ZPOtfgWw2e9Lv9+chX7cs64CS4Oxg3o9GI7tUKv0Q5o1dAiTfCgQCLwnOkfQOu+oSLyJ2A783HA7vIPLGxX0TgVwud4HKn0nc7Pf7N6vV6oZHkkX8FPG3uMfgXC0Wi2vCg/poUKGGcagQI3k7k8mcp5slcGswGDwpl8tfwGJg3xB6Dvey8vz6oH4C3iXcFYjbwiDeo1KafafkC3NjK7iL5ESFGQEUF7Sg+ifZdDp9GnMF/KGmfBdT2HCwZ7TwtrBPC7rQaav6Iv48rqZwg+F+p8hOMBj0IbxfMdMBrW5pAVGV/ztINByENkU0t5BIJEKRSOQ3Aj+Z57iFs1R5NK3EQS6HQqF1zmQdzpFWq3W42WwOTAf1er1PF2USFlC+qxMvFAr3HcexWX+QX6lUvsKpkTyPSEXJkw6MQ4S38Ljdbi8rmM/nY+CvgNcQqdH6U/xrYK9t244jZv6ByUOSiDdIfgBZ12U6dHEHu9TpdIr8F0OP692CtzaW/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group " style="user-select: auto;">
-                    <button type="button" class="btn btn-primary btn-lg btn-block login-button" style="user-select: auto;">Register</button>
-                </div>
-                <div class="login-register" style="user-select: auto;">
-                    <a href="index.php" style="user-select: auto;">Login</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript" src="/static/asset/js/bootstrap.js" style="user-select: auto;"></script>
-<script type="text/javascript" style="user-select: auto;"></script>
-<!-- Bootstrap core JavaScript-->
-<script src="/static/asset/jquery/jquery.min.js"></script>
-<script src="/static/asset/js/bootstrap.bundle.min.js"></script>
-</body>
-
+    <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js" style="user-select: auto;"></script>
+    <script type="text/javascript" style="user-select: auto;"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    </body>
 </html>

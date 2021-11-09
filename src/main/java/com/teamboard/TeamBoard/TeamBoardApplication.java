@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TeamBoardApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TeamBoardApplication.class,  args);
+		SpringApplication.run(TeamBoardApplication.class, args);
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.teamboard.TeamBoard.controller;
 
-import com.teamboard.TeamBoard.user.form.SelOneForm;
 import com.teamboard.TeamBoard.user.form.JoinForm;
 import com.teamboard.TeamBoard.user.User;
 import com.teamboard.TeamBoard.user.UserService;
@@ -9,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +41,17 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/users/login")
-    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model){
+    @GetMapping("/users/Login")
+    public String login(){
+        return "test/BootTest";
+    }
+
+    @PostMapping("/users/Login")
+    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model, HttpServletRequest request){
         String findpw = userService.findOneUser(id).get().getPw();
+        System.out.println("id : "+id+" / pw : "+pw);
+        HttpSession session = request.getSession();
+        session.setAttribute("loginID", id);
         if(pw.equals(findpw)){
             // 세션 생성
             return "redirect:/";
