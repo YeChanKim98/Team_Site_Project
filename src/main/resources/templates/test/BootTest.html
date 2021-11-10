@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,9 +12,9 @@
     </head>
 
     <body>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Open modal for @mdo</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login btn</button>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="width:50%">
-            <div class="modal-dialog">
+            <div class="modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel" style="margin-left:10%;">Login</h5>
@@ -35,10 +35,10 @@
                             </div>
                             <div style="margin-top:15px;text-align: center;">
                                 <div style="border-right:2px solid gray;text-align: center;display: inline-block;">
-                                    <a href="#" style="color:black; text-decoration-line:none;padding-right:10px;">계정 찾기</a>
+                                    <a href="#" style="font-size:1em; color:black; text-decoration-line:none;padding-right:10px;">계정 찾기</a>
                                 </div>
                                 <div style="text-align: center;display: inline-block;">
-                                    <a href="#" style="color:black;text-decoration-line:none;padding-left:10px;">회원가입</a>
+                                    <a href="#" style="font-size:1em; color:black;text-decoration-line:none;padding-left:10px;margin-left:0px;">회원 가입</a>
                                 </div>
                             </div>
                         </form>

@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+	
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -37,6 +38,10 @@ dependencies {
 	//implementation 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2' // 테스트용 임시 DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// 서버 재기동 없이 코드를 반영하기 위한 개발자 키트
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	
 }
 
 test {

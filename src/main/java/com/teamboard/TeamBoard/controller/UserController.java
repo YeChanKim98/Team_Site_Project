@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,25 +26,27 @@ public class UserController {
     // Join : ID / PW / 이름 / 이메일(인증필요) / 닉네임
     @GetMapping("users/Join")
     public String joinForm(){
-        return "users/tmp/form/JoinForm";
+        return "users/Regist";
     }
 
     @PostMapping("users/Join")
-    public String join(JoinForm joinForm){
+    public String join(JoinForm joinForm, HttpServletRequest request){
         User user = new User();
         user.setId(joinForm.getId());
         user.setPw(joinForm.getPw());
         user.setName(joinForm.getName());
         user.setNick(joinForm.getNick());
         userService.join(user);
+        HttpSession session = request.getSession();
+        session.setAttribute("loginID", user.getId());
         return "redirect:/";
     }
 
     // 로그인
-    @GetMapping("/users/Login")
-    public String login(){
-        return "test/BootTest";
-    }
+//    @GetMapping("/users/Login2")
+//    public String login(){
+//        return "test/TestLogin_2";
+//    }
 
 
     @PostMapping("/users/Login")
@@ -114,9 +115,10 @@ public class UserController {
 
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
     // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
-    @GetMapping("/users/Update/{updateId}")
-    public String updateForm(@PathVariable String updateId, Model model){
-        User user = userService.findOneUser(updateId).get(); // 업데이트 테스트용 임시 케이스 -> 원래는 현재 유저 ID를 받아와서 입력
+    @GetMapping("/users/Update")
+    public String updateForm( Model model, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User user = userService.findOneUser((String) session.getAttribute("loginID")).get(); // 업데이트 테스트용 임시 케이스 -> 원래는 현재 유저 ID를 받아와서 입력
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getName());
         model.addAttribute("nick",user.getNick());
@@ -129,5 +131,28 @@ public class UserController {
         if(res==1) System.out.println("계정정보 업데이트 성공!");
         else System.out.println("계정정보 업데이트 실패!");
         return "redirect:/users/SelAll"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //test
+    @GetMapping("/test")
+    public String testhtml(){
+        return "test/TestLogin_2";
     }
 }

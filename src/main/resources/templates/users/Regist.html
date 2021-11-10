@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>회원 가입</title>
+		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+		<style>
+            body{
+                position:absolute;
+                left:50%;
+                margin-left:-225px;/*기준이 바디의 좌측이므로, 사이즈 지정 후 반을 마진으로 더해야함*/
+            }
+
+            #container input{
+                height:50px;
+            }
+
+			#container>h5{
+                margin: 0 0 3px;
+            }
+
+            #container>div{ /*직계 div만*/
+                margin-bottom:20px;
+                width:450px;
+            }
+
+            #input_nick{
+				padding-top:20px;
+			}
+
+			#joinbtn{
+				width:450px;
+				height:52px;
+				font-size:15pt;
+				font-weight:bold;
+				margin-top:10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="header">
+			로고박을 자리<br><br>
+		</div>
+
+		<form id="join_form" class="form-group" action="/users/Join" method="post">
+			<div id="container">
+
+
+				<div id="input_id">
+					<h5>아이디</h5>
+					<span>
+						<input type="text" id="inputid" class="form-control" name="id">
+					</span>
+				</div>
+				<div id="input_pw">
+					<h5>비밀번호</h5>
+					<span>
+						<input type="password" id="inputpw" class="form-control" name="pw">
+					</span>
+				</div>
+				<div id="input_pwchk">
+					<h5>비밀번호 재입력</h5>
+					<span>
+						<input type="password" id="inputpwchk" class="form-control" name="pwchk">
+					</span>
+				</div>
+				<div id="input_nick">
+					<h5>닉네임</h5>
+					<span>
+						<input type="text" id="inputnick" class="form-control" name="nick">
+					</span>
+				</div>
+				<div id="input_name">
+					<h5>이름</h5>
+					<span>
+						<input type="text" id="inputname" class="form-control" name="name">
+					</span>
+				</div>
+				<div id="input_mail">
+					<h5>이메일</h5>
+					<span>
+						<input type="email" id="inputemail" class="form-control" name="email">
+					</span>
+				</div>
+				<div id="join_btn">
+					<button type="submit" class="btn btn-primary" id="joinbtn">회원가입</button>
+				</div>
+
+			</div><!--컨테이너-->
+		</form>
+
+		<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+		<script type="text/javascript"></script>
+		<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+		<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>
