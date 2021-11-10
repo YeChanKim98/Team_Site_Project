@@ -9,13 +9,16 @@
 			<div>
 				<h1>테스트용 임시 홈(/)</h1>
 				<p>Member</p>
-				<a th:if ="${session.loginID}"><p th:text="${session.loginID}"></p></a>
+				<a th:if ="${session.loginID}">
+					<showUserID th:text="${session.loginID}"></showUserID>
+					<a href="/users/Logout">로그아웃</a>
+				</a>
+				<a th:unless="${session.loginID}"><a href="/users/Login">로그인</a></a>
 				<a href="/users/Join">가입</a>
 				<a href="/users/SelOne">출력(단일)</a>
 				<a href="/users/SelAll">출력(전체)</a>
 				<a href="/users/Delete">삭제</a>
 				<a href="/users/Update">정정</a>
-				<a href="/users/Login">로그인</a>
 			</div>
 
 			<div>

@@ -41,10 +41,12 @@ public class UserController {
         return "redirect:/";
     }
 
+    // 로그인
     @GetMapping("/users/Login")
     public String login(){
         return "test/BootTest";
     }
+
 
     @PostMapping("/users/Login")
     public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model, HttpServletRequest request){
@@ -58,6 +60,14 @@ public class UserController {
         }else{
             return null; // alert
         }
+    }
+
+    // 로그아웃
+    @GetMapping("/users/Logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.removeAttribute("loginID");
+        return "redirect:/";
     }
 
 
