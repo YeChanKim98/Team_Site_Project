@@ -4,8 +4,44 @@
 		<meta charset="UTF-8">
 		<title>회원 가입</title>
 		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+
+		<script>
+			<!--이전에 만든 참고용 스크립트-->
+            var id_rule = /^[A-za-z0-9!^*-_/?~+=]{6,12}/g;
+
+
+            function ch_bot_css(){
+                //css
+                document.activeElement.parentNode.parentNode.style.borderBottom='solid 2px blue';
+                //chk id
+            }
+            return false;
+            }
+
+
+            function re_bot_css(here){
+                var where = 'get'+here;
+                document.getElementById(where).style.animation='fadeIn';
+                document.getElementById(where).style.borderBottom='solid 1px #8080806e';
+            }
+
+            //실시간체크
+
+            //chk_id
+            if(!document.getElementById('get_id').lastChild.firstChild==""){
+                if(!(id_rule.test(document.activeElement.value))){
+                    alert("영문자 소문자 대문자 숫자 및 특수문자(!^*-_/?~+=)를 포함해야합니다!");
+                    document.activeElement.value='';
+                    document.activeElement.focus();
+                }else{document.activeElement.parentNode.lastChild.style.color='#0074e9';}
+		</script>
+
 		<style>
+			html{
+				background-color: #fcfcfc;
+			}
             body{
+                background-color: #fcfcfc;
                 position:absolute;
                 left:50%;
                 margin-left:-225px;/*기준이 바디의 좌측이므로, 사이즈 지정 후 반을 마진으로 더해야함*/
@@ -15,17 +51,31 @@
                 height:50px;
             }
 
-			#container>h5{
+			#container h5{
                 margin: 0 0 3px;
+                font-weight:bold;
             }
 
-            #container>div{ /*직계 div만*/
+            #container>div{ /*mail제외 직계 div만*/
                 margin-bottom:20px;
                 width:450px;
             }
 
             #input_nick{
 				padding-top:20px;
+			}
+
+			#inputemail{
+                width:320px;
+                float: left;
+				margin-right:10px;
+            }
+
+			#chkemailbtn{
+				height:50px;
+				width:120px;
+				font-weight:bold;
+                font-size:13pt;
 			}
 
 			#joinbtn{
@@ -82,6 +132,9 @@
 					<span>
 						<input type="email" id="inputemail" class="form-control" name="email">
 					</span>
+					<a>
+						<button type="button" class="btn btn-primary" id="chkemailbtn" onclick="alert('구현 예정');">이메일 인증</button>
+					</a>
 				</div>
 				<div id="join_btn">
 					<button type="submit" class="btn btn-primary" id="joinbtn">회원가입</button>

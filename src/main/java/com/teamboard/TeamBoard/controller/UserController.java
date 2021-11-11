@@ -8,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.script.ScriptContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,30 +41,40 @@ public class UserController {
         user.setPw(joinForm.getPw());
         user.setName(joinForm.getName());
         user.setNick(joinForm.getNick());
-        userService.join(user);
-        HttpSession session = request.getSession();
-        session.setAttribute("loginID", user.getId());
-        return "redirect:/";
+        String res = userService.join(user);
+        if(res.equals("Join Fail")) {
+            return "users/Join"; // alert -> 다시 가입 페이지
+        }else {
+            HttpSession session = request.getSession();
+            session.setAttribute("loginID", user.getId());
+            return "redirect:/";
+        }
     }
+    
 
     // 로그인
-//    @GetMapping("/users/Login2")
-//    public String login(){
-//        return "test/TestLogin_2";
-//    }
-
-
     @PostMapping("/users/Login")
-    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model, HttpServletRequest request){
-        String findpw = userService.findOneUser(id).get().getPw();
-        System.out.println("id : "+id+" / pw : "+pw);
-        HttpSession session = request.getSession();
-        session.setAttribute("loginID", id);
-        if(pw.equals(findpw)){
-            // 세션 생성
-            return "redirect:/";
+    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        Optional<User> resUser = userService.findOneUser(id);
+        if(resUser.isPresent()){
+            String findpw = resUser.get().getPw();
+            if(pw.equals(findpw)){
+                HttpSession session = request.getSession();
+                session.setAttribute("loginID", id);
+                return "redirect:/";
+            }else{
+                out.println("<script>alert('아이디혹은 비밀번호를 다시 확인해 주세요');history.go(-1);</script>");
+                out.flush();
+                out.close();
+                return "redirect:/";
+            }
         }else{
-            return null; // alert
+            out.println("<script>alert('존재하지 않는 계정입니다');history.go(-1);</script>");
+            out.flush();
+            out.close();
+            return "redirect:/";
         }
     }
 

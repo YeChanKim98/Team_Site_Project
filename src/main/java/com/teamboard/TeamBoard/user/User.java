@@ -1,5 +1,6 @@
 package com.teamboard.TeamBoard.user;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
@@ -13,10 +14,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pid; // 자동, PK
+    @NotNull
     private String id; // 입력, not null
+    @NotNull
     private String pw; //입력, not null
+    @NotNull
     private String name; // 입력, not null
+    @NotNull
     private String email; // 입력, not null
+    @NotNull
     private String nick; // 입력, not null
     private String phone; // 입력
     private LocalDateTime date; // 게터 세터 없음

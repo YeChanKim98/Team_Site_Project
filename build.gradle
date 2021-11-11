@@ -19,7 +19,9 @@ repositories {
 }
 
 dependencies {
+	// https://mvnrepository.com/artifact/org.springframework/spring-context-support/5.2.0.RELEASE -> 의존성 참고 사이트
 	
+	// 기본
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -28,7 +30,7 @@ dependencies {
 
 	// 타입리프 레이아웃용
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	
+
 	// 부트스트랩을 위한 JSP
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'javax.servlet:jstl'
@@ -41,7 +43,12 @@ dependencies {
 
 	// 서버 재기동 없이 코드를 반영하기 위한 개발자 키트
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	
+
+	// 메일기능을 위한 의존성
+	implementation 'javax.mail:mail:1.4.7'
+	implementation 'org.springframework:spring-context-support:5.2.0.RELEASE'
+
+
 }
 
 test {

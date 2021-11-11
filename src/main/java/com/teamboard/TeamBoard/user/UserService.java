@@ -47,6 +47,7 @@ public class UserService {
         return userRepository.findById(id); // 결과로 받은 객체에서 id값 출력..?
     }
 
+    // 업데이트
     public int update(UpdateForm user){
         return userRepository.update(user);
     }
