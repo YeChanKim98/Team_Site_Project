@@ -3,6 +3,7 @@ package com.teamboard.TeamBoard.boards;
 import com.teamboard.TeamBoard.board.BoardService;
 import com.teamboard.TeamBoard.board.free_Board;
 import com.teamboard.TeamBoard.repository.board.BoardRepository;
+import com.teamboard.TeamBoard.repository.board.JpaBoardRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,18 @@ public class BoardCrudTest {
         System.out.println("CompBoard : "+compBoard.getFboard_writer()+"\t"+compBoard.getFboard_title()+"\t"+compBoard.getFboard_content());
     }
 
+    @Test
+    @Commit
+    void 뷰_조회수증가(){
+        int fboard_num = 12; // test post number
+        boardService.viewBoard(fboard_num);
+        System.out.println(fboard_num+"번 게시물의 조회수 1증가");
+
+    }
+
+//    @Test
+//    void 카운터(){
+//        Long res = boardRepository.post_cnt();
+//        System.out.println("토탈 포스터 : "+res);
+//    }
 }

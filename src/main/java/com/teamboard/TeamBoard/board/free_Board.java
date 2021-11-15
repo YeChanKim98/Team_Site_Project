@@ -1,5 +1,6 @@
 package com.teamboard.TeamBoard.board;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -13,10 +14,11 @@ public class free_Board {
     private int fboard_num; // 자동, PK
     private String fboard_writer; // 입력, not null
     private String fboard_title; // 입력, not null
-    private String fboard_content; // 입력, not null
+    private String fboard_content=null; // 입력, not null
     private int fboard_view_count; // 자동, default 0
     private int fboard_comment_count; // 자동, default 0
-    private LocalDateTime fboard_reg_date; // 자동
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime fboard_reg_date=null; // 자동
 
 
     public int getFboard_num() {

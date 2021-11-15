@@ -2,12 +2,15 @@ package com.teamboard.TeamBoard.repository.board;
 
 import com.teamboard.TeamBoard.board.Form.WriteForm;
 import com.teamboard.TeamBoard.board.free_Board;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 // DAO
+@Repository
 public class JpaBoardRepository implements BoardRepository{
 
     @PersistenceContext
@@ -15,14 +18,12 @@ public class JpaBoardRepository implements BoardRepository{
     public JpaBoardRepository(EntityManager em) { this.em = em; }
 
     // 작성
-    @Override
     public free_Board write(free_Board freeBoard) {
         em.persist(freeBoard);
         return  freeBoard;
     }
 
     // 삭제 : DB이동 -> 조건추가 : num이랑 세션이 가진 작성자랑 같으면 넘어오도록 컨트롤러에 추가
-    @Override
     public int delete(int fboard_num) {
 
 //        삭제할 인스턴스를 받은 후 delete에 옮기고 원본은 삭제
@@ -36,7 +37,6 @@ public class JpaBoardRepository implements BoardRepository{
     }
 
     // 수정
-    @Override
     public int update(WriteForm writeForm) {
         return em.createQuery("update free_Board fb set fb.fboard_writer=:fboard_writer, fb.fboard_content=:fboard_content where fb.fboard_num=:fboard_num") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("fboard_writer",writeForm.getFboard_title())
@@ -46,26 +46,32 @@ public class JpaBoardRepository implements BoardRepository{
     }
 
     // 조회
-    @Override
     public free_Board view(int fboard_num) {
+        // 조회 수 증가
+        em.createQuery("update free_Board fb set fb.fboard_view_count=fb.fboard_view_count+1 where fb.fboard_num=:fboard_num")
+                .setParameter("fboard_num",fboard_num)
+                .executeUpdate();
+
         return em.createQuery("select fb from free_Board fb where fb.fboard_num=:fboard_num",free_Board.class)
                 .setParameter("fboard_num",fboard_num)
                 .getResultList().stream().findAny().get();
     }
 
     // 전체 게시글
-    @Override
     public List<free_Board> findAll() {
         return em.createQuery("select fb from free_Board fb",free_Board.class).getResultList();
+        // 리소스 낭비가 심하므로 목록에서는 콘텐츠 내용은 제외하고 받아오기
+
     }
 
     // 검색
-    @Override
-    public List<free_Board> findBoard(String keyword, String std) {
-        String findQuery="select distinct fb from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_content=:keyword";
-        if(std=="writer"){
+    public List<free_Board> findBoard(String search_option, String keyword) {
+        String findQuery="select distinct fb from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword";
+        if(search_option=="writer"){
             findQuery = "select fb from free_Board fb where fb.fboard_writer=:keyword";
-        } else if(std=="content"){
+        } else if(search_option=="title"){
+            findQuery = "select fb from free_Board fb where fb.fboard_title=:keyword";
+        }else if(search_option=="content"){
             findQuery = "select fb from free_Board fb where fb.fboard_content=:keyword";
         }
         return em.createQuery(findQuery, free_Board.class)
@@ -73,4 +79,20 @@ public class JpaBoardRepository implements BoardRepository{
                 .getResultList();
     }
 
+
+    // 페이징이 들어간 게시판 메인 뷰
+    public List<free_Board> mainView(int page){
+        int start = (page-1)*10;
+        int last = page*10-1;
+        return  em.createQuery("select fb from free_Board fb",free_Board.class)
+                .setFirstResult(start)
+                .setMaxResults(last)
+                .getResultList();
+    }
+
+    // 게시글 총 갯수
+    public Long post_cnt(){
+        return (Long) em.createQuery("select count(fb) from free_Board fb")
+                .getSingleResult();
+    }
 }

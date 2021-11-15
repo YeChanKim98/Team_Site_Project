@@ -114,7 +114,7 @@ public class UserController {
     }
 
 
-    // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서s 삭제
+    // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서 삭제
     // GetMapping은 임시용. 실제 유저는 버튼클릭 후 인증을 통해서 바로 삭제
     @GetMapping("/users/Delete")
     public String deleteForm(){

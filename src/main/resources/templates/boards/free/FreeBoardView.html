@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
+  <title>Free_Board_Main</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="container">
+  <article id="fboard">
+
+    <div id="fboard_list">
+      <table style="width:100%;border:2px solid black;">
+        <thead>
+        <tr id="list_head">
+          <th scope="col">글 번호</th>
+          <th scope="col">제목</th>
+          <th scope="col">내용</th>
+          <th scope="col">작성자</th>
+          <th scope="col">조회수</th>
+          <th scope="col">댓글수</th>
+          <th scope="col">작성일</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+          <th scope="row" th:text="${view.fboard_num}"></th>
+          <td th:text="${view.fboard_title}"></td>
+          <td th:text="${view.fboard_content}"></td>
+          <td th:text="${view.fboard_writer}"></td>
+          <td th:text="${view.fboard_view_count}"></td>
+          <td th:text="${view.fboard_comment_count}"></td>
+          <td th:text="${view.fboard_reg_date}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div><!--fboard_list : 글 목록-->
+
+
+  </article><!--fboard-->
+</div>
+<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+<script type="text/javascript"></script>
+<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
