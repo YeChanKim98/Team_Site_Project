@@ -23,10 +23,11 @@ public class BoardController {
 
 
     // 자유게시판 메인
-    @RequestMapping("freeBoard/view/main/{page}") // 페이지 받아서 페이징 기능 추가
+    @GetMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
-        System.out.println("현재 페이지 값 : "+page.get());
-        if(!page.isEmpty()){page.of(1);} // 페이지 미선택은 기본 1
+        System.out.println("게시판 메인 접근");
+        if(page.isEmpty()){page.of(1);} // 페이지 미선택은 기본
+        System.out.println("현재 page변수 값 : "+page.get());
         List<free_Board> boardList = boardService.mainView(page.get()); // 페이지 기반으로 변경
         System.out.println("페이징 정상 작동");
         model.addAttribute("boardList",boardList);
@@ -49,7 +50,7 @@ public class BoardController {
         board.setFboard_title(writeForm.getFboard_title());
         board.setFboard_content(writeForm.getFboard_content());
         boardService.writeBoard(board);
-        return "redirect:/freeBoard/view/main/"; // 게시판 메인으로 이동
+        return "redirect:/freeBoard/view/main"; // 게시판 메인으로 이동
     }
 
     // 삭제
