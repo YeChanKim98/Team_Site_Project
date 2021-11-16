@@ -14,4 +14,5 @@ public interface BoardRepository {
     List<free_Board> findAll();
     List<free_Board> findBoard(String keyword, String std);
     List<free_Board> mainView(int page); // 나중에 정리할거임
+    public Long post_cnt();
 }

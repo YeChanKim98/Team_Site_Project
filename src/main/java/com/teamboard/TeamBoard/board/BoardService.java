@@ -39,9 +39,14 @@ public class BoardService {
         return boardRepository.findBoard(search_option ,keyword);
     }
 
-    // 조회
+    // 게시글 조회
     public free_Board viewBoard(int fboard_num){
         return boardRepository.view(fboard_num);
+    }
+
+    //
+    public Long totalPost(){
+        return boardRepository.post_cnt();
     }
 
     // 수정
@@ -53,7 +58,5 @@ public class BoardService {
     public int deleteBoard(int fboard_num){
         return boardRepository.delete(fboard_num);
     }
-
-
 
 }

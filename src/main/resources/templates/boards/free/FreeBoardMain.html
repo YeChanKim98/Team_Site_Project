@@ -61,7 +61,6 @@
 			}
             .page-item{
 				width:20%;
-				font-weight:bold;
 			}
 			.page-link{
 				height:100%;
@@ -126,20 +125,30 @@
 					</div>
 				</div><!--fboard_util : 검색창 / 글쓰기-->
 
+
+				<!--
+				1. 5이하면 << 없음
+				2. 6이상이면 >> 있음
+				3. 현재페이지 bold
+				4. 현제페이지 기준으로 넘버링
+				5. 마지막 페이지에는 뒤에 번호가 없음
+				6. 마지막 페이지에는 >> 없음
+				7. <<,>> 기능 구현 : 식 점검 / >>에서 최대 넘으면 최대로
+				-->
 				<div id="fboard_paging">
 						<nav aria-label="Page navigation example">
 							<ul class="pagination">
 								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
+									<a th:if="${page_now}>5" class="page-link" href="#" aria-label="Previous">
+										<span th:href="@{freeBoard/view/main/}" aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
 								<li class="page-item"><a class="page-link" href="#">1</a></li>
 								<li class="page-item"><a class="page-link" href="#">2</a></li>
 								<li class="page-item"><a class="page-link" href="#">3</a></li>
 								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
+									<a th:if="(${page_total}/5)>5"class="page-link" href="#" aria-label="Next">
+										<span th:href="@{freeBoard/view/main/}" aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
 							</ul>

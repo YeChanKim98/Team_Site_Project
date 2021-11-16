@@ -25,13 +25,12 @@ public class BoardController {
     // 자유게시판 메인
     @GetMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
-        System.out.println("게시판 메인 접근");
-        if(page.isEmpty()){page.of(1);} // 페이지 미선택은 기본
-        System.out.println("현재 page변수 값 : "+page.get());
+        //@RequestParam(defaultValue = "1") int page
+        if(page.isEmpty()){page= Optional.of(1);} // 페이지 미선택은 기본으로 1값
         List<free_Board> boardList = boardService.mainView(page.get()); // 페이지 기반으로 변경
-        System.out.println("페이징 정상 작동");
         model.addAttribute("boardList",boardList);
-        model.addAttribute("page",page);
+        model.addAttribute("page_now",page);
+        model.addAttribute("page_total",boardService.totalPost());
         return "boards/free/FreeBoardMain"; // 메인페이지로 이동}
     }
 
