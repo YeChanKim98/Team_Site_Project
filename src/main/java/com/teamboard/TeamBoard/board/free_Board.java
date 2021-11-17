@@ -1,11 +1,15 @@
 package com.teamboard.TeamBoard.board;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+@Getter
+@Setter
 @Entity
 @Transactional
 public class free_Board {
@@ -17,8 +21,10 @@ public class free_Board {
     private String fboard_content=null; // 입력, not null
     private int fboard_view_count; // 자동, default 0
     private int fboard_comment_count; // 자동, default 0
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime fboard_reg_date=null; // 자동
+    // @Column(updatable = false, nullable = false) 값과 상관없이 일단 넣어줌, 낫널
+//    @CreatedDate
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private String fboard_reg_date;//=null; // 자동
 
 
     public int getFboard_num() {
@@ -65,12 +71,12 @@ public class free_Board {
         this.fboard_comment_count = fboard_comment_counter;
     }
 
-    public LocalDateTime getFboard_reg_date() {
+    public String getFboard_reg_date() {
         return fboard_reg_date;
     }
 
     @PrePersist
-    public void createDate(){
-        this.fboard_reg_date = LocalDateTime.now();
+    public void onPrePersist() {
+        this.fboard_reg_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

@@ -8,7 +8,6 @@
 		<style>
 
             .container{width:70%;}
-
 			#fboard_list > table{
 				text-align:center;
 				height:120%;
@@ -16,12 +15,10 @@
 				border-top:3px solid #4a74bd;
 				border-bottom:3px solid #4a74bd;
 			}
-
 			#list_head{
                 font-weight:bold;
                 font-size:18px;
 			}
-
             #list_head th{border-bottom:2px solid #4a74bd;}
 			.board_num{width:10%;}
 			.board_title{width:30%;}
@@ -54,14 +51,15 @@
 				clear: both;
 				text-align:center;
 			}
-			#fboard_paging > nav{
-				display: inline-block;
-				width:25%;
-				height:65px;
-			}
+			#fboard_paging > nav {
+                display: inline-block;
+                width: 25%;
+                height: 65px;
+            }
             .page-item{
 				width:20%;
 			}
+			.now
 			.page-link{
 				height:100%;
 			}
@@ -70,6 +68,9 @@
 	</head>
 	<body>
 		네비바 Replace예정<br><br><br>
+		<a th:text="'Now '+${page_now}+'Page / Total '+${page_total}+'Page      '"></a>
+		<a th:text="'Start '+${block_start}+'block to'"></a>
+		<a th:text="${block_end}+'block'"></a>
 		<div class="container">
 			<article id="fboard">
 
@@ -87,7 +88,7 @@
 						</thead>
 
 						<tbody>
-							<tr  th:each="board : ${boardList}">
+							<tr th:each="board : ${boardList}">
 								<th class="board_num" scope="row" th:text="${board.fboard_num}"></th>
 								<td class="board_title"><a th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
 								<td class="board_writer" th:text="${board.fboard_writer}"></td>
@@ -100,6 +101,7 @@
 				</div><!--fboard_list : 글 목록-->
 
 				<div id="fboard_util">
+
 					<div id="fboard_search">
 						<form action="/freeBoard/view/search">
 						<div class="input-group mb-3">
@@ -123,34 +125,52 @@
 					<div id="fboard_write">
 						<button id="write_btn" type="button" class="btn btn-primary" onclick="location.href='/freeBoard/write'">글쓰기</button>
 					</div>
+
 				</div><!--fboard_util : 검색창 / 글쓰기-->
 
-
 				<!--
+				<< : 현재페이지가 5보다 크면 존재 / 링크는 현재페이지-5 (혹은 start 블럭-1 페이지)
+				>> : 토탈페이지가 5보다
 				1. 5이하면 << 없음
 				2. 6이상이면 >> 있음
 				3. 현재페이지 bold
-				4. 현제페이지 기준으로 넘버링
-				5. 마지막 페이지에는 뒤에 번호가 없음
-				6. 마지막 페이지에는 >> 없음
+				4. 마지막 페이지 구현
+					조건 : 마지막 페이지에는 뒤에 번호가 없음
+					조건 : 마지막 페이지에는 >> 없음
 				7. <<,>> 기능 구현 : 식 점검 / >>에서 최대 넘으면 최대로
+
+
+				# 3/5 = 0..3 -> 1-5
+				# 5/5 = 1..0 -> 1-5
+				# 13/5 = 2..3 -> 11-15
+				# 15/5 = 3..0 -> 11-15
+				# 필요 어트리뷰트 정보 : 현재페이지
+				# 블럭 시작 구간 : int(현재 페이지/5)*5+1 -> 나머지를 떨구기위해 다시 *5를 함 / 0페이지는 없으므로 +1
+				# 블럭 종료 구간 : 시작 구간+4
+				# 볼드 적용 블럭 : 시작페이지 + 현재페이지%5
+
 				-->
+
 				<div id="fboard_paging">
 						<nav aria-label="Page navigation example">
 							<ul class="pagination">
+
 								<li class="page-item">
-									<a th:if="${page_now}>5" class="page-link" href="#" aria-label="Previous">
-										<span th:href="@{freeBoard/view/main/}" aria-hidden="true">&laquo;</span>
+									<a th:if="${page_now}>5" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+										<span  aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
+
+								<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
+									<a class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
+								</li>
+
 								<li class="page-item">
-									<a th:if="(${page_total}/5)>5"class="page-link" href="#" aria-label="Next">
-										<span th:href="@{freeBoard/view/main/}" aria-hidden="true">&raquo;</span>
+									<a th:if="${block_end%5==0||block_end+1<=page_total}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
+
 							</ul>
 						</nav>
 				</div><!--fboard_paging-->

@@ -83,10 +83,9 @@ public class JpaBoardRepository implements BoardRepository{
     // 페이징이 들어간 게시판 메인 뷰
     public List<free_Board> mainView(int page){
         int start = (page-1)*10;
-        int last = page*10-1;
         return  em.createQuery("select fb from free_Board fb",free_Board.class)
-                .setFirstResult(start)
-                .setMaxResults(last)
+                .setFirstResult(start) // 시작부터
+                .setMaxResults(10) // 10개씩 출력
                 .getResultList();
     }
 

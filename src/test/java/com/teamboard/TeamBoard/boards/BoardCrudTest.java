@@ -21,19 +21,24 @@ public class BoardCrudTest {
     BoardRepository boardRepository;
 
     @Test
-    //@Commit
+    @Commit
     void 게시글작성() {
-        free_Board board = new free_Board();
-        board.setFboard_writer("Board_Test_Account");
-        board.setFboard_title("Test_Post");
-        board.setFboard_content("Hello_Post_!");
 
-        free_Board resBoard = boardService.writeBoard(board);
-        System.out.println("ResBoard : "+resBoard.getFboard_writer()+"\t"+resBoard.getFboard_title()+"\t"+resBoard.getFboard_content());
-        free_Board compBoard = boardService.viewBoard(7);
+        for(int i = 0 ; i < 50 ; i++) {
+            free_Board board = new free_Board();
 
-        Assertions.assertThat(resBoard.getFboard_title()).isEqualTo(compBoard.getFboard_title());
-        System.out.println("CompBoard : "+compBoard.getFboard_writer()+"\t"+compBoard.getFboard_title()+"\t"+compBoard.getFboard_content());
+            board.setFboard_writer("Board_Test_Account");
+            board.setFboard_title("Test_Post");
+            board.setFboard_content("Hello_Post_!");
+
+            free_Board resBoard = boardService.writeBoard(board);
+        }
+//
+//        System.out.println("ResBoard : "+resBoard.getFboard_writer()+"\t"+resBoard.getFboard_title()+"\t"+resBoard.getFboard_content());
+//        free_Board compBoard = boardService.viewBoard(7);
+//
+//        Assertions.assertThat(resBoard.getFboard_title()).isEqualTo(compBoard.getFboard_title());
+//        System.out.println("CompBoard : "+compBoard.getFboard_writer()+"\t"+compBoard.getFboard_title()+"\t"+compBoard.getFboard_content());
     }
 
     @Test
