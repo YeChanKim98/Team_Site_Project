@@ -26,8 +26,6 @@ public class BoardController {
     @GetMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
 
-        System.out.println("접근 요청");
-        
         if(page.isEmpty()){page= Optional.of(1);} // 페이지 미선택은 기본으로 1값
         int[] pageInfo = pagination(page.get(),  -1); // 페이지네이션 정보
         if(page.get()>pageInfo[0]){
@@ -38,8 +36,6 @@ public class BoardController {
         model.addAttribute("boardList",boardList);
         model.addAttribute("from","main");
         model.addAttribute("page_now",page.get());
-        System.out.println("토탈페이지 : "+pageInfo[0]);
-        System.out.println("Page.get() "+page.get()+"\tStart : "+pageInfo[1]+"\tEnd : "+pageInfo[2]);
         model.addAttribute("page_total",pageInfo[0]);
         model.addAttribute("block_start",pageInfo[1]);
         model.addAttribute("block_end",pageInfo[2]);
@@ -57,7 +53,6 @@ public class BoardController {
     @PostMapping("freeBoard/write")
     public String freeWrite(HttpServletRequest request, WriteForm writeForm){
         // 리덱터리 리스팅 회피 : writer변수와 세션에서 받은 변수의 값이 일치하지 않으면 메인으로 리다이렉트
-        System.out.println("라이트 백 진입");
         free_Board board = new free_Board();
         HttpSession session = request.getSession(); // 로그인 여부는 이전에 거르므로, 백에서는 로그인 한 것으로 신뢰
         if(session.getAttribute("loginID").toString().equals("")){
@@ -65,9 +60,7 @@ public class BoardController {
         }else board.setFboard_writer(session.getAttribute("loginID").toString()); // 로그인 작성
         board.setFboard_title(writeForm.getFboard_title());
         board.setFboard_content(writeForm.getFboard_content());
-        System.out.println("게시글 작성 객체 입력 완료");
         boardService.writeBoard(board);
-        System.out.println("서비스 입력 완료");
         return "redirect:/freeBoard/view/main/1"; // 게시판 메인으로 이동
     }
 
@@ -107,15 +100,12 @@ public class BoardController {
     @GetMapping({"freeBoard/view/search","freeBoard/view/search/{page}"})
     public String searchFboard(@PathVariable(required=false) Optional<Integer> page, @RequestParam String search_option, @RequestParam String keyword, Model model){
 
-        System.out.println("======>> 검색 조건 : "+search_option+" / "+keyword);
 
         if(keyword.equals(""))return "redirect:/freeBoard/view/main/1"; // 키워드 없는 검색은 전체 조회(게시판 메인으로)
 
         if(page.isEmpty()){page= Optional.of(1);}
         List<free_Board> boardList = boardService.findBoard(search_option, keyword, page.get());
-        System.out.println("검색완료! 전체 게시물 수 확인중");
         int max = boardService.search_post_cnt(search_option,keyword).intValue();
-        System.out.println("검색된 게시물 : "+max+"개");
         int[] pageInfo = pagination(page.get(), max);
         if(page.get()>pageInfo[0]){
             page = Optional.of(pageInfo[0]);
@@ -126,13 +116,12 @@ public class BoardController {
             // 혹은 모델에 새로운 어트리뷰트를 넣어서 해당 어트리뷰트를 만나면 게시판 메인에 결과없음 페이지가 보여지도록
             return "redirect:/";
         }
+        if(page.get()>max){return "redirect:/freeBoard/view/search/"+pageInfo[2];}
         model.addAttribute("boardList",boardList);
         model.addAttribute("keyword",keyword); // 검색결과를 뷰로 전송 후 hidden에 넣었다가 다시 전송 받아서 페이지네이션 실행
         model.addAttribute("search_option",search_option); // 검색결과를 뷰로 전송 후 hidden에 넣었다가 다시 전송 받아서 페이지네이션 실행
         model.addAttribute("from","search");
-        System.out.println("검색 : 토탈페이지 : "+pageInfo[0]);
         model.addAttribute("page_now",page.get());
-        System.out.println("검색 : Page.get() "+page.get()+"\tStart : "+pageInfo[1]+"\tEnd : "+pageInfo[2]);
         model.addAttribute("page_total",pageInfo[0]);
         model.addAttribute("block_start",pageInfo[1]);
         model.addAttribute("block_end",pageInfo[2]);

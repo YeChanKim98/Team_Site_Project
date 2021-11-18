@@ -60,7 +60,6 @@ public class BoardService {
     }
     public Long search_post_cnt(String search_option, String keyword){
         Long res = boardRepository.search_post_cnt(search_option, keyword);
-        System.out.println("서비스 검색 수 : "+res);
         return res;
     }
 

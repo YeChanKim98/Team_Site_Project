@@ -101,7 +101,6 @@ public class JpaBoardRepository implements BoardRepository{
 
     // 검색 게시글 총 갯수
     public Long search_post_cnt(String search_option, String keyword){
-        System.out.println("레파지토리 인자"+search_option+"  /  "+keyword);
         String findQuery="select count(fb) from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword";
         if(search_option.equals("writer")){
             findQuery = "select count(fb) from free_Board fb where fb.fboard_writer=:keyword";
@@ -110,7 +109,6 @@ public class JpaBoardRepository implements BoardRepository{
         }else if(search_option.equals("content")){
             findQuery = "select count(fb) from free_Board fb where fb.fboard_content=:keyword";
         }
-        System.out.println("레파지토리 jpql선택 완료 : "+findQuery);
         return (Long)em.createQuery(findQuery)
                 .setParameter("keyword",keyword)
                 .getSingleResult();
