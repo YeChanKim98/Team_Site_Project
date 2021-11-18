@@ -67,10 +67,14 @@
 		</style>
 	</head>
 	<body>
-		네비바 Replace예정<br><br><br>
-		<a th:text="'Now '+${page_now}+'Page / Total '+${page_total}+'Page      '"></a>
+		<center>
+		네비바 Replace예정<br>
+		<a th:text="'From : '+${from}"></a><br>
+		<a th:if="${keyword}" th:text="'keyword : '+${keyword}+'&nbsp;&nbsp;&nbsp;option : '+${search_option}"></a><br>
+		<a th:text="'Now '+${page_now}+'Page / Total '+${page_total}+'Page      '"></a><br>
 		<a th:text="'Start '+${block_start}+'block to'"></a>
 		<a th:text="${block_end}+'block'"></a>
+		</center>
 		<div class="container">
 			<article id="fboard">
 
@@ -114,7 +118,7 @@
 								</select>
 							</div>
 							<input type="text" id="search_input" class="form-control" aria-label="Text input with segmented dropdown button" th:name="keyword">
-
+<!--							<input th:if="${keyword}" type="hidden" th:name="pre_keyword" th:value="${keyword}">-->
 							<button id="search_btn" type="submit" class="btn btn-outline-primary">검색</button>
 							<!--자바스크립트를 이용한 컨트롤러와 값 송수신-->
 							<!--완전일치가 아닌, 키워드를 포함한 값 검색-->
@@ -128,45 +132,35 @@
 
 				</div><!--fboard_util : 검색창 / 글쓰기-->
 
-				<!--
-				<< : 현재페이지가 5보다 크면 존재 / 링크는 현재페이지-5 (혹은 start 블럭-1 페이지)
-				>> : 토탈페이지가 5보다
-				1. 5이하면 << 없음
-				2. 6이상이면 >> 있음
-				3. 현재페이지 bold
-				4. 마지막 페이지 구현
-					조건 : 마지막 페이지에는 뒤에 번호가 없음
-					조건 : 마지막 페이지에는 >> 없음
-				7. <<,>> 기능 구현 : 식 점검 / >>에서 최대 넘으면 최대로
-
-
-				# 3/5 = 0..3 -> 1-5
-				# 5/5 = 1..0 -> 1-5
-				# 13/5 = 2..3 -> 11-15
-				# 15/5 = 3..0 -> 11-15
-				# 필요 어트리뷰트 정보 : 현재페이지
-				# 블럭 시작 구간 : int(현재 페이지/5)*5+1 -> 나머지를 떨구기위해 다시 *5를 함 / 0페이지는 없으므로 +1
-				# 블럭 종료 구간 : 시작 구간+4
-				# 볼드 적용 블럭 : 시작페이지 + 현재페이지%5
-
-				-->
-
 				<div id="fboard_paging">
 						<nav aria-label="Page navigation example">
 							<ul class="pagination">
 
 								<li class="page-item">
-									<a th:if="${page_now}>5" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+									<a th:if="${page_now}>5 and ${from.toString().equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+										<span  aria-hidden="true">&laquo;</span>
+									</a>
+									<a th:if="${page_now}>5 and ${from.toString().equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_start.intValue()-1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
 										<span  aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
 
 								<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
-									<a class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
+									<a th:if="${from.toString.equals('main')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
+									<a th:if="${from.toString.equals('search')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/search/'+${page}(search_option=${search_option},keyword=${keyword})}"></a>
+									<!--현재페이지 Bold 구현-->
 								</li>
 
 								<li class="page-item">
-									<a th:if="${block_end%5==0||block_end+1<=page_total}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
+									<!--
+									 [ >> 조건 ]
+									 - 현재 블록의 마지막 뒤에도 페이지가 있어야함
+									 - 블록이 5개가 다 찬 상태(%5가0)여야함
+									-->
+									<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+									<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_end.intValue()+1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Next">
 										<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>

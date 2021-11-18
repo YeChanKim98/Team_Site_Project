@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Objects;
 
 // DAO
 @Repository
@@ -65,17 +66,20 @@ public class JpaBoardRepository implements BoardRepository{
     }
 
     // 검색
-    public List<free_Board> findBoard(String search_option, String keyword) {
+    public List<free_Board> findBoard(String search_option, String keyword, int page) {
+        int start = (page-1)*10;
         String findQuery="select distinct fb from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword";
-        if(search_option=="writer"){
+        if(search_option.equals("writer")){
             findQuery = "select fb from free_Board fb where fb.fboard_writer=:keyword";
-        } else if(search_option=="title"){
+        } else if(search_option.equals("title")){
             findQuery = "select fb from free_Board fb where fb.fboard_title=:keyword";
-        }else if(search_option=="content"){
+        }else if(search_option.equals("content")){
             findQuery = "select fb from free_Board fb where fb.fboard_content=:keyword";
         }
         return em.createQuery(findQuery, free_Board.class)
                 .setParameter("keyword",keyword)
+                .setFirstResult(start)
+                .setMaxResults(10)
                 .getResultList();
     }
 
@@ -92,6 +96,23 @@ public class JpaBoardRepository implements BoardRepository{
     // 게시글 총 갯수
     public Long post_cnt(){
         return (Long) em.createQuery("select count(fb) from free_Board fb")
+                .getSingleResult();
+    }
+
+    // 검색 게시글 총 갯수
+    public Long search_post_cnt(String search_option, String keyword){
+        System.out.println("레파지토리 인자"+search_option+"  /  "+keyword);
+        String findQuery="select count(fb) from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword";
+        if(search_option.equals("writer")){
+            findQuery = "select count(fb) from free_Board fb where fb.fboard_writer=:keyword";
+        } else if(search_option.equals("title")){
+            findQuery = "select count(fb) from free_Board fb where fb.fboard_title=:keyword";
+        }else if(search_option.equals("content")){
+            findQuery = "select count(fb) from free_Board fb where fb.fboard_content=:keyword";
+        }
+        System.out.println("레파지토리 jpql선택 완료 : "+findQuery);
+        return (Long)em.createQuery(findQuery)
+                .setParameter("keyword",keyword)
                 .getSingleResult();
     }
 }

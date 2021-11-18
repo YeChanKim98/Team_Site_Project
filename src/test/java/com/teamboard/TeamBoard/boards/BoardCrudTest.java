@@ -24,11 +24,11 @@ public class BoardCrudTest {
     @Commit
     void 게시글작성() {
 
-        for(int i = 0 ; i < 50 ; i++) {
+        for(int i = 0 ; i < 20 ; i++) {
             free_Board board = new free_Board();
 
-            board.setFboard_writer("Board_Test_Account");
-            board.setFboard_title("Test_Post");
+            board.setFboard_writer("Search");
+            board.setFboard_title("Search"+i);
             board.setFboard_content("Hello_Post_!");
 
             free_Board resBoard = boardService.writeBoard(board);
