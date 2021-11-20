@@ -1,4 +1,4 @@
-package mail;
+package com.teamboard.TeamBoard.mail;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
@@ -13,7 +13,7 @@ public class EmailService {
     private final JavaMailSender emailSender;
 
     public void sendSimpleMessage(String to, String subject, String text) {
-
+        System.out.println("sendSimpleMessage"+to+subject+text);
         SimpleMailMessage message = createMessage(to, subject, text);
         try{//예외처리
             emailSender.send(message);
@@ -24,6 +24,7 @@ public class EmailService {
     }
 
     private SimpleMailMessage createMessage(String to, String subject, String text){
+        System.out.println("createMessage"+to+subject+text);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);//보낼 대상
         message.setSubject(subject);//제목

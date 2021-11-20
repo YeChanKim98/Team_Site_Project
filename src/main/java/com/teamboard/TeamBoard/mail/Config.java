@@ -1,14 +1,13 @@
-package mail;
+package com.teamboard.TeamBoard.mail;
 
-import java.util.Properties;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.Properties;
 
 @Component
 @PropertySource("classpath:mail.properties")

@@ -47,8 +47,8 @@ dependencies {
 	// 메일기능을 위한 의존성
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework:spring-context-support")
-	implementation 'com.sun.mail:javax.mail'
-
+	implementation "javax.mail:mail:1.4.7"
+	implementation 'org.springframework:spring-context-support:5.2.0.RELEASE'
 
 }
 
