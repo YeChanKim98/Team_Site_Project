@@ -6,6 +6,7 @@ create table USER(
     NAME varchar(20) not null,
     EMAIL varchar(30) not null,
     NICK varchar(25) not null,
+    -- DATE DEFAULT CURRENT_TIMESTAMP, H2용
     DATE TIMESTAMP DEFAULT NOW(), -- 확인 필요 / MySQL용
     PHONE varchar(20)
 );

@@ -12,10 +12,14 @@ import java.util.List;
 @Transactional
 public class BoardService {
 
+    // 서비스에서 jpa리포지토리의 개인 메서드를 이용하게 하기위해 빈 똑바로 잡아주기
+    
     private final BoardRepository boardRepository;
+    // private final BoardRepository JpaboardRepository;
 
     @Autowired
     public BoardService(BoardRepository boardRepository) {this.boardRepository = boardRepository;}
+    // public BoardService(BoardRepository jpaboardRepository) {this.boardRepository = jpaboardRepository;}
 
     // 메인(페이징)
     public List<free_Board> mainView(int page){

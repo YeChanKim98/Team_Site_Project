@@ -5,43 +5,126 @@
   <title>Free_Board_Main</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .label{
+      margin-left:10px;
+      font-size:10pt;
+      color:#797979;
+    }
+    .label_content{
+      font-size:12pt;
+      color:#494949;
+    }
+    .tr_title{
+      border-top:2px solid #4a74bd;
+      border-bottom:1px solid #4a74bd;
+      font-size:20pt;
+      background-color:#F9F9F9;
+      height:70px;
+    }
+    list{list-style:none;}
+    #write_comment > div{display: inline-block;}
+  </style>
 
+  <script>
+    function checkOnlyOne(element) {
+
+      const checkboxes
+              = document.getElementsByName("animal");
+
+      checkboxes.forEach((cb) => {
+        cb.checked = false;
+      })
+
+      element.checked = true;
+    }
+  </script>
 </head>
 <body>
-<div class="container">
-  <article id="fboard">
+  <div id="container">
 
-    <div id="fboard_list">
-      <table style="width:100%;border:2px solid black;">
-        <thead>
-        <tr id="list_head">
-          <th scope="col">글 번호</th>
-          <th scope="col">제목</th>
-          <th scope="col">내용</th>
-          <th scope="col">작성자</th>
-          <th scope="col">조회수</th>
-          <th scope="col">댓글수</th>
-          <th scope="col">작성일</th>
+    <!--본문-->
+    <div id="content">
+      <table align="center" style="margin-top:30px;width:50%;">
+        <tr class="tr_title">
+          <td colspan="2">
+            <b style="margin-left:10px;" th:text="${view.fboard_title}"></b>
+          </td>
         </tr>
-        </thead>
 
-        <tbody>
+        <tr height="30" width="40%" style="border-bottom:1px solid #A8A8A8;">
+          <td>
+            <b class="label">작성자</b>&nbsp;|&nbsp;
+            <a class="label_content" th:text="${view.fboard_writer}"></a>
+            <b class="label">조회수</b>&nbsp;|&nbsp;&nbsp;&nbsp;
+            <a class="label_content" th:text="${view.fboard_view_count}"></a>
+            <b class="label">댓글수</b>&nbsp;|&nbsp;
+            <a class="label_content" th:text="${view.fboard_comment_count}"></a>
+          </td>
+
+          <td style="width:60%;" align="right">
+            <b class="label">등록일</b>&nbsp;|
+            <a class="label_content" th:text="${view.fboard_reg_date}"><%=article.getReg_date()%></a>
+            &nbsp;
+          </td>
+        </tr>
+
         <tr>
-          <th scope="row" th:text="${view.fboard_num}"></th>
-          <td th:text="${view.fboard_title}"></td>
-          <td th:text="${view.fboard_content}"></td>
-          <td th:text="${view.fboard_writer}"></td>
-          <td th:text="${view.fboard_view_count}"></td>
-          <td th:text="${view.fboard_comment_count}"></td>
-          <td th:text="${view.fboard_reg_date}"></td>
+          <td height="370px" colspan="2" style="border-bottom:1px solid #4a74bd;padding-left:15px; padding-right:15px;" th:text="${view.fboard_content}"></td>
         </tr>
-        </tbody>
+
+        <tr height="50" style="border-bottom:2px solid #4a74bd; text-align: right;">
+          <td align="right" colspan="2">
+            <button type="button" class="btn btn-outline-dark" onclick="document.location.href='/freeBoard/view/main'" style="margin-right:10px;">글 목록</button>
+            <button th:if ="${session.loginID==view.fboard_writer}" type="button" value="글 수정" class="btn btn-outline-dark" th:href="@{'freeBoard/Update/'+${view.fboard_writer}+'/'+${view.fboard_num}}" style="margin-right:10px">글 수정</button>
+            <button th:if ="${session.loginID==view.fboard_writer}" type="button" value="글 삭제" class="btn btn-outline-danger" th:onclick="location.href=   @{'freeBoard/delete'+${{view.fboard_num}}"  style="margin-right:10px">글 삭제</button>
+          </td>
+        </tr>
       </table>
-    </div><!--fboard_list : 글 목록-->
+    </div>
 
 
-  </article><!--fboard-->
-</div>
+    <!--Comment-->
+    <div id="comment" style="margin-top:30px;margin-right:auto; margin-left:auto; width:50%;">
+      <!--댓글 상단-->
+      <div style="border-bottom:2px solid #a8a8a8; margin-top:15px;">
+        <h5><b th:text="'댓글('+${view.fboard_comment_count}+')'"></b></h5>
+      </div>
+
+      <!--댓글 목록-->
+      <div style="border-bottom:1px solid #a8a8a8;margin-top:5px;margin-bottom:15px;">
+        <ul>
+          <li> <!-- 타임리프를 통해서 반복 실행 -->
+            <div>
+              <div>
+                댓글 작성자 | 작성일
+              </div>
+              <div>
+                댓글 내용
+                for문을 통해서 댓글정보를 받아온 후 th:each로 게시글 메인과 같은 메커니즘으로 적용 : 페이징이 빡셈
+                CSS+JS는 나중에
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!--댓글 작성-->
+      <div id="write_comment" style="height:70px;">
+        <div style="float:left;width:8%;margin-left:10px;">
+          <input  type='checkbox' name='animal' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:13pt;">&nbsp;익명</a><br>
+          <input type='checkbox' name='animal' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:13pt;">&nbsp;아이디</a>
+        </div>
+        <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
+          <input style="height:100%;width:100%;" type="text" name="comment">
+        </div>
+        <div style="float:right; height:70%;width:10%;">
+          <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="button" class="btn btn-primary" onclick="location.href='#'">등록</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
 <script type="text/javascript"></script>
 <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
