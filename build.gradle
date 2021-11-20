@@ -44,10 +44,6 @@ dependencies {
 	// 서버 재기동 없이 코드를 반영하기 위한 개발자 키트
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	// 메일기능을 위한 의존성
-	implementation 'javax.mail:mail:1.4.7'
-	implementation 'org.springframework:spring-context-support:5.2.0.RELEASE'
-
 
 }
 
