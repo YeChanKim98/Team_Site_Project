@@ -8,7 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,13 +54,19 @@ public class BoardController {
     }
 
     @PostMapping("freeBoard/write")
-    public String freeWrite(HttpServletRequest request, WriteForm writeForm){
-        // 리덱터리 리스팅 회피 : writer변수와 세션에서 받은 변수의 값이 일치하지 않으면 메인으로 리다이렉트
+    public String freeWrite(@RequestParam(required = false)String setAnonymous, HttpServletRequest request, WriteForm writeForm){ // 리덱터리 리스팅 회피 : writer변수와 세션에서 받은 변수의 값이 일치하지 않으면 메인으로 리다이렉트
+
         free_Board board = new free_Board();
-        HttpSession session = request.getSession(); // 로그인 여부는 이전에 거르므로, 백에서는 로그인 한 것으로 신뢰
-        if(session.getAttribute("loginID").toString().equals("")){
-            board.setFboard_writer("Anonymous"); // 비로그인 작성
-        }else board.setFboard_writer(session.getAttribute("loginID").toString()); // 로그인 작성
+        HttpSession session = request.getSession(); // 로그인 여부는 이전에 거르므로, 백에서는 로그인 한 것으로 신뢰 -> 한번만 쓰는데 변수 없이 바로 가져다 쓸지?
+
+        if(session.getAttribute("loginID")==null) {
+            board.setFboard_writer("익명(비로그인)");
+        }else if(setAnonymous.equals("anonymous")){
+            board.setFboard_writer("익명(로그인)");
+        }else{
+            board.setFboard_writer(session.getAttribute("loginID").toString());
+        }
+
         board.setFboard_title(writeForm.getFboard_title());
         board.setFboard_content(writeForm.getFboard_content());
         boardService.writeBoard(board);
@@ -65,10 +74,16 @@ public class BoardController {
     }
 
     // 삭제
-    @PostMapping("freeBoard/delete/{fboard_num}")
-    public String freeDelete(@PathVariable int fboard_num){
+    @GetMapping("freeBoard/delete/{fboard_num}")
+    public String freeDelete(@PathVariable int fboard_num, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
         boardService.deleteBoard(fboard_num);
-        return "redirect:/freeBoard/view/main/"; // 게시판 메인으로 이동
+        out.println("<script>alert('게시글 삭제 완료');history.go(-2);</script>");
+        out.flush();
+        out.close();
+        System.out.println("클로즈");
+        return "";
     }
 
     // 수정

@@ -2,7 +2,7 @@ package com.teamboard.TeamBoard.board.Form;
 
 public class WriteForm {
     private int fboard_num;
-    private String fboard_writer;
+    private String fboard_writer="Default";
     private String fboard_title;
     private String fboard_content;
 

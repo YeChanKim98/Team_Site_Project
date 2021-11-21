@@ -41,6 +41,8 @@
   </script>
 </head>
 <body>
+
+<!--전체 width(850)는 고정 좌우 마진 오토 리사이즈 none-->
   <div id="container">
 
     <!--본문-->
@@ -75,9 +77,9 @@
 
         <tr height="50" style="border-bottom:2px solid #4a74bd; text-align: right;">
           <td align="right" colspan="2">
-            <button type="button" class="btn btn-outline-dark" onclick="document.location.href='/freeBoard/view/main'" style="margin-right:10px;">글 목록</button>
-            <button th:if ="${session.loginID==view.fboard_writer}" type="button" value="글 수정" class="btn btn-outline-dark" th:href="@{'freeBoard/Update/'+${view.fboard_writer}+'/'+${view.fboard_num}}" style="margin-right:10px">글 수정</button>
-            <button th:if ="${session.loginID==view.fboard_writer}" type="button" value="글 삭제" class="btn btn-outline-danger" th:onclick="location.href=   @{'freeBoard/delete'+${{view.fboard_num}}"  style="margin-right:10px">글 삭제</button>
+            <button type="button" class="btn btn-outline-dark" onclick="location.href='/freeBoard/view/main'" style="margin-right:10px;">글 목록</button>
+            <a th:if ="${session.loginID==view.fboard_writer}" th:href="@{'/freeBoard/Update/'+${view.fboard_writer}+'/'+${view.fboard_num}}" ><button  type="button" value="글 수정" class="btn btn-outline-dark" style="margin-right:10px">글 수정</button></a>
+            <a th:if ="${session.loginID==view.fboard_writer}" th:href="@{'/freeBoard/delete/'+${view.fboard_num}}" ><button type="button" value="글 삭제" class="btn btn-outline-danger"  style="margin-right:10px">글 삭제</button></a>
           </td>
         </tr>
       </table>
@@ -112,8 +114,8 @@
       <!--댓글 작성-->
       <div id="write_comment" style="height:70px;">
         <div style="float:left;width:8%;margin-left:10px;">
-          <input  type='checkbox' name='animal' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:13pt;">&nbsp;익명</a><br>
-          <input type='checkbox' name='animal' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:13pt;">&nbsp;아이디</a>
+          <input  type='checkbox' name='animal' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
+          <input type='checkbox' name='animal' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
         </div>
         <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
           <input style="height:100%;width:100%;" type="text" name="comment">

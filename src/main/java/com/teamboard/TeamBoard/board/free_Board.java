@@ -77,6 +77,7 @@ public class free_Board {
 
     @PrePersist
     public void onPrePersist() {
-        this.fboard_reg_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.fboard_reg_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        // '초'를 지우면 그냥 00으로 들어감
     }
 }
