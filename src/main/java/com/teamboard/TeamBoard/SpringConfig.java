@@ -1,5 +1,7 @@
 package com.teamboard.TeamBoard;
 
+import com.teamboard.TeamBoard.repository.Mail.Chk_MailRepository;
+import com.teamboard.TeamBoard.repository.Mail.JpaChk_MailRepository;
 import com.teamboard.TeamBoard.repository.board.BoardRepository;
 import com.teamboard.TeamBoard.repository.board.JpaBoardRepository;
 import com.teamboard.TeamBoard.repository.user.JpaUserRepository;
@@ -33,5 +35,8 @@ public class SpringConfig {
 
     @Bean
     public BoardRepository boardRepository(){return new JpaBoardRepository(em);}
+
+    @Bean
+    public Chk_MailRepository chk_MailRepository(){return new JpaChk_MailRepository(em);}
 
 }
