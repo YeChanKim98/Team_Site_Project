@@ -1,5 +1,6 @@
 package com.teamboard.TeamBoard.controller;
 
+import com.teamboard.TeamBoard.mail.Chk_MailService;
 import com.teamboard.TeamBoard.user.form.JoinForm;
 import com.teamboard.TeamBoard.user.User;
 import com.teamboard.TeamBoard.user.UserService;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.script.ScriptContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,9 +23,12 @@ public class UserController {
 
     // 성공 후 반환에 대한 전반적인 재작성 필요
     private final UserService userService;
+    private final Chk_MailService chk_MailService;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Chk_MailService chk_mailService) {
         this.userService = userService;
+        chk_MailService = chk_mailService;
     }
 
     // Join : ID / PW / 이름 / 이메일(인증필요) / 닉네임
@@ -35,19 +38,30 @@ public class UserController {
     }
 
     @PostMapping("users/Join")
-    public String join(JoinForm joinForm, HttpServletRequest request){
-        User user = new User();
-        user.setId(joinForm.getId());
-        user.setPw(joinForm.getPw());
-        user.setName(joinForm.getName());
-        user.setNick(joinForm.getNick());
-        String res = userService.join(user);
-        if(res.equals("Join Fail")) {
-            return "users/Join"; // alert -> 다시 가입 페이지
-        }else {
-            HttpSession session = request.getSession();
-            session.setAttribute("loginID", user.getId());
-            return "redirect:/";
+    public String join(JoinForm joinForm, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        if (chk_MailService.checkAuth(joinForm.getEmail()) == 1) { // 이메일 인증 상태가 1이면
+            System.out.println("이메일 인증을 확인하여 가입절차를 실시합니다");
+            User user = new User();
+            user.setId(joinForm.getId());
+            user.setPw(joinForm.getPw());
+            user.setName(joinForm.getName());
+            user.setNick(joinForm.getNick());
+            user.setEmail(joinForm.getEmail());
+            String res = userService.join(user);
+            if (res.equals("Join Fail")) {
+                return "users/Join"; // alert -> 다시 가입 페이지
+            } else {
+                HttpSession session = request.getSession();
+                session.setAttribute("loginID", user.getId());
+                return "redirect:/";
+            }
+        }else{ // 이메일이 인증상태가 아니면
+            out.println("<script>alert('이메일 인증을 완료해주세요');history.go(-1);</script>");
+            out.flush();
+            out.close();
+            return "";
         }
     }
     
@@ -98,7 +112,7 @@ public class UserController {
     }
 
 
-    // Select One User : ID 받은 후 결과 리턴
+    // 아이디 찾기(이메일 이용)
     @GetMapping("/users/SelOne")
     public String findForm(){
         return "users/tmp/form/SelOneForm";
@@ -106,9 +120,10 @@ public class UserController {
 
 
     @PostMapping("/users/SelOne") // 리퀘스트 맵핑?
-    public String findOneUser(@RequestParam("id") String id, Model model){ // 리퀘스트 파라미터 어노테이션으로 인해 폼html에서 타임리프 사용
-        Optional<User> user = userService.findOneUser(id);
-        model.addAttribute("input",id); // 확인용 속성추가 : 일단 유지
+    public String findOneUser(@RequestParam("address") String address, Model model){ // 리퀘스트 파라미터 어노테이션으로 인해 폼html에서 타임리프 사용
+        System.out.println("컨트롤러에서 이메일을 통한 계정 조회 : "+address);
+        Optional<User> user = userService.findByMail(address);
+        model.addAttribute("input",address); // 확인용 속성추가 : 일단 유지
         model.addAttribute("user",user.get()); // 옵셔널로 감싸져 있으므로 get메소드를 통해서 꺼내줘야함
         return "/users/tmp/SelOne";
     }

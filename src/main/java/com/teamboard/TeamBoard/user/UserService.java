@@ -47,6 +47,12 @@ public class UserService {
         return userRepository.findById(id); // 결과로 받은 객체에서 id값 출력..?
     }
 
+    // 이메일을 통한 ID 받기
+    public Optional<User> findByMail(String address) {
+        System.out.println("서비스에서 Address : "+address+"를 통한 계정 조회");
+        return userRepository.findByMail(address);
+    }
+
     // 업데이트
     public int update(UpdateForm user){
         return userRepository.update(user);
