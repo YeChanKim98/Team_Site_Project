@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Objects;
 
 // DAO
 @Repository
@@ -65,17 +66,20 @@ public class JpaBoardRepository implements BoardRepository{
     }
 
     // 검색
-    public List<free_Board> findBoard(String search_option, String keyword) {
-        String findQuery="select distinct fb from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword";
-        if(search_option=="writer"){
-            findQuery = "select fb from free_Board fb where fb.fboard_writer=:keyword";
-        } else if(search_option=="title"){
-            findQuery = "select fb from free_Board fb where fb.fboard_title=:keyword";
-        }else if(search_option=="content"){
-            findQuery = "select fb from free_Board fb where fb.fboard_content=:keyword";
+    public List<free_Board> findBoard(String search_option, String keyword, int page) {
+        int start = (page-1)*10;
+        String findQuery="select distinct fb from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword order by fb.fboard_num desc ";
+        if(search_option.equals("writer")){
+            findQuery = "select fb from free_Board fb where fb.fboard_writer=:keyword order by fb.fboard_num desc ";
+        } else if(search_option.equals("title")){
+            findQuery = "select fb from free_Board fb where fb.fboard_title=:keyword order by fb.fboard_num desc ";
+        }else if(search_option.equals("content")){
+            findQuery = "select fb from free_Board fb where fb.fboard_content=:keyword order by fb.fboard_num desc ";
         }
         return em.createQuery(findQuery, free_Board.class)
                 .setParameter("keyword",keyword)
+                .setFirstResult(start)
+                .setMaxResults(10)
                 .getResultList();
     }
 
@@ -83,7 +87,7 @@ public class JpaBoardRepository implements BoardRepository{
     // 페이징이 들어간 게시판 메인 뷰
     public List<free_Board> mainView(int page){
         int start = (page-1)*10;
-        return  em.createQuery("select fb from free_Board fb",free_Board.class)
+        return  em.createQuery("select fb from free_Board fb order by fb.fboard_num desc",free_Board.class)
                 .setFirstResult(start) // 시작부터
                 .setMaxResults(10) // 10개씩 출력
                 .getResultList();
@@ -92,6 +96,21 @@ public class JpaBoardRepository implements BoardRepository{
     // 게시글 총 갯수
     public Long post_cnt(){
         return (Long) em.createQuery("select count(fb) from free_Board fb")
+                .getSingleResult();
+    }
+
+    // 검색 게시글 총 갯수
+    public Long search_post_cnt(String search_option, String keyword){
+        String findQuery="select count(fb) from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword";
+        if(search_option.equals("writer")){
+            findQuery = "select count(fb) from free_Board fb where fb.fboard_writer=:keyword";
+        } else if(search_option.equals("title")){
+            findQuery = "select count(fb) from free_Board fb where fb.fboard_title=:keyword";
+        }else if(search_option.equals("content")){
+            findQuery = "select count(fb) from free_Board fb where fb.fboard_content=:keyword";
+        }
+        return (Long)em.createQuery(findQuery)
+                .setParameter("keyword",keyword)
                 .getSingleResult();
     }
 }
