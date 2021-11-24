@@ -32,7 +32,6 @@ public class MailController {
     }
 
     @GetMapping("/chk_mail/{address}")
-    //              /chk_mail/입력값
     public String send_chk(@PathVariable String address, HttpServletRequest req){
         System.out.println("인증메일 발송 컨트롤러 진입"+address);
 

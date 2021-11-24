@@ -47,10 +47,16 @@ public class UserService {
         return userRepository.findById(id); // 결과로 받은 객체에서 id값 출력..?
     }
 
-    // 이메일을 통한 ID 받기
-    public Optional<User> findByMail(String address) {
-        System.out.println("서비스에서 Address : "+address+"를 통한 계정 조회");
-        return userRepository.findByMail(address);
+    // 아이디 찾기
+    public String findId(String name, String address) {
+        System.out.println("    -> [서비스][진입] 이름, 이메일을 통한 아이디 조회 : "+name+" / "+address);
+        return userRepository.findId(name, address);
+    }
+
+    // PW찾기
+    public String findPw(String id, String address) {
+        System.out.println("    -> [서비스][진입] 아이디, 이메일을 통한 아이디 조회 : "+id+" / "+address);
+        return userRepository.findPw(id, address);
     }
 
     // 업데이트
@@ -66,6 +72,10 @@ public class UserService {
         }
         return 1;
     }
+
+
+
+
 
     // 닉네임 중복확인
     private int ChkOver_Nick(User user) {

@@ -11,6 +11,7 @@ public interface UserRepository {
     int delete(String id);
     int update(UpdateForm user);
     Optional<User> findById(String id);
-    Optional<User> findByMail(String address);
+    String findId(String name, String address);
+    String findPw(String id, String address);
     List<User> findAll();
 }

@@ -1,6 +1,7 @@
 package com.teamboard.TeamBoard.controller;
 
 import com.teamboard.TeamBoard.mail.Chk_MailService;
+import com.teamboard.TeamBoard.mail.EmailService;
 import com.teamboard.TeamBoard.user.form.JoinForm;
 import com.teamboard.TeamBoard.user.User;
 import com.teamboard.TeamBoard.user.UserService;
@@ -23,12 +24,14 @@ public class UserController {
 
     // 성공 후 반환에 대한 전반적인 재작성 필요
     private final UserService userService;
+    private final EmailService emailService;
     private final Chk_MailService chk_MailService;
 
     @Autowired
-    public UserController(UserService userService, Chk_MailService chk_mailService) {
+    public UserController(UserService userService, EmailService emailService, Chk_MailService chk_mailService) {
         this.userService = userService;
-        chk_MailService = chk_mailService;
+        this.emailService = emailService;
+        this.chk_MailService = chk_mailService;
     }
 
     // Join : ID / PW / 이름 / 이메일(인증필요) / 닉네임
@@ -112,20 +115,46 @@ public class UserController {
     }
 
 
-    // 아이디 찾기(이메일 이용)
-    @GetMapping("/users/SelOne")
+    // 계정 찾기
+    @GetMapping("/users/FindAccount")
     public String findForm(){
-        return "users/tmp/form/SelOneForm";
+        return "users/Form/FindAccountForm";
     }
 
+    // ID 찾기
+    @PostMapping("/users/findAccount/id")
+    public String findId(@RequestParam String address, @RequestParam String name, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        String findRes = userService.findId(name,address);
+        String content = name+"님의 로그인 ID는 "+findRes+"입니다.";
+        if (!findRes.isEmpty()) { // 계정존재시
+            emailService.sendSimpleMessage(address, "계정 ID 입니다",content);
+            return "redirect:/";
+        }else{ // 계정없을시
+            out.println("<script>alert('이름혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
+            out.flush();
+            out.close();
+            return "/";
+        }
+    }
 
-    @PostMapping("/users/SelOne") // 리퀘스트 맵핑?
-    public String findOneUser(@RequestParam("address") String address, Model model){ // 리퀘스트 파라미터 어노테이션으로 인해 폼html에서 타임리프 사용
-        System.out.println("컨트롤러에서 이메일을 통한 계정 조회 : "+address);
-        Optional<User> user = userService.findByMail(address);
-        model.addAttribute("input",address); // 확인용 속성추가 : 일단 유지
-        model.addAttribute("user",user.get()); // 옵셔널로 감싸져 있으므로 get메소드를 통해서 꺼내줘야함
-        return "/users/tmp/SelOne";
+    // PW 찾기
+    @PostMapping("/users/findAccount/pw")
+    public String findPw(@RequestParam String id, @RequestParam String address, HttpServletResponse response, Model model) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        String findRes = userService.findPw(id,address);
+        String content = id+"님의 로그인 PW는 "+findRes+"입니다.";
+        if (!findRes.isEmpty()) {
+            emailService.sendSimpleMessage(address, "계정 PW 입니다",content);
+            return "redirect:/";
+        }else{
+            out.println("<script>alert('아이디혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
+            out.flush();
+            out.close();
+            return "/";
+        }
     }
 
 

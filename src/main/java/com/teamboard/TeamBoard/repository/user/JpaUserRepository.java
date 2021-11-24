@@ -61,11 +61,22 @@ public class JpaUserRepository implements UserRepository {
     // PK 기반이 아닌 쿼리는 JPQL을 작성하여 실행해야한다 -> 하지만 이것을 해결한 것이 Spring Data JPA이다. 쿼리문의 작성을 필요로 하지 않는다.
     // 이메일 기반 조회
     @Override
-    public Optional<User> findByMail(String address){
-        System.out.println("유저 레포지토리 이메일로 아이디 조회 실시");
-        return em.createQuery("select u from User u where u.email = :address", User.class)
+    public String findId(String name, String address){
+        System.out.println("[레포지토리][진입] 이름, 이메일을 통한 아이디 조회 : "+name+" / "+address);
+        return em.createQuery("select u.id from User u where u.name=:name and u.email = :address")
+                .setParameter("name",name)
                 .setParameter("address",address)
-                .getResultList().stream().findAny();
+                .getResultList().stream().findAny().get().toString();
+    }
+
+    // PW찾기
+    @Override
+    public String findPw(String id, String address){
+        System.out.println("[레포지토리][진입] 아이디, 이메일을 통한 PW 조회 : "+id+" / "+address);
+        return em.createQuery("select u.pw from User u where u.id=:id and u.email = :address")
+                .setParameter("id",id)
+                .setParameter("address",address)
+                .getResultList().stream().findAny().get().toString();
     }
 
     @Override
