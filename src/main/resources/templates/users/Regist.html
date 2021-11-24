@@ -16,7 +16,7 @@
 				}
 
                 else if(!reg.test(join_form.id.value)){
-                    alert('ASDASD');
+                    alert('비번이 조건 불일치');
                     document.getElementById('pw_notice').innerHTML="8~12자에 특수문자, 문자, 숫자가 포함되어야합니다";
                     document.getElementById('pw_notice').style.color="red";
                     return false;
@@ -45,64 +45,49 @@
 			}
 
 			function Join() {
-				if(join_form.id.value===""){
-					alert("아이디를 입력하세요");
-					join_form.inputid.focus();
-					return false;
-				}
-
-				else if(join_form.pw.value===""){
-					alert("비밀번호를 입력하세요");
-					join_form.pw.focus();
-					return false;
-				}
-
-                else if(join_form.pw.value.length < 6 || join_form.pw.value.length > 12){
+                if (join_form.id.value === "") {
+                    alert("아이디를 입력하세요");
+                    join_form.inputid.focus();
+                    return false;
+                } else if (join_form.pw.value === "") {
+                    alert("비밀번호를 입력하세요");
+                    join_form.pw.focus();
+                    return false;
+                } else if (join_form.pw.value.length < 6 || join_form.pw.value.length > 12) {
                     alert("비밀번호는 8~12자리만 가능합니다");
                     join_form.pw.focus();
                     return false;
-                }
-
-				else if(join_form.pwchk.value===""){
-					 alert("비밀번호 재확인을 해주세요");
-					 join_form.pwchk.focus();
-					 return false;
-				}
-
-				else if(join_form.nick.value===""){
-					 alert("닉네임을 입력하세요");
-					 join_form.nick.focus();
-					 return false;
-				}
-
-				else if(join_form.name.value===""){
-					 alert("이름을 입력하세요");
-					 join_form.name.focus();
-					 return false;
-				}
-
-				else if(join_form.email.value===""){
-					 alert("이메일을 입력하세요");
-					 join_form.email.focus();
-					 return false;
-				}
-
-                else if(join_form.pw.value !== join_form.pwchk.value){
+                } else if (join_form.pwchk.value === "") {
+                    alert("비밀번호 재확인을 해주세요");
+                    join_form.pwchk.focus();
+                    return false;
+                } else if (join_form.nick.value === "") {
+                    alert("닉네임을 입력하세요");
+                    join_form.nick.focus();
+                    return false;
+                } else if (join_form.name.value === "") {
+                    alert("이름을 입력하세요");
+                    join_form.name.focus();
+                    return false;
+                } else if (join_form.email.value === "") {
+                    alert("이메일을 입력하세요");
+                    join_form.email.focus();
+                    return false;
+                } else if (join_form.pw.value !== join_form.pwchk.value) {
                     alert("비밀번호를 다시 확인해주세요");
                     join_form.pwchk.focus();
                     return false;
-				}
-
-                else {
+                } else {
                     join_form.submit(); // 이동
                     return false;
-				}
+                }
+            }
 
-                function goCheck(){
-                    location.href="/mail";
-				}
-
-			 }
+			function goCheck() {
+				var link = '/chk_mail/' + document.getElementById('inputemail').value;
+				alert(link);
+				location.href = link;
+			}
       	</script>
 
 		<style>
@@ -173,14 +158,14 @@
 				<div id="input_pw">
 					<h5>비밀번호</h5>
 					<span>
-						<input type="password" id="inputpw" class="form-control" name="pw" onkeyup="chkreg();">
+						<input type="password" id="inputpw" class="form-control" name="pw" onkeyup="chkreg()">
 					</span>
 					<span id="pw_notice"></span>
 				</div>
 				<div id="input_pwchk">
 					<h5>비밀번호 재입력</h5>
 					<span>
-						<input type="password" id="inputpwchk" class="form-control" name="pwchk" onkeyup="chkpwd();">
+						<input type="password" id="inputpwchk" class="form-control" name="pwchk" onkeyup="chkpwd()">
 					</span>
 					<span id="chkpw_notice"></span>
 				</div>
