@@ -10,20 +10,39 @@
 	<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 
 	<script>
-		<!--로그인용 스크립트-->
-		function chk_input_accout() {
-			let id = document.getElementById('recipient-id').value;
-			let pw = document.getElementById('recipient-passwd').value;
-			if(!id){
-				alert('ID를 입력하세요!');
-				document.getElementById('recipient-id').focus();
-			}else if(!pw){
-				alert('PW를 입력하세요!');
-				document.getElementById('recipient-passwd').focus();
-			}else{
-				document.getElementById('login-form').submit();
-			}
-		}
+
+        // function sendPost(action, params) {
+        //     var form = document.createElement('form');
+        //     form.setAttribute('method', 'post');
+        //     form.setAttribute('action', action);
+        //     document.charset = "utf-8";
+        //     for ( var key in params) {
+        //         var hiddenField = document.createElement('input');
+        //         hiddenField.setAttribute('type', 'hidden');
+        //         hiddenField.setAttribute('name', key);
+        //         hiddenField.setAttribute('value', params[key]);
+        //         form.appendChild(hiddenField);
+        //     }
+        //     document.body.appendChild(form);
+        //     form.submit();
+        // }
+
+
+
+        <!--로그인용 스크립트-->
+        function chk_input_accout() {
+            let id = document.getElementById('recipient-id').value;
+            let pw = document.getElementById('recipient-passwd').value;
+            if(!id){
+                alert('ID를 입력하세요!');
+                document.getElementById('recipient-id').focus();
+            }else if(!pw){
+                alert('PW를 입력하세요!');
+                document.getElementById('recipient-passwd').focus();
+            }else{
+                document.getElementById('login-form').submit();
+            }
+        }
 	</script>
 
 </head>
@@ -33,7 +52,7 @@
 		<h1>테스트용 임시 홈(/)</h1>
 		<a th:if ="${session.loginID}">
 			<a th:text="'hi, '+${session.loginID}"></a><br>
-			<a href="/users/Logout">로그아웃</a>
+			<a href="/users/Logout">&nbsp;로그아웃&nbsp;</a>
 		</a>
 		<a th:unless="${session.loginID}">
 			<!--					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login btn</button>-->
@@ -48,33 +67,10 @@
 							</button>
 						</div>
 
-<<<<<<< HEAD
-	</head>
-	<body>
-		<div>
-			<div>
-				<h1>테스트용 임시 홈(/)</h1>
-				<a th:if ="${session.loginID}">
-					<a th:text="'hi, '+${session.loginID}"></a><br>
-					<a href="/users/Logout">&nbsp;로그아웃&nbsp;</a>
-				</a>
-				<a th:unless="${session.loginID}">
-<!--					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login btn</button>-->
-					<a data-toggle="modal" data-target="#exampleModal" onmouseover="this.style.fontWeight='bold'" onmouseout="this.style.fontWeight=''">Login</a>
-					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header" style="border-bottom-color: white; padding-bottom:0;">
-									<h5 class="modal-title" id="exampleModalLabel" style="margin-left:10%;font-size:2.1em;">Login</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-=======
 						<div class="modal-body" style="margin:0 auto;width:80%;">
 							<form id="login-form" action="users/Login" method="post">
 								<div class="form-group" style="display:flex; text-align:center; margin-top:10px; margin-bottom:8px;">
 									<input type="text" class="form-control" id="recipient-id" name="id" placeholder="아이디">
->>>>>>> 110df56050d6655e9ea9834332fd98584222fd6a
 								</div>
 								<div class="form-group" style="display:flex; text-align:center;">
 									<input type="text" class="form-control" id="recipient-passwd" name="pw" placeholder="비밀번호">
@@ -93,63 +89,31 @@
 							</form>
 						</div>
 					</div>
-<<<<<<< HEAD
-					<div>
-					</div>
-				</a>
-				<a href="/Site/Account/Admin/YC">&nbsp;관리자 페이지&nbsp;</a>
-=======
 				</div>
->>>>>>> 110df56050d6655e9ea9834332fd98584222fd6a
 			</div>
 			<div>
-<<<<<<< HEAD
-				<hr color="black">
-				<p>Free_Board</p>
-				<a href="freeBoard/write">작 성&nbsp;&nbsp;</a>
-				<a href="freeBoard/view/main">젠체 목록</a>
 			</div>
-		</div>
+		</a>
+		<a href="/Site/Account/Admin/YC">&nbsp;관리자 페이지&nbsp;</a>
+	</div>
+
+	<div>
+		<hr color="black">
+		<p>Free_Board</p>
+		<a href="freeBoard/write">작 성&nbsp;&nbsp;</a>
+		<a href="freeBoard/view/main">젠체 목록</a>
+	</div>
+</div>
 <!--		<form action="/mail" method="post">-->
 <!--			<input name="address" value="ssy01077@gmail.com"><br>-->
 <!--			<input name="title" value="ㅁㄴㅇㄹ" > <br>-->
 <!--			<textarea name="content" cols="60" rows="20" value="test"></textarea>-->
 <!--			<button type="submit">발송</button>-->
 <!--		</form>-->
-		<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js" style="user-select: auto;"></script>
-		<script type="text/javascript" style="user-select: auto;"></script>
-		<!-- Bootstrap core JavaScript-->
-		<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-		<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-	</body>
-=======
-			</div>
-		</a>
-		<a href="/users/SelAll">출력(전체)</a>
-		<a href="/users/Delete">삭제</a>
-		<a th:if ="${session.loginID}" href="/users/Update">정정</a>
-	</div>
-
-	<div>
-		<hr color="black">
-		<p>Free_Board</p>
-		<a href="freeBoard/write">작 성</a>
-		<a href="#">수정</a>
-		<a href="#">삭제</a>
-		<a href="freeBoard/view/main">젠체 목록</a>
-	</div>
-</div>
-<form action="/mail" method="post">
-	<input name="address" value="ssy01077@gmail.com"><br>
-	<input name="title" value="ㅁㄴㅇㄹ" > <br>
-	<textarea name="content" cols="60" rows="20" value="test"></textarea>
-	<button type="submit">발송</button>
-</form>
 <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js" style="user-select: auto;"></script>
 <script type="text/javascript" style="user-select: auto;"></script>
 <!-- Bootstrap core JavaScript-->
 <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
 <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 </body>
->>>>>>> 110df56050d6655e9ea9834332fd98584222fd6a
 </html>
