@@ -3,6 +3,7 @@ package com.teamboard.TeamBoard.controller;
 import com.teamboard.TeamBoard.board.BoardService;
 import com.teamboard.TeamBoard.board.Form.WriteForm;
 import com.teamboard.TeamBoard.board.free_Board;
+import com.teamboard.TeamBoard.board.notice_Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,8 @@ public class BoardController {
             page = Optional.of(pageInfo[0]); // 최고페이지 이상으로 가려고하면 강제로 마지막페이지로 이동
             pageInfo[1] = page.get();
         }
+        List<notice_Board> noticeList = boardService.listNoticeView();
+        model.addAttribute("noticeList",noticeList);
         List<free_Board> boardList = boardService.mainView(page.get()); // 마지막 페이지보다 높은 페이지 요구하면 강제로 마지막 페이지 반환
         model.addAttribute("boardList",boardList);
         model.addAttribute("from","main");
@@ -74,41 +77,74 @@ public class BoardController {
     }
 
     // 삭제
-    @GetMapping("freeBoard/delete/{fboard_num}")
-    public String freeDelete(@PathVariable int fboard_num, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping("{kinds}/delete/{num}")
+    public String freeDelete(@PathVariable String kinds,@PathVariable int num, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        boardService.deleteBoard(fboard_num);
-        out.println("<script>alert('게시글 삭제 완료');history.go(-2);</script>");
-        out.flush();
-        out.close();
-        System.out.println("클로즈");
+            if(kinds.equals("freeBoard")) {
+                PrintWriter out = response.getWriter();
+                boardService.deleteBoard(num);
+                out.println("<script>alert('게시글 삭제 완료');history.go(-2);</script>");
+                out.flush();
+                out.close();
+                System.out.println("클로즈");
+            }
         return "";
     }
 
     // 수정
-    @GetMapping("freeBoard/Update/{id}/{fboard_num}")
-    public String freeUpdate(@PathVariable String id, @PathVariable int fboard_num, Model model){
-        free_Board board = boardService.viewBoard(fboard_num);
-        model.addAttribute("fboard_num",fboard_num);
-        model.addAttribute("fboard_id",id);
-        model.addAttribute("fboard_title",board.getFboard_title());
-        model.addAttribute("fboard_content",board.getFboard_content());
-        return "redirect:/"; //수성 폼으로  이동
+    @GetMapping("{kinds}/update/{id}/{num}")
+    public String freeUpdate(@PathVariable String kinds,@PathVariable String id, @PathVariable int num, Model model){
+        if(kinds.equals("freeBoard")) {
+            free_Board board = boardService.viewBoard_free(num);
+            model.addAttribute("fboard_num", num);
+            model.addAttribute("fboard_id", id);
+            model.addAttribute("fboard_title", board.getFboard_title());
+            model.addAttribute("fboard_content", board.getFboard_content());
+        }
+        return "redirect:/"; // 입력폼에 넘기고 값이 있으면 넣고 없으면 안 넣고, 추가 요소 확인
     }
 
-    @PostMapping("freeBoard/Update/{id}/{fboard_num}")
-    public String freeUpdate(@PathVariable String id, @PathVariable int fboard_num, WriteForm writeForm){
-        boardService.updateBoard(writeForm);
-        return "redirect:freeBoard/view/main/"; // 게시판 메인으로 이동
+    @PostMapping("{kinds}/Update/{id}/{fboard_num}")
+    public String freeUpdate(@PathVariable String kinds, @PathVariable String id, @PathVariable int fboard_num, WriteForm writeForm){
+        if(kinds.equals("freeBoard")) boardService.updateBoard(writeForm);
+        return "redirect:freeBoard/view/main/1"; // 게시판 메인으로 이동
     }
 
     // 조회
-    @GetMapping("freeBoard/view/{fboard_num}")
-    public String viewFboard(@PathVariable int fboard_num, Model model){
-        free_Board board = boardService.viewBoard(fboard_num);
-        model.addAttribute("view",board);
-        return"boards/free/FreeBoardView"; // 뷰페이지로 이동
+    @GetMapping("{kinds}/view/{num}")
+    public String viewBoard(@PathVariable String kinds, @PathVariable int num, Model model){
+        System.out.println("[viewBoard]["+kinds+"] 진입 : "+num);
+        if(kinds.equals("freeBoard")){
+            System.out.println("[viewBoard][freeBoard] 서비스 호출");
+            free_Board post = boardService.viewBoard_free(num);
+            System.out.println("[viewBoard][freeBoard] 조건에 맞는 대상 찾기 완료");
+            model.addAttribute("num",post.getFboard_num());
+            model.addAttribute("writer",post.getFboard_writer());
+            model.addAttribute("title",post.getFboard_title());
+            model.addAttribute("content",post.getFboard_content());
+            model.addAttribute("view_cnt",post.getFboard_view_count());
+            model.addAttribute("comment_cnt",post.getFboard_comment_count());
+            model.addAttribute("reg_date",post.getFboard_reg_date());
+            model.addAttribute("from_kinds",kinds);
+            System.out.println("[viewBoard][freeBoard] 뷰에 전달할 모델 생성 완료");
+        }else if(kinds.equals("notice")){
+            System.out.println("[viewBoard][notice] 서비스 호출");
+            notice_Board post = boardService.viewBoard_notice(num);
+            System.out.println("[viewBoard][notice] 조건에 맞는 대상 찾기 완료");
+            model.addAttribute("num",post.getNotice_num());
+            model.addAttribute("writer",post.getNotice_writer());
+            model.addAttribute("title",post.getNotice_title());
+            model.addAttribute("content",post.getNotice_content());
+            model.addAttribute("view_cnt",post.getNotice_view_count());
+            model.addAttribute("comment_cnt",post.getNotice_comment_count());
+            model.addAttribute("reg_date",post.getNotice_reg_date());
+            model.addAttribute("from_kinds",kinds);
+            System.out.println("[viewBoard][notice] 뷰에 전달할 모델 생성 완료");
+        }else{
+            System.out.println("[viewBoard][Get]잘못된 페이지 요청");
+            return "/freeBoard/view/main/1"; //이전 페이지로 돌아가도록
+        }
+        return"boards/PostView";
     }
 
     // 게시글 검색
@@ -150,7 +186,7 @@ public class BoardController {
         if(page%5==0){start = (((int)page/5)-1)*5+1;}  // 마지막페이지(5배수 처리)
         else{start = ((int)page/5)*5+1;}               // 나머지
         int end = start+4;
-        if(max==-1){total_page = Math.toIntExact(boardService.totalPost());}
+        if(max==-1){total_page = Math.toIntExact(boardService.totalPost())+5;} // +5 : 공지글 5개로 고정이므로 5개씩 밀려서 페이징 됨 그래서 +5로 맞춰줌
         else{total_page=max;}
         if(total_page%10!=0) total_page=total_page/10+1;
         else total_page=total_page/10;

@@ -65,3 +65,13 @@ create table DEL_COMMENT(
     DCOMMENT_REG_DATE datetime not null,
     DCOMMENT_UPDATE_DATE datetime
 );
+
+create table notice_board(
+    notice_NUM int auto_increment not null primary key,
+    FBOARD_WRITER varchar(25) not null,
+    FBOARD_TITLE varchar(50) not null,
+    FBOARD_CONTENT varchar(1500) not null,
+    FBOARD_VIEW_COUNT int(5) DEFAULT 0 not null,
+    FBOARD_Comment_COUNT int(5) DEFAULT 0 not null,
+    FBOARD_REG_DATE datetime not null
+)

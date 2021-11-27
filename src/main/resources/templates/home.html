@@ -52,7 +52,7 @@
 				<h1>테스트용 임시 홈(/)</h1>
 				<a th:if ="${session.loginID}">
 					<a th:text="'hi, '+${session.loginID}"></a><br>
-					<a href="/users/Logout">로그아웃</a>
+					<a href="/users/Logout">&nbsp;로그아웃&nbsp;</a>
 				</a>
 				<a th:unless="${session.loginID}">
 <!--					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login btn</button>-->
@@ -94,26 +94,22 @@
 					<div>
 					</div>
 				</a>
-				<a href="/users/SelAll">출력(전체)</a>
-				<a href="/users/Delete">삭제</a>
-				<a th:if ="${session.loginID}" href="/users/Update">정정</a>
+				<a href="/Site/Account/Admin/YC">&nbsp;관리자 페이지&nbsp;</a>
 			</div>
 
 			<div>
 				<hr color="black">
 				<p>Free_Board</p>
-				<a href="freeBoard/write">작 성</a>
-				<a href="#">수정</a>
-				<a href="#">삭제</a>
+				<a href="freeBoard/write">작 성&nbsp;&nbsp;</a>
 				<a href="freeBoard/view/main">젠체 목록</a>
 			</div>
 		</div>
-		<form action="/mail" method="post">
-			<input name="address" value="ssy01077@gmail.com"><br>
-			<input name="title" value="ㅁㄴㅇㄹ" > <br>
-			<textarea name="content" cols="60" rows="20" value="test"></textarea>
-			<button type="submit">발송</button>
-		</form>
+<!--		<form action="/mail" method="post">-->
+<!--			<input name="address" value="ssy01077@gmail.com"><br>-->
+<!--			<input name="title" value="ㅁㄴㅇㄹ" > <br>-->
+<!--			<textarea name="content" cols="60" rows="20" value="test"></textarea>-->
+<!--			<button type="submit">발송</button>-->
+<!--		</form>-->
 		<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js" style="user-select: auto;"></script>
 		<script type="text/javascript" style="user-select: auto;"></script>
 		<!-- Bootstrap core JavaScript-->

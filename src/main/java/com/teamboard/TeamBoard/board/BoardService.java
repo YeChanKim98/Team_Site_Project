@@ -12,24 +12,29 @@ import java.util.List;
 @Transactional
 public class BoardService {
 
-    // 서비스에서 jpa리포지토리의 개인 메서드를 이용하게 하기위해 빈 똑바로 잡아주기
-
     private final BoardRepository boardRepository;
-    // private final BoardRepository JpaboardRepository;
 
     @Autowired
     public BoardService(BoardRepository boardRepository) {this.boardRepository = boardRepository;}
-    // public BoardService(BoardRepository jpaboardRepository) {this.boardRepository = jpaboardRepository;}
 
     // 메인(페이징)
     public List<free_Board> mainView(int page){
         return boardRepository.mainView(page);
     }
 
-    // 작성
+    // 메인(공지)
+    public List<notice_Board> listNoticeView(){return boardRepository.noticeView();}
+
+    // 글 작성
     public free_Board writeBoard(free_Board free_board){
         boardRepository.write(free_board);
         return free_board;
+    }
+
+    // 공지 작성
+    public int writeNotice(notice_Board noticeBoard){
+        boardRepository.write_notice(noticeBoard);
+        return 1;
     }
 
     // 검색(전체)
@@ -44,8 +49,13 @@ public class BoardService {
     }
 
     // 게시글 조회
-    public free_Board viewBoard(int fboard_num){
-        return boardRepository.view(fboard_num);
+    public free_Board viewBoard_free(int fboard_num){
+        return boardRepository.view_free(fboard_num);
+    }
+
+    // 공지 조회
+    public notice_Board viewBoard_notice(int notice_num){
+        return boardRepository.view_notice(notice_num);
     }
 
     // 수정

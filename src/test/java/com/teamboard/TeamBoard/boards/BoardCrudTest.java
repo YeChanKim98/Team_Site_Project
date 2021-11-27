@@ -45,7 +45,7 @@ public class BoardCrudTest {
     @Commit
     void 뷰_조회수증가(){
         int fboard_num = 12; // test post number
-        boardService.viewBoard(fboard_num);
+        boardService.viewBoard_free(fboard_num);
         System.out.println(fboard_num+"번 게시물의 조회수 1증가");
 
     }

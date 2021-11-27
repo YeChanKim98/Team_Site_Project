@@ -32,6 +32,15 @@
             text-decoration: none;
             color: black;
         }
+		#notice_area{background-color: #dcfcdb;}
+        #notice_link:link{
+            text-decoration: none;
+            color: black;
+        }
+        #notice_link:visited{
+            text-decoration: none;
+            color: black;
+        }
         .board_writer{width:15%;}
         .board_vcnt{width:8%;}
         .board_ccnt{width:8%;}
@@ -100,6 +109,17 @@
 				</thead>
 
 				<tbody class="table_body">
+				<!-- 공지 -->
+				<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
+					<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
+					<td class="board_title"><a id="notice_link" th:text="${notice.notice_title}" th:href="'/notice/view/'+${notice.notice_num}"></a></td>
+					<td class="board_writer" th:text="${notice.notice_writer}"></td>
+					<td class="board_vcnt" th:text="${notice.notice_view_count}"></td>
+					<td class="board_ccnt" th:text="${notice.notice_comment_count}"></td>
+					<td class="board_date" th:text="${notice.notice_reg_date}"></td>
+				</tr>
+
+				<!-- 일반 글 -->
 				<tr th:each="board : ${boardList}">
 					<th class="board_num" scope="row" th:text="${board.fboard_num}"></th>
 					<td class="board_title"><a id="post_link" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
@@ -156,7 +176,7 @@
 					<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
 						<a th:if="${from.toString.equals('main')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
 						<a th:if="${from.toString.equals('search')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/search/'+${page}(search_option=${search_option},keyword=${keyword})}"></a>
-						<!--현재페이지 Bold 구현-->
+						<!--현재페이지 Bold 구현 : <b>태그에 if를 통해서..-->
 					</li>
 
 					<li class="page-item">

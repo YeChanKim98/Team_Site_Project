@@ -141,7 +141,7 @@ public class UserController {
 
     // PW 찾기
     @PostMapping("/users/findAccount/pw")
-    public String findPw(@RequestParam String id, @RequestParam String address, HttpServletResponse response, Model model) throws IOException {
+    public String findPw(@RequestParam String id, @RequestParam String address, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
         String findRes = userService.findPw(id,address);
@@ -174,16 +174,20 @@ public class UserController {
 
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
     // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
-    @GetMapping("/users/Update")
-    public String updateForm( Model model, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        User user = userService.findOneUser((String) session.getAttribute("loginID")).get(); // 업데이트 테스트용 임시 케이스 -> 원래는 현재 유저 ID를 받아와서 입력
+    @GetMapping({"/users/Update","/users/Update/{updateId}"})
+    public String updateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
+        if(updateId.isEmpty()){
+            HttpSession session = request.getSession();
+            User user = userService.findOneUser((String) session.getAttribute("loginID")).get();
+        }
+        User user = userService.findOneUser(updateId).get();
         model.addAttribute("id",user.getId());
         model.addAttribute("name",user.getName());
         model.addAttribute("nick",user.getNick());
         return "users/tmp/form/Update";
     }
 
+    //
     @PostMapping("/users/Update/{updateId}")
     public String update(UpdateForm updateForm){
         int res  = userService.update(updateForm); // 1성공 0실패
