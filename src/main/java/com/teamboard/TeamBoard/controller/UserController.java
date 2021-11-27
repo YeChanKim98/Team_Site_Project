@@ -118,7 +118,7 @@ public class UserController {
     // 계정 찾기
     @GetMapping("/users/FindAccount")
     public String findForm(){
-        return "users/Form/FindAccountForm";
+        return "users/FindAccountForm";
     }
 
     // ID 찾기
