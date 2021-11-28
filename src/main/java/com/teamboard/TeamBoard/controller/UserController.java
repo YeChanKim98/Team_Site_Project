@@ -123,13 +123,13 @@ public class UserController {
 
     // ID 찾기
     @PostMapping("/users/findAccount/id")
-    public String findId(@RequestParam String address, @RequestParam String name, HttpServletResponse response) throws IOException {
+    public String findId(@RequestParam String id_address, @RequestParam String id_name, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String findRes = userService.findId(name,address);
-        String content = name+"님의 로그인 ID는 "+findRes+"입니다.";
+        String findRes = userService.findId(id_name,id_address);
+        String content = id_name+"님의 로그인 ID는 "+findRes+"입니다.";
         if (!findRes.isEmpty()) { // 계정존재시
-            emailService.sendSimpleMessage(address, "계정 ID 입니다",content);
+            emailService.sendSimpleMessage(id_address, "계정 ID 입니다",content);
             return "redirect:/";
         }else{ // 계정없을시
             out.println("<script>alert('이름혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
@@ -141,13 +141,13 @@ public class UserController {
 
     // PW 찾기
     @PostMapping("/users/findAccount/pw")
-    public String findPw(@RequestParam String id, @RequestParam String address, HttpServletResponse response) throws IOException {
+    public String findPw(@RequestParam String pw_id, @RequestParam String pw_address, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String findRes = userService.findPw(id,address);
-        String content = id+"님의 로그인 PW는 "+findRes+"입니다.";
+        String findRes = userService.findPw(pw_id,pw_address);
+        String content = pw_id+"님의 로그인 PW는 "+findRes+"입니다.";
         if (!findRes.isEmpty()) {
-            emailService.sendSimpleMessage(address, "계정 PW 입니다",content);
+            emailService.sendSimpleMessage(pw_address, "계정 PW 입니다",content);
             return "redirect:/";
         }else{
             out.println("<script>alert('아이디혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
@@ -181,16 +181,16 @@ public class UserController {
             User user = userService.findOneUser((String) session.getAttribute("loginID")).get();
         }
         User user = userService.findOneUser(updateId).get();
-        model.addAttribute("id",user.getId());
-        model.addAttribute("name",user.getName());
-        model.addAttribute("nick",user.getNick());
+        model.addAttribute("userInfo",user);
+//        model.addAttribute("name",user.getName());
+//        model.addAttribute("nick",user.getNick());
         return "users/tmp/form/Update";
     }
 
     //
-    @PostMapping("/users/Update/{updateId}")
-    public String update(UpdateForm updateForm){
-        int res  = userService.update(updateForm); // 1성공 0실패
+    @PostMapping("/users/Update")//{updateId}")
+    public String update(User user){
+        int res  = userService.update(user); // 1성공 0실패
         if(res==1) System.out.println("계정정보 업데이트 성공!");
         else System.out.println("계정정보 업데이트 실패!");
         return "redirect:/users/SelAll"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함

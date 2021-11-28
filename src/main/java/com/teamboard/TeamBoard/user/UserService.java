@@ -60,7 +60,7 @@ public class UserService {
     }
 
     // 업데이트
-    public int update(UpdateForm user){
+    public int update(User user){
         return userRepository.update(user);
     }
 

@@ -60,6 +60,7 @@ public class BoardService {
 
     // 수정
     public int updateBoard(WriteForm writeForm) {
+        System.out.println("게시글 수정 서비스 진입");
         return boardRepository.update(writeForm);
     }
 

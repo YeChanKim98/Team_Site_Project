@@ -47,8 +47,12 @@ public class JpaBoardRepository implements BoardRepository{
 
     // 수정
     public int update(WriteForm writeForm) {
-        return em.createQuery("update free_Board fb set fb.fboard_writer=:fboard_writer, fb.fboard_content=:fboard_content where fb.fboard_num=:fboard_num") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
-                .setParameter("fboard_writer",writeForm.getFboard_title())
+        System.out.println("게시글 수정 레포지트리 실행");
+        System.out.println(writeForm.getFboard_title());
+        System.out.println(writeForm.getFboard_content());
+        System.out.println(writeForm.getFboard_num());
+        return em.createQuery("update free_Board fb set fb.fboard_title=:fboard_title, fb.fboard_content=:fboard_content where fb.fboard_num=:fboard_num")
+                .setParameter("fboard_title",writeForm.getFboard_title())
                 .setParameter("fboard_content",writeForm.getFboard_content())
                 .setParameter("fboard_num",writeForm.getFboard_num())
                 .executeUpdate();
@@ -56,7 +60,7 @@ public class JpaBoardRepository implements BoardRepository{
 
     // 일반글 조회
     public free_Board view_free(int fboard_num) {
-        // 조회 수 증가
+        // 조회 수 증가 : 현재 범용으로 가져오는 메서드가 없어서 수정시 해당 메서드를 이용하는데, 이때 뷰가 같이 증가함
         em.createQuery("update free_Board fb set fb.fboard_view_count=fb.fboard_view_count+1 where fb.fboard_num=:fboard_num")
                 .setParameter("fboard_num",fboard_num)
                 .executeUpdate();

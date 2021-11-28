@@ -31,7 +31,13 @@
 <div class="row">
 	<div class="col-md-3"></div> <!--지우고 다른 방법으로 가운데 정렬-->
 	<div class="col-md-6">
-		<form  class="/freeBoard/write" method="post">
+		<a th:value="${use}"></a>
+		<a th:if="${use} == 'update'">== 'update'</a><br>
+		<a th:if="${use} == 'write'">== 'write'</a>
+
+
+		<!--작성-->
+		<form th:if="${use}=='write'" target="/freeBoard/write" method="post">
 			<table class="table">
 				<tr>
 					<td style="width:80px;vertical-align: middle;padding-left:16px;padding-right:0px;">작성자</td>
@@ -50,7 +56,7 @@
 				</tr>
 
 				<tr>
-					<td colspan="3"><textarea rows="10" cols="50" name="fboard_content" class="form-control"></textarea></td>
+					<td colspan="3"><textarea rows="10" cols="50" name="fboard_content" class="form-control" placeholder="내용" style="resize:none;"></textarea></td>
 				</tr>
 				<tr>
 
@@ -59,23 +65,48 @@
 						<input type="submit" value="글쓰기" class="btn btn-success" style="float: right">
 					</td>
 				</tr>
-
 			</table>
 		</form>
+
+
+		<!--업데이트-->
+		<form th:if="${use}=='update'" th:target="'/'+${kinds}+'/update/'+${session.loginID}+'/'+${boardInfo.fboard_num}" method="post">
+			<table class="table">
+				<tr>
+					<td style="width:80px;vertical-align: middle;padding-left:16px;padding-right:0px;">작성자</td><input type="hidden" th:value="${boardInfo.fboard_num}" name="fboard_num">
+					<td style="width:250px;padding-left:0px;">
+						<input type="text" class="form-control" name="fboard_writer" th:value="${session.loginID}" disabled>
+					</td>
+					<td>
+						<label th:if="${session.loginID}" style="font-size:12pt;">
+							<input type="checkbox" name="setAnonymous" value="anonymous">익명
+						</label>
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3"><input type="text" class="form-control" name="fboard_title" th:value="${boardInfo.fboard_title}"></td>
+				</tr>
+
+				<tr>
+					<td colspan="3"><textarea rows="10" cols="50" name="fboard_content" class="form-control" th:text="${boardInfo.fboard_content}"></textarea></td>
+				</tr>
+				<tr>
+
+					<td colspan="3"  class="text-center">
+						<button type="button"  class="btn btn-primary" style="float:left;"  onclick="history.back()">취소</button>
+						<input type="submit" value="글수정" class="btn btn-success" style="float: right">
+					</td>
+				</tr>
+			</table>
+		</form>
+
+
 	</div>
 </div>
-
-
 <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
 <script type="text/javascript"></script>
 <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
 <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#bookIntro_textarea'),config)
-        .catch(error=>{
-            console.error(error);
-        });
-</script>
 </body>
 </html>

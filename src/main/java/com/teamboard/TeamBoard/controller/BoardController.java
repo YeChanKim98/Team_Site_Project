@@ -52,8 +52,10 @@ public class BoardController {
 
     // 작성
     @GetMapping("freeBoard/write")
-    public String freeWrite(){
-        return "boards/free/WriteForm";
+    public String freeWrite(Model model){
+        System.out.println("새 글 작성 요청");
+        model.addAttribute("use","write");
+        return "boards/WriteForm";
     }
 
     @PostMapping("freeBoard/write")
@@ -78,36 +80,56 @@ public class BoardController {
 
     // 삭제
     @GetMapping("{kinds}/delete/{num}")
-    public String freeDelete(@PathVariable String kinds,@PathVariable int num, HttpServletResponse response) throws IOException {
+    public void freeDelete(@PathVariable String kinds,@PathVariable int num, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
             if(kinds.equals("freeBoard")) {
                 PrintWriter out = response.getWriter();
                 boardService.deleteBoard(num);
-                out.println("<script>alert('게시글 삭제 완료');history.go(-2);</script>");
+                out.println("<script>alert('게시글 삭제 완료');location.href='/freeBoard/view/main/1';</script>");
                 out.flush();
                 out.close();
-                System.out.println("클로즈");
             }
-        return "";
     }
 
     // 수정
     @GetMapping("{kinds}/update/{id}/{num}")
-    public String freeUpdate(@PathVariable String kinds,@PathVariable String id, @PathVariable int num, Model model){
+    public String boardUpdate(@PathVariable String kinds,@PathVariable String id, @PathVariable int num, Model model, HttpServletRequest request){
         if(kinds.equals("freeBoard")) {
-            free_Board board = boardService.viewBoard_free(num);
-            model.addAttribute("fboard_num", num);
-            model.addAttribute("fboard_id", id);
-            model.addAttribute("fboard_title", board.getFboard_title());
-            model.addAttribute("fboard_content", board.getFboard_content());
+            if(request.getSession().getAttribute("loginID").equals(id)) {
+                free_Board board = boardService.viewBoard_free(num); // 뷰가 아닌 하나 가져오는 코드 필요 : 자주 쓰임
+                model.addAttribute("boardInfo", board);
+                model.addAttribute("kinds", kinds);
+                model.addAttribute("use", "update");
+            }else{
+                System.out.println("[BoardController][boardUpdate] 글 수정은 본인만 가능합니다 : 작성자 - "+id+" / 현재 로그인 : "+request.getSession().getAttribute("loginID"));
+                return "redirect:/";
+            }
+        }else{
+            System.out.println("[BoardController][boardUpdate] 게시판 식별에 실패했습니다");
+            return "redirect:/";
         }
-        return "redirect:/"; // 입력폼에 넘기고 값이 있으면 넣고 없으면 안 넣고, 추가 요소 확인
+        System.out.println("작성폼으로 연결");
+        return "boards/WriteForm";
     }
 
-    @PostMapping("{kinds}/Update/{id}/{fboard_num}")
-    public String freeUpdate(@PathVariable String kinds, @PathVariable String id, @PathVariable int fboard_num, WriteForm writeForm){
-        if(kinds.equals("freeBoard")) boardService.updateBoard(writeForm);
-        return "redirect:freeBoard/view/main/1"; // 게시판 메인으로 이동
+    @PostMapping("{kinds}/update/{id}/{num}")
+    public String boardUpdate(@PathVariable String kinds, @PathVariable String id, @PathVariable int num, WriteForm writeForm){
+        System.out.println("게시글 수정을 시작합니다");
+        System.out.println("수정 제목 : "+writeForm.getFboard_title());
+        System.out.println("수정 내용 : "+writeForm.getFboard_content());
+        System.out.println("수정 번호 : "+writeForm.getFboard_num());
+        System.out.println("수정자 : "+writeForm.getFboard_writer());
+
+        if(kinds.equals("freeBoard")){
+            int res = boardService.updateBoard(writeForm);
+
+            if(res==1){
+                System.out.println("수정결과 : "+res);
+            }else{
+                System.out.println("수정결과 : "+res);
+            }
+        }
+        return "redirect:/freeBoard/view/main/1"; // 게시판 메인으로 이동
     }
 
     // 조회
