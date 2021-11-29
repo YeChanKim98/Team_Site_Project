@@ -130,6 +130,7 @@ public class UserController {
         String content = id_name+"님의 로그인 ID는 "+findRes+"입니다.";
         if (!findRes.isEmpty()) { // 계정존재시
             emailService.sendSimpleMessage(id_address, "계정 ID 입니다",content);
+            System.out.println("[ID찾기]메일 발송 완료 : "+content);
             return "redirect:/";
         }else{ // 계정없을시
             out.println("<script>alert('이름혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
@@ -148,6 +149,7 @@ public class UserController {
         String content = pw_id+"님의 로그인 PW는 "+findRes+"입니다.";
         if (!findRes.isEmpty()) {
             emailService.sendSimpleMessage(pw_address, "계정 PW 입니다",content);
+            System.out.println("[PW찾기]메일 발송 완료 : "+content);
             return "redirect:/";
         }else{
             out.println("<script>alert('아이디혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
@@ -196,26 +198,4 @@ public class UserController {
         return "redirect:/users/SelAll"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //test
-    @GetMapping("/test")
-    public String testhtml(){
-        return "test/TestLogin_2";
-    }
 }

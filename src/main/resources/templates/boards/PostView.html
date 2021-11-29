@@ -116,14 +116,15 @@
       </div>
 
 
-      <from th:action="@{'/fboard/'+${num}+'/comment/write'}" method="post">
+      <form th:action="@{'/fboard/'+${num}+'/comment/write'}" method="post">
+
         <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
           <input style="height:100%;width:100%;" type="text" name="comment_content">
         </div>
         <div style="float:right; height:70%;width:10%;">
-          <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary" onclick="location.href='#'">등록</button>
+          <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary">등록</button>
         </div>
-      </from>
+      </form>
 
 
 

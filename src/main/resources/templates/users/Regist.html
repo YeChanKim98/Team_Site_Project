@@ -6,6 +6,8 @@
 		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 
 		<script>
+			var sendMail=0;
+
 			const getpw = document.getElementById("inputpw");
 			getpw.addEventListener('keyup', logKey);
 
@@ -24,7 +26,7 @@
 
             function chkreg(val){
 				var rgx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,12}$/;
-				if(!rgx.test(val.value) && val.value!==""){
+				if(!rgx.test(val.value)){
                     document.getElementById('pw_notice').innerHTML="8~12자에 특수문자, 문자, 숫자가 포함되어야합니다";
                     document.getElementById('pw_notice').style.color="red";
                     return false;
@@ -92,10 +94,26 @@
             }
 
 			function goCheck() {
+                if (join_form.email.value === "") {
+                    alert("이메일을 입력하세요");
+                    join_form.email.focus();
+                    return false;
+                }
 				var link = '/chk_mail/' + document.getElementById('inputemail').value;
-				alert(link);
-				location.href = link;
+				//alert(link);
+				if(sendMail===0){
+				const btn = document.getElementById('chkemailbtn');
+				btn.disabled = true;
+                location.href = link;
+                alert("인증메일이 발송되었습니다. 전송완료까지는 다소 시간이 걸립니다");
+
+                }else{
+                    alert("이메일 인증을 완료해주세요");
+                    return false;
+				}
 			}
+
+
       	</script>
 
 		<style>

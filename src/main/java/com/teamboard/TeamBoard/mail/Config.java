@@ -34,8 +34,9 @@ public class Config {
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
-        javaMailSender.setUsername("hun0536@gmail.com");
-        javaMailSender.setPassword("rnscjdfpdls!!");
+        // 본인 구글 계정 입력 후 '보안 수준이 낮은 접근 허용' 사용으로 변경
+        javaMailSender.setUsername("ssy01077@gmail.com");
+        javaMailSender.setPassword("P@singW_Gg1");
         javaMailSender.setPort(port);
 
         pt.put("mail.smtp.socketFactory.port", socketPort); pt.put("mail.smtp.auth", auth);

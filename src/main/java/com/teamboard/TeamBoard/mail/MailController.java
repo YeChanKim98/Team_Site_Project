@@ -32,7 +32,7 @@ public class MailController {
     }
 
     @GetMapping("/chk_mail/{address}")
-    public String send_chk(@PathVariable String address, HttpServletRequest req){
+    public String send_chk(@PathVariable String address, HttpServletRequest request){
         System.out.println("인증메일 발송 컨트롤러 진입"+address);
 
         double randomValue = Math.random();
@@ -45,10 +45,11 @@ public class MailController {
         int res = chk_MailService.regist(mail);
         System.out.println("인증 메일 등록 결과 : "+res);
 
-        String content = "<a href='/check/mail/"+address+"/"+key+"'>인증을 위해 해당 링크를 눌러주세요</a>";
+        String content = "<a href='127.0.0.1:8080/check/mail/"+address+"/"+key+"'>인증을 위해 해당 링크를 눌러주세요</a>";
         emailService.sendSimpleMessage(address,"가입인증메일입니다",content);
-        System.out.println("인증 메일 발송완료");
-        return "home";
+        System.out.println("인증 메일 발송완료 : "+content);
+        String referer = request.getHeader("Referer");
+        return "redirect:"+ referer;
     }
 
     @GetMapping("/check/mail/{address}/{key}")

@@ -108,7 +108,14 @@
 				</tr>
 				</thead>
 
-				<tbody class="table_body">
+				<tbody th:if="${result}" class="table_body">
+					<td colspan="6">
+						<h4>검?색 결과가 없어요~</h4><br>
+						<img src="/static/asset/img/noResult.gif" alt="No_Result">
+						<form action="freeBoard/view/main"><button type="submit" value="게시판 목록으로"></button></form>
+					</td>
+				</tbody>
+				<tbody th:unless="${result}" class="table_body">
 				<!-- 공지 -->
 				<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
 					<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
