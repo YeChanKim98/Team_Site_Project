@@ -50,7 +50,7 @@ public class BoardController {
         return "boards/free/FreeBoardMain"; // 메인페이지로 이동}
     }
 
-    // 작성
+    // 작성(삽입)
     @GetMapping("freeBoard/write")
     public String freeWrite(Model model){
         System.out.println("새 글 작성 요청");
@@ -132,10 +132,13 @@ public class BoardController {
         return "redirect:/freeBoard/view/main/1"; // 게시판 메인으로 이동
     }
 
+
     // 조회
     @GetMapping("{kinds}/view/{num}")
     public String viewBoard(@PathVariable String kinds, @PathVariable int num, Model model){
         System.out.println("[viewBoard]["+kinds+"] 진입 : "+num);
+
+        // 컨텐츠 정보
         if(kinds.equals("freeBoard")){
             System.out.println("[viewBoard][freeBoard] 서비스 호출");
             free_Board post = boardService.viewBoard_free(num);
@@ -166,7 +169,15 @@ public class BoardController {
             System.out.println("[viewBoard][Get]잘못된 페이지 요청");
             return "/freeBoard/view/main/1"; //이전 페이지로 돌아가도록
         }
-        return"boards/PostView";
+
+        // 댓글 정보
+//        List<Comment> commentList = boardService.getComment(num);
+//        if(commentList.isEmpty()){
+//            System.out.println("달린 댓글 없음");
+//            return"boards/PostView"; // 댓글 없이 리턴
+//        }
+//        model.addAttribute("commentList",commentList);
+        return"boards/PostView"; // 검색결과가 있으면 모델에 추가하여 리턴 : 뷰에서는 타임리프레 th:if="${commentList}"로 구분 -> 있으면 each comment : commentList로 출력
     }
 
     // 게시글 검색

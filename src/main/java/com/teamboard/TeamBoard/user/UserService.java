@@ -59,10 +59,23 @@ public class UserService {
         return userRepository.findPw(id, address);
     }
 
-    // 업데이트
+    // 업데이트 : 어드민
     public int update(User user){
         return userRepository.update(user);
     }
+
+    // 업데이트 : 유저(닉네임, PW, Mail)
+    public int updateNick(String id, String nick){
+        return userRepository.updateNick(id,nick);
+    }
+    public int updatePw(String id, String pw){ return userRepository.updatePw(id,pw);}
+    public int updateMail(String id, String mail){
+        return userRepository.updateMail(id,mail);
+    }
+
+
+
+
 
     // 추후 통합사용 가능여부 확인
     // ID 중복확인
@@ -72,10 +85,6 @@ public class UserService {
         }
         return 1;
     }
-
-
-
-
 
     // 닉네임 중복확인
     private int ChkOver_Nick(User user) {

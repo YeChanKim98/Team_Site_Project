@@ -26,6 +26,9 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final Chk_MailService chk_MailService;
+    private String updateId;
+    private Model model;
+    private HttpServletRequest request;
 
     @Autowired
     public UserController(UserService userService, EmailService emailService, Chk_MailService chk_mailService) {
@@ -160,6 +163,56 @@ public class UserController {
     }
 
 
+
+    // 유저용
+    @GetMapping({"/users/Update","/users/Update/{updateId}"}) // 첫번째 파라미터는 어드민 및 테스트용
+    public String userUpdateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
+        if(updateId.isEmpty()){
+            HttpSession session = request.getSession();
+            User user = userService.findOneUser((String) session.getAttribute("loginID")).get();
+        }
+        User user = userService.findOneUser(updateId).get();
+        model.addAttribute("userInfo",user);
+        return "/"; // 마이페이지 업데이트 폼
+    }
+
+    @PostMapping({"/users/Update","/users/Update/{id}"}) // 첫번째 파라미터는 어드민 및 테스트용
+    public String userUpdateForm(@PathVariable String id, @RequestParam String nick, @RequestParam String pw, @RequestParam String mail, HttpServletRequest request){
+        System.out.println("유저용 업데이트 컨트롤러 진입.. 확인중..");
+        if(!request.getSession().getAttribute("longinId").equals(id)) {
+            System.out.println("올바르지 않은 접근입니다");
+            return "/";
+        }
+        User user = userService.findOneUser(id).get(); // 뷰 JS 에서 해당 과정없이 location?User=${user}로 모델값을 다시 컨트롤러로 전달이 가능한가..?
+        if(!user.getNick().isEmpty()){
+            int res = userService.updateNick(id, nick); // 업데이트 폼 JS에서 중복 검사를 할 것을 믿고 바로 업데이트 : JS에서 컨트롤러에 요청 -> 해당 아이디가 있는지..? 1반환시 빠꾸 및 정보 변경이 가능하도록 값(아직 없음) 추가
+            if(res==0){
+                System.out.println("닉네임 업데이트 실패!");
+                return "/users/Update/"+id;
+            }
+            System.out.println("닉네임 업데이트 성공!");
+        }
+        if(!user.getPw().isEmpty()){
+            int res = userService.updatePw(id, pw);
+            if(res==0){
+                System.out.println("패스워트 업데이트 실패!");
+                return "/users/Update/"+id;
+            }
+            System.out.println("닉네임 업데이트 성공!");
+        }
+        if(!user.getEmail().isEmpty()){
+            int res = userService.updateMail(id, mail);
+            if(res==0){
+                System.out.println("이메일 업데이트 실패!");
+                return "/users/Update/"+id;
+            }
+            System.out.println("닉네임 업데이트 성공!");
+        }
+        return "/users/Update/"+id; // 마이페이지 업데이트 폼으로 돌아감
+    }
+
+
+    
     // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서 삭제
     // GetMapping은 임시용. 실제 유저는 버튼클릭 후 인증을 통해서 바로 삭제
     @GetMapping("/users/Delete")
@@ -167,31 +220,30 @@ public class UserController {
         return "/users/tmp/form/DeleteForm";
     }
 
-    @PostMapping("/users/Delete") // 리퀘스트 맵핑?
+    @PostMapping("/users/Delete") 
     public String delete(@RequestParam("id") String id){
         int res = userService.deleteUser(id);
         if (res==1) return "redirect:/users/SelAll";
         else return "Fail";
     }
 
+    // 어드민용
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
     // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
-    @GetMapping({"/users/Update","/users/Update/{updateId}"})
-    public String updateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
+    @GetMapping({"/admin/users/Update","/admin/users/Update/{updateId}"})
+    public String adminUpdateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
         if(updateId.isEmpty()){
             HttpSession session = request.getSession();
             User user = userService.findOneUser((String) session.getAttribute("loginID")).get();
         }
         User user = userService.findOneUser(updateId).get();
         model.addAttribute("userInfo",user);
-//        model.addAttribute("name",user.getName());
-//        model.addAttribute("nick",user.getNick());
         return "users/tmp/form/Update";
     }
 
-    //
-    @PostMapping("/users/Update")//{updateId}")
-    public String update(User user){
+    // 어드민용
+    @PostMapping("/admin/users/Update")//{updateId}")
+    public String Adminupdate(User user){
         int res  = userService.update(user); // 1성공 0실패
         if(res==1) System.out.println("계정정보 업데이트 성공!");
         else System.out.println("계정정보 업데이트 실패!");

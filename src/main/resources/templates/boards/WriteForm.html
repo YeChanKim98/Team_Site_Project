@@ -32,9 +32,6 @@
 	<div class="col-md-3"></div> <!--지우고 다른 방법으로 가운데 정렬-->
 	<div class="col-md-6">
 		<a th:value="${use}"></a>
-		<a th:if="${use} == 'update'">== 'update'</a><br>
-		<a th:if="${use} == 'write'">== 'write'</a>
-
 
 		<!--작성-->
 		<form th:if="${use}=='write'" target="/freeBoard/write" method="post">

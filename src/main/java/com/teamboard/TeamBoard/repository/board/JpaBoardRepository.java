@@ -94,13 +94,13 @@ public class JpaBoardRepository implements BoardRepository{
     // 검색
     public List<free_Board> findBoard(String search_option, String keyword, int page) {
         int start = (page-1)*10;
-        String findQuery="select distinct fb from free_Board fb where fb.fboard_writer=:keyword or fb.fboard_title=:keyword or fb.fboard_content=:keyword order by fb.fboard_num desc ";
+        String findQuery="select distinct fb from free_Board fb where fb.fboard_writer like CONCAT('%',:keyword,'%') or fb.fboard_title like CONCAT('%',:keyword,'%') or fb.fboard_content like CONCAT('%',:keyword,'%') order by fb.fboard_num desc ";
         if(search_option.equals("writer")){
-            findQuery = "select fb from free_Board fb where fb.fboard_writer=:keyword order by fb.fboard_num desc ";
+            findQuery = "select fb from free_Board fb where fb.fboard_writer like CONCAT('%',:keyword,'%') order by fb.fboard_num desc ";
         } else if(search_option.equals("title")){
-            findQuery = "select fb from free_Board fb where fb.fboard_title=:keyword order by fb.fboard_num desc ";
+            findQuery = "select fb from free_Board fb where fb.fboard_title like CONCAT('%',:keyword,'%') order by fb.fboard_num desc ";
         }else if(search_option.equals("content")){
-            findQuery = "select fb from free_Board fb where fb.fboard_content=:keyword order by fb.fboard_num desc ";
+            findQuery = "select fb from free_Board fb where fb.fboard_content like CONCAT('%',:keyword,'%') order by fb.fboard_num desc ";
         }
         return em.createQuery(findQuery, free_Board.class)
                 .setParameter("keyword",keyword)

@@ -34,6 +34,8 @@ public class JpaUserRepository implements UserRepository {
                 .executeUpdate();
     }
 
+    
+    // 어드민 전용 맴버정보 업데이트
     @Override
     public int update(User user) {
         //UPDATE [테이블] SET [열] = '변경할값' WHERE [조건]
@@ -44,6 +46,29 @@ public class JpaUserRepository implements UserRepository {
                 .setParameter("email",user.getEmail())
                 .setParameter("nick",user.getNick())
                 .setParameter("phone",user.getPhone())
+                .executeUpdate();
+    }
+
+    // 유저용 업데이트 : 통합..?
+    @Override
+    public int updateNick(String id, String nick){
+        return em.createQuery("update User u set u.nick=:nick where u.id=:id")
+                .setParameter("nick",nick)
+                .setParameter("id",id)
+                .executeUpdate();
+    }
+    @Override
+    public int updatePw(String id, String pw){
+        return em.createQuery("update User u set u.pw=:pw where u.id=:id")
+                .setParameter("pw",pw)
+                .setParameter("id",id)
+                .executeUpdate();
+    }
+    @Override
+    public int updateMail(String id, String mail){
+        return em.createQuery("update User u set u.email=:mail where u.id=:id")
+                .setParameter("mail",mail)
+                .setParameter("id",id)
                 .executeUpdate();
     }
 

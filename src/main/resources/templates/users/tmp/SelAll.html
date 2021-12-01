@@ -21,7 +21,7 @@
 			<tr th:each="user : ${users}">
 				<td><a th:text="${user.pid}"></a></td>
 				<td><a th:text="${user.name}"></a></td>
-				<td><a th:href="@{'/users/Update/'+${user.id}}" th:text="${user.id}"></a></td>
+				<td><a th:href="@{'/admin/users/Update/'+${user.id}}" th:text="${user.id}"></a></td>
 				<td><a th:text="${user.pw}"></a></td>
 				<td><a th:text="${user.nick}"></a></td>
 				<td><a th:text="${user.email}"></a></td>
