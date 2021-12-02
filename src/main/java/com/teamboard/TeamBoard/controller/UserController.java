@@ -73,27 +73,27 @@ public class UserController {
     
     // ID중복체크
     @GetMapping("/users/Join/chkidover/{chkid}")
-    public String chkidover(@PathVariable String chkid, Model model ,HttpServletRequest request){
+    public String chkidover(@PathVariable String chkid, Model model ,HttpServletRequest request,HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
         System.out.println("컨트롤러 중복체크 실행");
         int res = userService.chkidover(chkid);
-        System.out.println("중복 체크 결과 (중복:1 / 비중복:0) : "+res);
-        model.addAttribute("chkidres",res);
-        return "redirect:"+ request.getHeader("Referer");
-        // 모든 값을 받은 후 다시 모델로 넘김
-        
-        // 1. writer를 이용해서 값을 전달하고 history-1을 통해 돌아간다
-        // * 인증여부는 어떻게 판단?
-        writer.write("안녕하세요");
-        //응답을 보낸다.
-        writer.flush();
-        writer.close();
-        
-        // 2. 모든값을 받은 후 모델로 그대로 다시보낸다
+        System.out.println("중복 체크 결과 (중복:1 / 비중복:0) : " + res);
+        model.addAttribute("chkidres", res);
+
+        if (res == 1) {
+            out.println("<script>alert('이미 존재하는 아이디입니다');history.go(-1);</script>");
+            out.flush();
+            out.close();
+        }
+
+        return "redirect:" + request.getHeader("Referer");
     }
 
     // 로그인
     @PostMapping("/users/Login")
-    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw,Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String login(@RequestParam("id")String id, @RequestParam("pw")String pw, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
         Optional<User> resUser = userService.findOneUser(id);

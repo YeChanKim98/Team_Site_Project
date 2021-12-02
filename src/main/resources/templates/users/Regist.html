@@ -8,12 +8,14 @@
 		<script>
 
 			var sendMail=0
+			var chkid = 0
 
 			// 아이디 중복 체크
 			function chkidover(){
 				var link = '/users/Join/chkidover/' + document.getElementById('inputid').value;
 				location.href=link;
-				
+				alert("사용가능한 아이디입니다");
+                chkid = 1; // 만약 이미 체크하고 다시 작성하여 중복된 아이디로 가입을 시도한다면..?
 			}
 
 			// 비밀번호 정규식 체크
@@ -74,7 +76,10 @@
 					alert("아이디를 입력하세요");
 					join_form.inputid.focus();
 					return false;
-				} else if (join_form.pw.value === "") {
+				}else if(chkid===0) {
+                    alert("아이디 중복체크를 해주세요");
+                    return false;
+                }else if (join_form.pw.value === "") {
 					alert("비밀번호를 입력하세요");
 					join_form.pw.focus();
 					return false;
