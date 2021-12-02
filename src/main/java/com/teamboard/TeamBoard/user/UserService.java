@@ -47,6 +47,17 @@ public class UserService {
         return userRepository.findById(id); // 결과로 받은 객체에서 id값 출력..?
     }
 
+    // ID중복 체크
+    public int chkidover(String id) {
+        System.out.print("ID 중복체크 : ");
+        if(userRepository.findById(id).isPresent()){
+            System.out.println("중복");
+            return 1;
+        }
+        System.out.println("미중복");
+        return 0;
+    }
+
     // 아이디 찾기
     public String findId(String name, String address) {
         System.out.println("    -> [서비스][진입] 이름, 이메일을 통한 아이디 조회 : "+name+" / "+address);

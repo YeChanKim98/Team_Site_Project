@@ -6,24 +6,17 @@
 		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 
 		<script>
-			var sendMail=0;
 
-			const getpw = document.getElementById("inputpw");
-			getpw.addEventListener('keyup', logKey);
+			var sendMail=0
 
-			function logKey(e) {
-				alert("test");
+			// 아이디 중복 체크
+			function chkidover(){
+				var link = '/users/Join/chkidover/' + document.getElementById('inputid').value;
+				location.href=link;
+				
 			}
 
-			inputpw.onkeyup(function (){
-				alert("아디디 키업");
-			})
-			pw.onkeyup(function (){
-				alert('키업!');
-					}
-
-			)
-
+			// 비밀번호 정규식 체크
             function chkreg(val){
 				var rgx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,12}$/;
 				if(!rgx.test(val.value)){
@@ -38,7 +31,7 @@
                 }
             }
 
-
+			// 비밀번호 재입력 체크
             function chkpwd(){
                 pw = join_form.pw.value;
                 chk = join_form.pwchk.value;
@@ -54,65 +47,66 @@
 				}
 			}
 
-			function Join() {
-                if (join_form.id.value === "") {
-                    alert("아이디를 입력하세요");
-                    join_form.inputid.focus();
-                    return false;
-                } else if (join_form.pw.value === "") {
-                    alert("비밀번호를 입력하세요");
-                    join_form.pw.focus();
-                    return false;
-                } else if (join_form.pw.value.length < 6 || join_form.pw.value.length > 12) {
-                    alert("비밀번호는 8~12자리만 가능합니다");
-                    join_form.pw.focus();
-                    return false;
-                } else if (join_form.pwchk.value === "") {
-                    alert("비밀번호 재확인을 해주세요");
-                    join_form.pwchk.focus();
-                    return false;
-                } else if (join_form.nick.value === "") {
-                    alert("닉네임을 입력하세요");
-                    join_form.nick.focus();
-                    return false;
-                } else if (join_form.name.value === "") {
-                    alert("이름을 입력하세요");
-                    join_form.name.focus();
-                    return false;
-                } else if (join_form.email.value === "") {
-                    alert("이메일을 입력하세요");
-                    join_form.email.focus();
-                    return false;
-                } else if (join_form.pw.value !== join_form.pwchk.value) {
-                    alert("비밀번호를 다시 확인해주세요");
-                    join_form.pwchk.focus();
-                    return false;
-                } else {
-                    join_form.submit(); // 이동
-                    return false;
-                }
-            }
-
+			// 이메일 인증메일 발송
 			function goCheck() {
-                if (join_form.email.value === "") {
-                    alert("이메일을 입력하세요");
-                    join_form.email.focus();
-                    return false;
-                }
+				if (join_form.email.value === "") {
+					alert("이메일을 입력하세요");
+					join_form.email.focus();
+					return false;
+				}
 				var link = '/chk_mail/' + document.getElementById('inputemail').value;
-				//alert(link);
+				//alert(link); // 인증메일 컨트롤러 진입 경로
 				if(sendMail===0){
-				const btn = document.getElementById('chkemailbtn');
-				btn.disabled = true;
-                location.href = link;
-                alert("인증메일이 발송되었습니다. 전송완료까지는 다소 시간이 걸립니다");
+					const btn = document.getElementById('chkemailbtn');
+					btn.disabled = true;
+					location.href = link;
+					alert("인증메일이 발송되었습니다. 전송완료까지는 다소 시간이 걸립니다");
 
-                }else{
-                    alert("이메일 인증을 완료해주세요");
-                    return false;
+				}else{
+					alert("이메일 인증을 완료해주세요");
+					return false;
 				}
 			}
 
+			// 가입버튼
+			function Join() {
+				if (join_form.id.value === "") {
+					alert("아이디를 입력하세요");
+					join_form.inputid.focus();
+					return false;
+				} else if (join_form.pw.value === "") {
+					alert("비밀번호를 입력하세요");
+					join_form.pw.focus();
+					return false;
+				} else if (join_form.pw.value.length < 6 || join_form.pw.value.length > 12) {
+					alert("비밀번호는 8~12자리만 가능합니다");
+					join_form.pw.focus();
+					return false;
+				} else if (join_form.pwchk.value === "") {
+					alert("비밀번호 재확인을 해주세요");
+					join_form.pwchk.focus();
+					return false;
+				} else if (join_form.nick.value === "") {
+					alert("닉네임을 입력하세요");
+					join_form.nick.focus();
+					return false;
+				} else if (join_form.name.value === "") {
+					alert("이름을 입력하세요");
+					join_form.name.focus();
+					return false;
+				} else if (join_form.email.value === "") {
+					alert("이메일을 입력하세요");
+					join_form.email.focus();
+					return false;
+				} else if (join_form.pw.value !== join_form.pwchk.value) {
+					alert("비밀번호를 다시 확인해주세요");
+					join_form.pwchk.focus();
+					return false;
+				} else {
+					join_form.submit(); // 이동
+					return false;
+				}
+			}
 
       	</script>
 
@@ -145,13 +139,13 @@
 				padding-top:20px;
 			}
 
-			#inputemail{
+			#inputemail, #inputid{
                 width:320px;
                 float: left;
 				margin-right:10px;
             }
 
-			#chkemailbtn{
+			#chkemailbtn, #chkidbtn{
 				height:50px;
 				width:120px;
 				font-weight:bold;
@@ -180,6 +174,9 @@
 					<span>
 						<input type="text" id="inputid" class="form-control" name="id">
 					</span>
+					<a>
+						<button type="button" class="btn btn-primary" id="chkidbtn" onclick="chkidover()">중복확인</button>
+					</a>
 				</div>
 				<div id="input_pw">
 					<h5>비밀번호</h5>

@@ -22,15 +22,16 @@ public class MailController {
         this.emailService = emailService;
     }
 
-
+    // 발송
     @PostMapping("/mail")
-    public String send(@RequestParam String address, @RequestParam String title, @RequestParam String content, HttpServletRequest req){
+    public String send(@RequestParam String address, @RequestParam String title, @RequestParam String content){
         System.out.println("컨트롤러 진입"+address+title+content);
         emailService.sendSimpleMessage(address, title, content);
         System.out.println("발송완료");
         return "home";
     }
-
+    
+    // 인증메일 전송
     @GetMapping("/chk_mail/{address}")
     public String send_chk(@PathVariable String address, HttpServletRequest request){
         System.out.println("인증메일 발송 컨트롤러 진입"+address);
@@ -52,6 +53,7 @@ public class MailController {
         return "redirect:"+ referer;
     }
 
+    // 인증메일 확인 과정
     @GetMapping("/check/mail/{address}/{key}")
     public String check(@PathVariable String address, @PathVariable int key){
         System.out.println("인증과정 컨트롤러 진입"+address+"\t"+key);

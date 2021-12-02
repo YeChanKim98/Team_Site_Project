@@ -11,22 +11,14 @@
 
 	<script>
 
-        // function sendPost(action, params) {
-        //     var form = document.createElement('form');
-        //     form.setAttribute('method', 'post');
-        //     form.setAttribute('action', action);
-        //     document.charset = "utf-8";
-        //     for ( var key in params) {
-        //         var hiddenField = document.createElement('input');
-        //         hiddenField.setAttribute('type', 'hidden');
-        //         hiddenField.setAttribute('name', key);
-        //         hiddenField.setAttribute('value', params[key]);
-        //         form.appendChild(hiddenField);
-        //     }
-        //     document.body.appendChild(form);
-        //     form.submit();
-        // }
-
+		// 엔터키 이벤트
+		function goLogin(){
+			if (window.event.keyCode == 13){
+				chk_input_accout()
+			}else {
+				return false;
+			}
+		}
 
 
         <!--로그인용 스크립트-->
@@ -70,10 +62,10 @@
 						<div class="modal-body" style="margin:0 auto;width:80%;">
 							<form id="login-form" action="users/Login" method="post">
 								<div class="form-group" style="display:flex; text-align:center; margin-top:10px; margin-bottom:8px;">
-									<input type="text" class="form-control" id="recipient-id" name="id" placeholder="아이디">
+									<input type="text" class="form-control" id="recipient-id" name="id" onKeyUp="goLogin()" placeholder="아이디">
 								</div>
 								<div class="form-group" style="display:flex; text-align:center;">
-									<input type="text" class="form-control" id="recipient-passwd" name="pw" placeholder="비밀번호">
+									<input type="text" class="form-control" id="recipient-passwd" name="pw" onKeyUp="goLogin()" placeholder="비밀번호">
 								</div>
 								<div>
 									<button type="button" class="btn btn-primary" style="width:100%; height:35pt;font-size:1.3em;vertical-align:center;" onclick="chk_input_accout();">Login</button>

@@ -71,6 +71,25 @@ public class UserController {
         }
     }
     
+    // ID중복체크
+    @GetMapping("/users/Join/chkidover/{chkid}")
+    public String chkidover(@PathVariable String chkid, Model model ,HttpServletRequest request){
+        System.out.println("컨트롤러 중복체크 실행");
+        int res = userService.chkidover(chkid);
+        System.out.println("중복 체크 결과 (중복:1 / 비중복:0) : "+res);
+        model.addAttribute("chkidres",res);
+        return "redirect:"+ request.getHeader("Referer");
+        // 모든 값을 받은 후 다시 모델로 넘김
+        
+        // 1. writer를 이용해서 값을 전달하고 history-1을 통해 돌아간다
+        // * 인증여부는 어떻게 판단?
+        writer.write("안녕하세요");
+        //응답을 보낸다.
+        writer.flush();
+        writer.close();
+        
+        // 2. 모든값을 받은 후 모델로 그대로 다시보낸다
+    }
 
     // 로그인
     @PostMapping("/users/Login")
@@ -85,16 +104,16 @@ public class UserController {
                 session.setAttribute("loginID", id);
                 return "redirect:/";
             }else{
-                out.println("<script>alert('아이디혹은 비밀번호를 다시 확인해 주세요');history.go(-1);</script>");
+                out.println("<script>alert('비밀번호를 다시 확인해 주세요');</script>");
                 out.flush();
                 out.close();
-                return "redirect:/";
+                return "redirect:"+ request.getHeader("Referer");
             }
         }else{
-            out.println("<script>alert('존재하지 않는 계정입니다');history.go(-1);</script>");
+            out.println("<script>alert('존재하지 않는 계정입니다');</script>");
             out.flush();
             out.close();
-            return "redirect:/";
+            return "redirect:"+ request.getHeader("Referer");
         }
     }
 
