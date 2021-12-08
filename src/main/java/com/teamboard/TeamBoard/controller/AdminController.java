@@ -52,7 +52,7 @@ public class AdminController {
     }
 
     @PostMapping("/Admin/postNotice")
-    public String WirteNotice(@RequestParam String title ,@RequestParam String content, HttpServletRequest request){
+    public String WriteNotice(@RequestParam String title ,@RequestParam String content, HttpServletRequest request){
         System.out.println("공지작성 요청자 ID : "+request.getSession().getAttribute("loginID"));
         if(request.getSession().getAttribute("loginID").equals("Admin")){
             notice_Board notice = new notice_Board();

@@ -196,8 +196,6 @@ public class BoardController {
             pageInfo[1] = page.get();
         }
         if(boardList.isEmpty()){
-            System.out.println("검색 결과 없음"); // 검색결과가 없을 때 보여줄 페이지 아직 안 만듬 : 일단 메시지 띄우고 메인으로 날림
-            // 혹은 모델에 새로운 어트리뷰트를 넣어서 해당 어트리뷰트를 만나면 게시판 메인에 결과없음 페이지가 보여지도록
             return "boards/free/NoResult";
         }
         if(page.get()>max){return "redirect:/freeBoard/view/search/"+pageInfo[2];}

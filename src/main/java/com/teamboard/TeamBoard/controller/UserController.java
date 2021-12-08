@@ -73,22 +73,20 @@ public class UserController {
     
     // ID중복체크
     @GetMapping("/users/Join/chkidover/{chkid}")
-    public String chkidover(@PathVariable String chkid, Model model ,HttpServletRequest request,HttpServletResponse response) throws IOException {
+    public String chkidover(@PathVariable String chkid, Model model,HttpServletRequest request,HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         System.out.println("컨트롤러 중복체크 실행");
         int res = userService.chkidover(chkid);
         System.out.println("중복 체크 결과 (중복:1 / 비중복:0) : " + res);
-        model.addAttribute("chkidres", res);
 
         if (res == 1) {
             out.println("<script>alert('이미 존재하는 아이디입니다');history.go(-1);</script>");
             out.flush();
             out.close();
         }
-
-        return "redirect:" + request.getHeader("Referer");
+        return "redirect:"+request.getHeader("Referer");
     }
 
     // 로그인
@@ -130,7 +128,7 @@ public class UserController {
     // Select All User : 검색 후 바로 출력
     @PostMapping("/users/SelAll")
     @RequestMapping("/users/SelAll")
-    public String findAllUser(Model userList){ // 인자가 들어가는 이유
+    public String findAllUser(Model userList){
         List<User> users = userService.findAllUser();
         userList.addAttribute("users",users);
         return "users/tmp/SelAll";
@@ -181,8 +179,6 @@ public class UserController {
         }
     }
 
-
-
     // 유저용
     @GetMapping({"/users/Update","/users/Update/{updateId}"}) // 첫번째 파라미터는 어드민 및 테스트용
     public String userUpdateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
@@ -202,7 +198,7 @@ public class UserController {
             System.out.println("올바르지 않은 접근입니다");
             return "/";
         }
-        User user = userService.findOneUser(id).get(); // 뷰 JS 에서 해당 과정없이 location?User=${user}로 모델값을 다시 컨트롤러로 전달이 가능한가..?
+        User user = userService.findOneUser(id).get();
         if(!user.getNick().isEmpty()){
             int res = userService.updateNick(id, nick); // 업데이트 폼 JS에서 중복 검사를 할 것을 믿고 바로 업데이트 : JS에서 컨트롤러에 요청 -> 해당 아이디가 있는지..? 1반환시 빠꾸 및 정보 변경이 가능하도록 값(아직 없음) 추가
             if(res==0){

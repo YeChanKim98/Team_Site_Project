@@ -78,7 +78,6 @@ public class JpaUserRepository implements UserRepository {
         Optional<User> user = em.createQuery("select u from User u where u.id = :id", User.class)
                 .setParameter("id",id)
                 .getResultList().stream().findAny();
-//        User user = em.find(User.class,id); // 인자로 어떠한 엔티티를 찾을것인지, PK 총 2개의 인자를 넘겨서 select를 실행한다
         return user;
     }
 
@@ -101,12 +100,12 @@ public class JpaUserRepository implements UserRepository {
         return em.createQuery("select u.pw from User u where u.id=:id and u.email = :address")
                 .setParameter("id",id)
                 .setParameter("address",address)
-                .getResultList().stream().findAny().get().toString(); // 변수로 빼서 결과 있는지 확인 후 반환
+                .getResultList().stream().findAny().get().toString();
     }
 
     @Override
     public List<User> findAll() {
-        return em.createQuery("select u from User u", User.class).getResultList(); // JPQL을 이용
+        return em.createQuery("select u from User u", User.class).getResultList();
         // 인라인 단축키 : Ctrl + Alt + N
     }
 }

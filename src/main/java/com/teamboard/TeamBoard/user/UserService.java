@@ -44,7 +44,7 @@ public class UserService {
 
     // ID를 통한 유저 확인
     public Optional<User> findOneUser(String id) {
-        return userRepository.findById(id); // 결과로 받은 객체에서 id값 출력..?
+        return userRepository.findById(id);
     }
 
     // ID중복 체크

@@ -32,13 +32,8 @@ public class JpaBoardRepository implements BoardRepository{
         return  1;
     }
 
-    // 삭제 : DB이동 -> 조건추가 : num이랑 세션이 가진 작성자랑 같으면 넘어오도록 컨트롤러에 추가
+    // 삭제
     public int delete(int fboard_num) {
-
-//        삭제할 인스턴스를 받은 후 delete에 옮기고 원본은 삭제
-//        Optional<free_Board> target = em.createQuery("select fb from free_Board fb where fb.fboard_num=:fboard_num", free_Board.class)
-//                .setParameter("fboard_num",fboard_num)
-//                .getResultList().stream().findAny();
 
         return em.createQuery("delete from free_Board fb where fb.fboard_num=:fboard_num")
                 .setParameter("fboard_num",fboard_num)
