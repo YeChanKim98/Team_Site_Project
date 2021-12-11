@@ -26,9 +26,9 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final Chk_MailService chk_MailService;
-    private String updateId;
-    private Model model;
-    private HttpServletRequest request;
+//    private String updateId;
+//    private Model model;
+//    private HttpServletRequest request;
 
     @Autowired
     public UserController(UserService userService, EmailService emailService, Chk_MailService chk_mailService) {
@@ -72,21 +72,12 @@ public class UserController {
     }
     
     // ID중복체크
-    @GetMapping("/users/Join/chkidover/{chkid}")
-    public String chkidover(@PathVariable String chkid, Model model,HttpServletRequest request,HttpServletResponse response) throws IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        System.out.println("컨트롤러 중복체크 실행");
+    @PostMapping("/users/Join/chkidover/{chkid}")
+    @ResponseBody
+    public int chkidover(@PathVariable String chkid){
         int res = userService.chkidover(chkid);
-        System.out.println("중복 체크 결과 (중복:1 / 비중복:0) : " + res);
-
-        if (res == 1) {
-            out.println("<script>alert('이미 존재하는 아이디입니다');history.go(-1);</script>");
-            out.flush();
-            out.close();
-        }
-        return "redirect:"+request.getHeader("Referer");
+        System.out.println("중복 체크 결과 (중복:0 / 비중복:1) : " + res);
+        return res;
     }
 
     // 로그인
@@ -123,8 +114,6 @@ public class UserController {
         return "redirect:/";
     }
 
-
-
     // Select All User : 검색 후 바로 출력
     @PostMapping("/users/SelAll")
     @RequestMapping("/users/SelAll")
@@ -133,7 +122,6 @@ public class UserController {
         userList.addAttribute("users",users);
         return "users/tmp/SelAll";
     }
-
 
     // 계정 찾기
     @GetMapping("/users/FindAccount")

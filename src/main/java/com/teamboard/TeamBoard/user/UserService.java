@@ -22,7 +22,7 @@ public class UserService {
 
     // 가입
     public String join(User user) {
-        int chkRes = ChkOver_Id(user);
+        int chkRes = chkidover(user.getId());
         if(chkRes==1) {
             userRepository.join(user);
             return user.getName();
@@ -49,13 +49,7 @@ public class UserService {
 
     // ID중복 체크
     public int chkidover(String id) {
-        System.out.print("ID 중복체크 : ");
-        if(userRepository.findById(id).isPresent()){
-            System.out.println("중복");
-            return 1;
-        }
-        System.out.println("미중복");
-        return 0;
+        return (userRepository.findById(id).isPresent())? 0 : 1;
     }
 
     // 아이디 찾기
@@ -84,25 +78,10 @@ public class UserService {
         return userRepository.updateMail(id,mail);
     }
 
-
-
-
-
     // 추후 통합사용 가능여부 확인
-    // ID 중복확인
-    private int ChkOver_Id(User user) {
-        if(userRepository.findById(user.getId()).isPresent()){
-            return -1;
-        }
-        return 1;
-    }
-
     // 닉네임 중복확인
     private int ChkOver_Nick(User user) {
-        if(userRepository.findById(user.getNick()).isPresent()){
-            return -2;
-        }
-        return 1;
+        return (userRepository.findById(user.getNick()).isPresent()) ? 0 : 1;
     }
 
     // Email 중복확인
