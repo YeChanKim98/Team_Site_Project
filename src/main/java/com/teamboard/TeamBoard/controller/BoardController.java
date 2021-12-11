@@ -4,6 +4,8 @@ import com.teamboard.TeamBoard.board.BoardService;
 import com.teamboard.TeamBoard.board.Form.WriteForm;
 import com.teamboard.TeamBoard.board.free_Board;
 import com.teamboard.TeamBoard.board.notice_Board;
+import com.teamboard.TeamBoard.comment.CommentService;
+import com.teamboard.TeamBoard.comment.Free_comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +22,11 @@ import java.util.Optional;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
     @Autowired
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
+        this.commentService = commentService;
     }
 
 
@@ -142,7 +146,7 @@ public class BoardController {
         if(kinds.equals("freeBoard")){
             System.out.println("[viewBoard][freeBoard] 서비스 호출");
             free_Board post = boardService.viewBoard_free(num);
-            System.out.println("[viewBoard][freeBoard] 조건에 맞는 대상 찾기 완료");
+            System.out.println("[viewBoard][freeBoard] 조건에 맞는 대상 검색 완료");
             model.addAttribute("num",post.getFboard_num());
             model.addAttribute("writer",post.getFboard_writer());
             model.addAttribute("title",post.getFboard_title());
@@ -151,6 +155,10 @@ public class BoardController {
             model.addAttribute("comment_cnt",post.getFboard_comment_count());
             model.addAttribute("reg_date",post.getFboard_reg_date());
             model.addAttribute("from_kinds",kinds);
+            System.out.println("[viewBoard][freeBoard] 해당 글에 대한 댓글 조회");
+            List<Free_comment> comment = commentService.comment_view(num);
+            model.addAttribute("commentList",comment);
+            System.out.println("[viewBoard][freeBoard] 댓글 조회 완료");
             System.out.println("[viewBoard][freeBoard] 뷰에 전달할 모델 생성 완료");
         }else if(kinds.equals("notice")){
             System.out.println("[viewBoard][notice] 서비스 호출");
@@ -167,23 +175,14 @@ public class BoardController {
             System.out.println("[viewBoard][notice] 뷰에 전달할 모델 생성 완료");
         }else{
             System.out.println("[viewBoard][Get]잘못된 페이지 요청");
-            return "/freeBoard/view/main/1"; //이전 페이지로 돌아가도록
+            return "/freeBoard/view/main/1";
         }
-
-        // 댓글 정보
-//        List<Comment> commentList = boardService.getComment(num);
-//        if(commentList.isEmpty()){
-//            System.out.println("달린 댓글 없음");
-//            return"boards/PostView"; // 댓글 없이 리턴
-//        }
-//        model.addAttribute("commentList",commentList);
-        return"boards/PostView"; // 검색결과가 있으면 모델에 추가하여 리턴 : 뷰에서는 타임리프레 th:if="${commentList}"로 구분 -> 있으면 each comment : commentList로 출력
+        return"boards/PostView";
     }
 
     // 게시글 검색
     @GetMapping({"freeBoard/view/search","freeBoard/view/search/{page}"})
     public String searchFboard(@PathVariable(required=false) Optional<Integer> page, @RequestParam String search_option, @RequestParam String keyword, Model model){
-
 
         if(keyword.equals(""))return "redirect:/freeBoard/view/main/1"; // 키워드 없는 검색은 전체 조회(게시판 메인으로)
 

@@ -17,7 +17,7 @@ public class CommentControllor {
     }
 
     @PostMapping("/fboard/{target_board}/comment/write")
-    public String writeComment(@PathVariable int target_board, @RequestParam String content, HttpServletRequest request){
+    public String writeComment(@PathVariable int target_board, @RequestParam String write_comment_content, HttpServletRequest request){
         System.out.println("controllor on!!!!!!!!!!");
         HttpSession session = request.getSession();
         String writer = "";
@@ -29,9 +29,9 @@ public class CommentControllor {
         Free_comment comment = new Free_comment();
         comment.setFcomment_writer(writer);
         comment.setTarget_board(target_board);
-        comment.setFcomment_content(content);
+        comment.setFcomment_content(write_comment_content);
 
-        System.out.println("@@@@@!!!!!"+writer+"/"+target_board+"/"+content);
+        System.out.println("@@@@@!!!!!"+writer+"/"+target_board+"/"+write_comment_content);
 
         int res = commentService.writeComment(comment);
         if(res==0){
@@ -42,7 +42,7 @@ public class CommentControllor {
     }
 
     @GetMapping("fboard/{fboard_num}/comment/delete/{comment_num}")
-    public String deleteComment(@PathVariable int target_board, @PathVariable int comment_num, HttpServletRequest request){
+    public String deleteComment(@PathVariable int target_board, @PathVariable int comment_num){
         commentService.deleteComment(comment_num);
         return "redirect:freeBoard/view/"+target_board;
     }

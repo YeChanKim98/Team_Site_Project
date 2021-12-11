@@ -23,13 +23,18 @@
       height:70px;
     }
     list{list-style:none;}
+    #comment>div>ul{padding-left: 0; }
+    #comment_content{padding-bottom:5px;}
+    #comment_list{
+      list-style: none;
+      border-bottom: 1px solid #a8a8a8;
+    }
     #write_comment > div{display: inline-block;}
   </style>
 
   <script>
     function checkOnlyOne(element) {
-      const checkboxes
-              = document.getElementsByName("writer_option");
+      const checkboxes = document.getElementsByName("writer_option");
       checkboxes.forEach((cb) => {
         cb.checked = false;
       })
@@ -87,21 +92,19 @@
   <div id="comment" style="margin-top:30px;margin-right:auto; margin-left:auto; width:50%;">
     <!--댓글 상단-->
     <div style="border-bottom:2px solid #a8a8a8; margin-top:15px;">
-      <h5><b th:text="'댓글('+${comment_cnt}+')'"></b></h5>
+      <h5><b th:text="'댓글('+${comment_cnt}+')'"></b></h5> <!--댓글 삽입삭제시 실제로 카운트 관리하도록 백 수정-->
     </div>
 
     <!--댓글 목록-->
-    <div style="border-bottom:1px solid #a8a8a8;margin-top:5px;margin-bottom:15px;">
+    <div style="margin-top:5px;margin-bottom:15px;">
       <ul>
-        <li> <!-- 타임리프를 통해서 반복 실행 -->
-          <div>
+        <li id="comment_list" th:each="comment:${commentList}"> <!-- 타임리프를 통한 반복 실행 구간-->
+          <div id="comment_content">
             <div>
-              댓글 작성자 | 작성일
+              <a th:text="${comment.fcomment_writer}"/>&nbsp;|&nbsp;<a th:text="${comment.fcomment_reg_date}"/>
             </div>
             <div>
-              댓글 내용
-              for문을 통해서 댓글정보를 받아온 후 th:each로 게시글 메인과 같은 메커니즘으로 적용 : 페이징이 빡셈
-              CSS+JS는 나중에
+              <span th:text="${comment.fcomment_content}"></span>
             </div>
           </div>
         </li>
@@ -109,7 +112,7 @@
     </div>
 
     <!--댓글 작성-->
-    <div id="write_comment" style="height:70px;">
+    <div id="write_comment" style="height:70px;margin-top:23px;">
       <div style="float:left;width:8%;margin-left:10px;">
         <input  type='checkbox' name='writer_option' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
         <input type='checkbox' name='writer_option' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
@@ -117,16 +120,13 @@
 
 
       <form th:action="@{'/fboard/'+${num}+'/comment/write'}" method="post">
-
-        <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
-          <input style="height:100%;width:100%;" type="text" name="comment_content">
+        <div style="height: 100%; float: left; width: 76%; margin-left: 10px;">
+          <input style="height:40px; width:100%;" type="text" name="write_comment_content">
         </div>
         <div style="float:right; height:70%;width:10%;">
           <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary">등록</button>
         </div>
       </form>
-
-
 
     </div>
   </div>

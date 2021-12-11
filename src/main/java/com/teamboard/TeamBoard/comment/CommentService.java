@@ -18,7 +18,6 @@ public class CommentService {
     public CommentService(CommentRepository commentRepository) {this.commentRepository = commentRepository;}
 
     public int writeComment(Free_comment free_comment){
-        System.out.println("service??");
         return commentRepository.write(free_comment);
     }
 
