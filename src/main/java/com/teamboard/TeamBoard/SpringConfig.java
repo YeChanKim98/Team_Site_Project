@@ -1,5 +1,6 @@
 package com.teamboard.TeamBoard;
 
+import com.teamboard.TeamBoard.comment.Free_comment;
 import com.teamboard.TeamBoard.repository.Mail.Chk_MailRepository;
 import com.teamboard.TeamBoard.repository.Mail.JpaChk_MailRepository;
 import com.teamboard.TeamBoard.repository.board.BoardRepository;
@@ -38,5 +39,8 @@ public class SpringConfig {
 
     @Bean
     public Chk_MailRepository chk_MailRepository(){return new JpaChk_MailRepository(em);}
+
+    @Bean
+    public Free_comment free_comment(){return new Jpafree_comment(em);}
 
 }
