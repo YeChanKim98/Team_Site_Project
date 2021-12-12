@@ -49,13 +49,12 @@ create table DEL_BOARD(
 );
 
 create table FREE_COMMENT(
-    FCOMMENT_NUM int auto_increment not null primary key,
-    Target_Board int not null, --> 어느 보드에 달리는지 명시
-    FCOMMENT_WRITER varchar(25) not null,
-    FCOMMENT_CONTENT varchar(500) not null,
-    FCOMMENT_REG_DATE datetime not null,
-    FCOMMENT_UPDATE_DATE datetime
-    );
+     FCOMMENT_NUM int auto_increment primary key,
+     Target_Board int not null,
+     FCOMMENT_WRITER varchar(25) not null,
+     FCOMMENT_CONTENT varchar(1000) not null,
+     FCOMMENT_REG_DATE datetime DEFAULT NOW()
+);
 
 create table DEL_COMMENT(
     DCOMMENT_NUM int auto_increment not null primary key,
