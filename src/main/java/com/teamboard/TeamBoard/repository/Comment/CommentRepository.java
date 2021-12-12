@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CommentRepository {
     int write(Free_comment free_comment);
-    int delete(int fcomment_num);
+    int delete(int fcomment_num, String userId);
     public List<Free_comment> comment_view(int target_board);
 }

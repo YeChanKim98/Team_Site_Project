@@ -47,7 +47,7 @@ public class AdminController {
             return "/admin/AdminMain";
         }else{
             System.out.println("[어드민 접근 체크]어림없지");
-            return "/";
+            return "redirect:/";
         }
     }
 
