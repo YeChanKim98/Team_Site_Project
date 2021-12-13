@@ -16,6 +16,7 @@ public class MailController {
 
     private final EmailService emailService;
     private final Chk_MailService chk_MailService;
+    
     @Autowired
     public MailController(Chk_MailService chk_MailService, EmailService emailService){
         this.chk_MailService = chk_MailService;

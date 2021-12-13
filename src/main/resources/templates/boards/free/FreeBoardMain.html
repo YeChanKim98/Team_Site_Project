@@ -7,7 +7,8 @@
 	<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 
-        .container{width:70%;}
+		.container{width:1040px;} /* fboard의 크기 + 마진값 */
+		#fboard{width:1010px;}
         #fboard_list > table{
             text-align:center;
             height:120%;
@@ -20,8 +21,8 @@
             font-size:18px;
         }
         #list_head th{border-bottom:2px solid #4a74bd;}
-        .board_num{width:10%;}
-        .board_title{width:30%;}
+        .board_num{width:110px;}
+        .board_title{width:340px;}
         .board_title > a:link{text-decoration-color:black;} /*적용 안 됨*/
         .board_title > a:hover{text-decoration:underline;}
         #post_link:link{
@@ -41,10 +42,10 @@
             text-decoration: none;
             color: black;
         }
-        .board_writer{width:15%;}
-        .board_vcnt{width:8%;}
-        .board_ccnt{width:8%;}
-        .board_date{width:15%;}
+        .board_writer{width:150px;}
+        .board_vcnt{width:100px;}
+        .board_ccnt{width:100px;}
+        .board_date{width:210px;}
         #fboard_util > div{display: inline-block;}
         #fboard_search{
             float: left;
@@ -94,7 +95,6 @@
 </center>
 <div class="container">
 	<article id="fboard">
-
 		<div id="fboard_list">
 			<table class="table table-hover">
 				<thead>
