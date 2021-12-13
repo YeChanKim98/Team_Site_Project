@@ -19,7 +19,6 @@
 	<div class="container">
 		<div class="form_container">
 			<a th:value="${use}"></a>
-
 			<!--작성-->
 			<form th:if="${use}=='write'" target="/freeBoard/write" method="post">
 				<table class="table">
@@ -28,8 +27,8 @@
 						<td style="width:250px;padding-left:0px;">
 							<input type="text" class="form-control" name="fboard_writer" th:value="${session.loginID}" disabled>
 						</td>
-						<td>
-							<label th:if="${session.loginID}" style="font-size:12pt;float:left;">
+						<td style="vertical-align:middle;">
+							<label th:if="${session.loginID}" style="font-size:12pt;float:left;margin-bottom:0px;">
 								<input type="checkbox" name="setAnonymous" value="anonymous">익명(th세로 가운데 정렬)
 							</label>
 						</td>
@@ -60,11 +59,6 @@
 						<td style="width:80px;vertical-align: middle;padding-left:16px;padding-right:0px;">작성자</td><input type="hidden" th:value="${boardInfo.fboard_num}" name="fboard_num">
 						<td style="width:250px;padding-left:0px;">
 							<input type="text" class="form-control" name="fboard_writer" th:value="${session.loginID}" disabled>
-						</td>
-						<td>
-							<label th:if="${session.loginID}" style="font-size:12pt;">
-								<input type="checkbox" name="setAnonymous" value="anonymous">익명
-							</label>
 						</td>
 					</tr>
 

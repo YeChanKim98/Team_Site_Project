@@ -43,7 +43,7 @@ public class AdminController {
         if(password.equals("0000")){
             System.out.println("HELLO ADMIN-!!");
             HttpSession session = request.getSession();
-            session.setAttribute("loginID", "Admin");
+            if(session.getAttribute("loginID").equals(""))session.setAttribute("loginID", "Admin");
             return "/admin/AdminMain";
         }else{
             System.out.println("[어드민 접근 체크]어림없지");

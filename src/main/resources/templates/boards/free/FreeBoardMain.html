@@ -7,11 +7,15 @@
 	<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 
-		.container{width:1040px;} /* fboard의 크기 + 마진값 */
-		#fboard{width:1010px;}
+        .container{
+            text-align: center;
+        }/* fboard의 크기 + 마진값 */
+        #fboard{
+            width:1010px;
+            display: inline-block;
+        }
         #fboard_list > table{
             text-align:center;
-            height:120%;
             resize:none;
             border-top:3px solid #4a74bd;
             border-bottom:3px solid #4a74bd;
@@ -22,7 +26,13 @@
         }
         #list_head th{border-bottom:2px solid #4a74bd;}
         .board_num{width:110px;}
-        .board_title{width:340px;}
+        .board_title{
+            width:340px;
+            padding-left:5px;
+        }
+        tbody .board_title {
+            text-align:left;
+		}
         .board_title > a:link{text-decoration-color:black;} /*적용 안 됨*/
         .board_title > a:hover{text-decoration:underline;}
         #post_link:link{
@@ -33,7 +43,7 @@
             text-decoration: none;
             color: black;
         }
-		#notice_area{background-color: #dcfcdb;}
+        #notice_area{background-color: #dcfcdb;}
         #notice_link:link{
             text-decoration: none;
             color: black;
@@ -57,31 +67,16 @@
             margin-left:5px;
             font-weight:bold;
         }
-        #fboard_write{
-            float: right;
-            width:10%;
-        }
-        #write_btn{
-            width:100%;
-            font-weight:bold;
-        }
+        #fboard_write{float: right;}
+        #write_btn{font-weight:bold;}
         #fboard_paging{
             clear: both;
             text-align:center;
         }
         #fboard_paging > nav {
             display: inline-block;
-            width: 25%;
             height: 65px;
         }
-        .page-item{
-            width:20%;
-        }
-        .now
-        .page-link{
-            height:100%;
-        }
-
 	</style>
 </head>
 <body>
@@ -93,114 +88,114 @@
 	<a th:text="'Start '+${block_start}+'block to'"></a>
 	<a th:text="${block_end}+'block'"></a>
 </center>
-<div class="container">
-	<article id="fboard">
-		<div id="fboard_list">
-			<table class="table table-hover">
-				<thead>
-				<tr id="list_head">
-					<th class="board_num" scope="col">글 번호</th>
-					<th class="board_title" scope="col">제목</th>
-					<th class="board_writer" scope="col">작성자</th>
-					<th class="board_vcnt" scope="col">조회수</th>
-					<th class="board_ccnt" scope="col">댓글수</th>
-					<th class="board_date" scope="col">작성일</th>
-				</tr>
-				</thead>
-				<tbody class="table_body">
-				<!-- 공지 -->
-				<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
-					<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
-					<td class="board_title"><a id="notice_link" th:text="${notice.notice_title}" th:href="'/notice/view/'+${notice.notice_num}"></a></td>
-					<td class="board_writer" th:text="${notice.notice_writer}"></td>
-					<td class="board_vcnt" th:text="${notice.notice_view_count}"></td>
-					<td class="board_ccnt" th:text="${notice.notice_comment_count}"></td>
-					<td class="board_date" th:text="${notice.notice_reg_date}"></td>
-				</tr>
+	<div class="container">
+		<div id="fboard">
+			<div id="fboard_list">
+				<table class="table table-hover">
+					<thead>
+					<tr id="list_head">
+						<th class="board_num" scope="col">글 번호</th>
+						<th class="board_title" scope="col">제목</th>
+						<th class="board_writer" scope="col" style="text-align: center;">작성자</th>
+						<th class="board_vcnt" scope="col">조회수</th>
+						<th class="board_ccnt" scope="col">댓글수</th>
+						<th class="board_date" scope="col">작성일</th>
+					</tr>
+					</thead>
+					<tbody class="table_body">
+					<!-- 공지 -->
+					<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
+						<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
+						<td class="board_title"><a id="notice_link" th:text="${notice.notice_title}" th:href="'/notice/view/'+${notice.notice_num}"></a></td>
+						<td class="board_writer" th:text="${notice.notice_writer}"></td>
+						<td class="board_vcnt" th:text="${notice.notice_view_count}"></td>
+						<td class="board_ccnt" th:text="${notice.notice_comment_count}"></td>
+						<td class="board_date" th:text="${notice.notice_reg_date}"></td>
+					</tr>
 
-				<!-- 일반 글 -->
-				<tr th:each="board : ${boardList}">
-					<th class="board_num" scope="row" th:text="${board.fboard_num}"></th>
-					<td class="board_title"><a id="post_link" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
-					<td class="board_writer" th:text="${board.fboard_writer}"></td>
-					<td class="board_vcnt" th:text="${board.fboard_view_count}"></td>
-					<td class="board_ccnt" th:text="${board.fboard_comment_count}"></td>
-					<td class="board_date" th:text="${board.fboard_reg_date}"></td>
-				</tr>
-				</tbody>
+					<!-- 일반 글 -->
+					<tr th:each="board : ${boardList}">
+						<th class="board_num" scope="row" th:text="${board.fboard_num}"></th>
+						<td class="board_title"><a id="post_link" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
+						<td class="board_writer" th:text="${board.fboard_writer}"></td>
+						<td class="board_vcnt" th:text="${board.fboard_view_count}"></td>
+						<td class="board_ccnt" th:text="${board.fboard_comment_count}"></td>
+						<td class="board_date" th:text="${board.fboard_reg_date}"></td>
+					</tr>
+					</tbody>
 
-			</table>
-		</div><!--fboard_list : 글 목록-->
+				</table>
+			</div><!--fboard_list : 글 목록-->
 
-		<div id="fboard_util">
+			<div id="fboard_util">
 
-			<div id="fboard_search">
-				<form action="/freeBoard/view/search">
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<select id="search_option" class="custom-select" th:name="search_option">
-								<option value="all" selected>전체</option>
-								<option value="writer">작성자</option>
-								<option value="title">제목</option>
-								<option value="content">내용</option>
-							</select>
+				<div id="fboard_search">
+					<form action="/freeBoard/view/search">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<select id="search_option" class="custom-select" th:name="search_option">
+									<option value="all" selected>전체</option>
+									<option value="writer">작성자</option>
+									<option value="title">제목</option>
+									<option value="content">내용</option>
+								</select>
+							</div>
+							<input type="text" id="search_input" class="form-control" aria-label="Text input with segmented dropdown button" th:name="keyword">
+							<button id="search_btn" type="submit" class="btn btn-outline-primary">검색</button>
+							<!--자바스크립트를 이용한 컨트롤러와 값 송수신-->
+							<!--완전일치가 아닌, 키워드를 포함한 값 검색-->
 						</div>
-						<input type="text" id="search_input" class="form-control" aria-label="Text input with segmented dropdown button" th:name="keyword">
-						<button id="search_btn" type="submit" class="btn btn-outline-primary">검색</button>
-						<!--자바스크립트를 이용한 컨트롤러와 값 송수신-->
-						<!--완전일치가 아닌, 키워드를 포함한 값 검색-->
-					</div>
-				</form>
-			</div><!--검색창 : 옵션 / 입력 / 버튼-->
+					</form>
+				</div><!--검색창 : 옵션 / 입력 / 버튼-->
 
-			<div id="fboard_write">
-				<button id="write_btn" type="button" class="btn btn-primary" onclick="location.href='/freeBoard/write'">글쓰기</button>
-			</div>
+				<div id="fboard_write">
+					<button id="write_btn" type="button" class="btn btn-primary" onclick="location.href='/freeBoard/write'">글쓰기</button>
+				</div>
 
-		</div><!--fboard_util : 검색창 / 글쓰기-->
+			</div><!--fboard_util : 검색창 / 글쓰기-->
 
-		<div id="fboard_paging">
-			<nav aria-label="Page navigation example">
-				<ul class="pagination">
+			<div id="fboard_paging">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
 
-					<li class="page-item">
-						<a th:if="${page_now}>5 and ${from.toString().equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
-							<span  aria-hidden="true">&laquo;</span>
-						</a>
-						<a th:if="${page_now}>5 and ${from.toString().equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_start.intValue()-1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
-							<span  aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
+						<li class="page-item">
+							<a th:if="${page_now}>5 and ${from.toString().equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+								<span  aria-hidden="true">&laquo;</span>
+							</a>
+							<a th:if="${page_now}>5 and ${from.toString().equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_start.intValue()-1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+								<span  aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
 
-					<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
-						<a th:if="${from.toString.equals('main')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
-						<a th:if="${from.toString.equals('search')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/search/'+${page}(search_option=${search_option},keyword=${keyword})}"></a>
-						<!--현재페이지 Bold 구현 : <b>태그에 if를 통해서..-->
-					</li>
+						<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
+							<a th:if="${from.toString.equals('main')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
+							<a th:if="${from.toString.equals('search')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/search/'+${page}(search_option=${search_option},keyword=${keyword})}"></a>
+							<!--현재페이지 Bold 구현 : <b>태그에 if를 통해서..-->
+						</li>
 
-					<li class="page-item">
-						<!--
-						 [ >> 조건 ]
-						 - 현재 블록의 마지막 뒤에도 페이지가 있어야함
-						 - 블록이 5개가 다 찬 상태(%5가0)여야함
-						-->
-						<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-						<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_end.intValue()+1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
+						<li class="page-item">
+							<!--
+							 [ >> 조건 ]
+							 - 현재 블록의 마지막 뒤에도 페이지가 있어야함
+							 - 블록이 5개가 다 찬 상태(%5가0)여야함
+							-->
+							<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+							<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_end.intValue()+1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
 
-				</ul>
-			</nav>
-		</div><!--fboard_paging-->
+					</ul>
+				</nav>
+			</div><!--fboard_paging-->
 
-	</article><!--fboard-->
-</div>
-<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
-<script type="text/javascript"></script>
-<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+		</div><!--fboard-->
+	</div>
+	<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+	<script type="text/javascript"></script>
+	<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

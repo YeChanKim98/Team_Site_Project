@@ -31,7 +31,7 @@ public class BoardController {
 
 
     // 자유게시판 메인
-    @GetMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
+    @RequestMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
 
         if(page.isEmpty()){page= Optional.of(1);} // 페이지 미선택은 기본으로 1값
