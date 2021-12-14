@@ -25,6 +25,10 @@ public class CommentService {
         return commentRepository.delete(fcomment_num,userId);
     }
 
+    public int deleteComment(int fcomment_num){
+        return commentRepository.delete(fcomment_num);
+    }
+
     public List<Free_comment> comment_view(int target_board){
         return commentRepository.comment_view(target_board);
     }

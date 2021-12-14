@@ -24,9 +24,9 @@ public class CommentControllor {
     @PostMapping("/freeBoard/{target_board}/comment/write") // 주소에 게시판 종류 유동적으로 변경
     public String writeComment(@PathVariable int target_board, @RequestParam String write_comment_content, HttpServletRequest request){
         HttpSession session = request.getSession();
-        String writer = session.getAttribute("loginID").toString();
-        System.out.println(session.getAttribute("loginID").toString());
+        String writer="";
         if (session.getAttribute("loginID")==null) writer = "anonymous";
+        else writer = session.getAttribute("loginID").toString();
         System.out.println("Writer : "+writer);
         Free_comment comment = new Free_comment();
         comment.setFcomment_writer(writer);

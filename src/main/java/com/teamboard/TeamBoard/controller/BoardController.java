@@ -50,7 +50,6 @@ public class BoardController {
         model.addAttribute("block_start",pageInfo[1]);
         model.addAttribute("block_end",pageInfo[2]);
 
-
         return "boards/free/FreeBoardMain"; // 메인페이지로 이동}
     }
 
@@ -89,6 +88,7 @@ public class BoardController {
             if(kinds.equals("freeBoard")) {
                 PrintWriter out = response.getWriter();
                 boardService.deleteBoard(num);
+                commentService.deleteComment(num);
                 out.println("<script>alert('게시글 삭제 완료');location.href='/freeBoard/view/main/1';</script>");
                 out.flush();
                 out.close();
@@ -126,12 +126,7 @@ public class BoardController {
 
         if(kinds.equals("freeBoard")){
             int res = boardService.updateBoard(writeForm);
-
-            if(res==1){
-                System.out.println("수정결과 : "+res);
-            }else{
-                System.out.println("수정결과 : "+res);
-            }
+            System.out.println("수정결과 : "+res);
         }
         return "redirect:/freeBoard/view/main/1"; // 게시판 메인으로 이동
     }

@@ -35,6 +35,13 @@ public class JpaCommentRepository implements CommentRepository {
                 .executeUpdate();
     }
 
+    @Override// get UserID메서드를 따로 만들어서 요청지가 작성자(혹은 비밀번호)에 의한 삭제일 경우 ID를 받아서 인자로 넣어서 실행
+    public int delete(int fcomment_num) {
+        return em.createQuery("delete from Free_comment fc where fc.target_board=:fcomment_num")
+                .setParameter("fcomment_num", fcomment_num)
+                .executeUpdate();
+    }
+
     @Override
     public List<Free_comment> comment_view(int target_board){
         return em.createQuery("select fc from Free_comment fc where fc.target_board=:target_board", Free_comment.class)
