@@ -63,9 +63,8 @@ public class BoardController {
 
     @PostMapping("freeBoard/write")
     public String freeWrite(@RequestParam(required = false)String setAnonymous, HttpServletRequest request, WriteForm writeForm){ // 리덱터리 리스팅 회피 : writer변수와 세션에서 받은 변수의 값이 일치하지 않으면 메인으로 리다이렉트
-
         free_Board board = new free_Board();
-        HttpSession session = request.getSession(); // 로그인 여부는 이전에 거르므로, 백에서는 로그인 한 것으로 신뢰 -> 한번만 쓰는데 변수 없이 바로 가져다 쓸지?
+        HttpSession session = request.getSession();
         System.out.println("익명성 여부 : "+setAnonymous);
         if(session.getAttribute("loginID")==null) {
             board.setFboard_writer("익명(비로그인)");
