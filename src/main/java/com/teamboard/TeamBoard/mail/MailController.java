@@ -29,7 +29,7 @@ public class MailController {
         System.out.println("컨트롤러 진입"+address+title+content);
         emailService.sendSimpleMessage(address, title, content);
         System.out.println("발송완료");
-        return "home";
+        return "home_old";
     }
     
     // 인증메일 전송
@@ -62,11 +62,11 @@ public class MailController {
         int res = chk_MailService.checkMail(address, key);
         if(res==1){
             System.out.println("메일 인증 완료");
-            return "home";
+            return "home_old";
         }
         else{
             System.out.println("메일 인증 실패");
-            return "home";
+            return "home_old";
         }
     }
 }

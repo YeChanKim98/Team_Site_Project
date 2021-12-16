@@ -27,8 +27,6 @@ public class AdminController {
     // 어드민 접근 시도 페이지
     @GetMapping("/Site/Account/Admin/{ConnectUser}")
     public String ConnectAdmin(@PathVariable String ConnectUser){
-
-        System.out.println("ConnectUser");
         if(ConnectUser.equals("YC")||ConnectUser.equals("ES")||ConnectUser.equals("NH")){
             return "/admin/chkAdmin";
         }
@@ -40,10 +38,11 @@ public class AdminController {
     // 어드민 접근 체크 및 승인
     @PostMapping("/Site/Account/Admin/Main")
     public String ConnectAdmin(@RequestParam String password, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String user = (String)session.getAttribute("loginID");
         if(password.equals("0000")){
             System.out.println("HELLO ADMIN-!!");
-            HttpSession session = request.getSession();
-            if(session.getAttribute("loginID").equals(""))session.setAttribute("loginID", "Admin");
+            if(user==null) session.setAttribute("loginID", "Admin");
             return "/admin/AdminMain";
         }else{
             System.out.println("[어드민 접근 체크]어림없지");

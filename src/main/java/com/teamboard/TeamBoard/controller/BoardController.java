@@ -29,7 +29,6 @@ public class BoardController {
         this.commentService = commentService;
     }
 
-
     // 자유게시판 메인
     @RequestMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
