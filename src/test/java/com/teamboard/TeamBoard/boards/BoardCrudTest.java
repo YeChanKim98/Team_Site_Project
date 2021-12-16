@@ -24,11 +24,11 @@ public class BoardCrudTest {
     @Commit
     void 게시글작성() {
 
-        for(int i = 0 ; i < 20 ; i++) {
+        for(int i = 0 ; i < 50 ; i++) {
             free_Board board = new free_Board();
 
-            board.setFboard_writer("Search");
-            board.setFboard_title("Search"+i);
+            board.setFboard_writer("Board_Test_Account");
+            board.setFboard_title("Test_Post");
             board.setFboard_content("Hello_Post_!");
 
             free_Board resBoard = boardService.writeBoard(board);
@@ -45,7 +45,7 @@ public class BoardCrudTest {
     @Commit
     void 뷰_조회수증가(){
         int fboard_num = 12; // test post number
-        boardService.viewBoard(fboard_num);
+        boardService.viewBoard_free(fboard_num);
         System.out.println(fboard_num+"번 게시물의 조회수 1증가");
 
     }

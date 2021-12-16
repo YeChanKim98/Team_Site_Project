@@ -28,14 +28,10 @@
 
   <script>
     function checkOnlyOne(element) {
-
-      const checkboxes
-              = document.getElementsByName("animal");
-
+      const checkboxes = document.getElementsByName("comment_writer");
       checkboxes.forEach((cb) => {
         cb.checked = false;
       })
-
       element.checked = true;
     }
   </script>
@@ -114,21 +110,18 @@
     <!--댓글 작성-->
     <div id="write_comment" style="height:70px;">
       <div style="float:left;width:8%;margin-left:10px;">
-        <input  type='checkbox' name='animal' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
-        <input type='checkbox' name='animal' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
+        <input  type='checkbox' name='comment_writer' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
+        <input type='checkbox' name='comment_writer' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
       </div>
 
-
-      <from th:action="@{'/fboard/'+${view.fboard_num}+'/comment/write'}" method="post">
+      <form th:action="@{'/fboard/'+${view.fboard_num}+'/comment/write'}" method="post">
         <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
-          <input style="height:100%;width:100%;" type="text" name="comment_content">
+          <input style="height:100%;width:100%;" type="text" name="content">
         </div>
         <div style="float:right; height:70%;width:10%;">
-          <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary" onclick="location.href='#'">등록</button>
+          <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary">등록</button>
         </div>
-      </from>
-
-
+      </form>
 
     </div>
   </div>

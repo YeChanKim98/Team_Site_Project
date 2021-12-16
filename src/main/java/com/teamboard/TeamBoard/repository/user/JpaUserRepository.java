@@ -34,8 +34,10 @@ public class JpaUserRepository implements UserRepository {
                 .executeUpdate();
     }
 
+    
+    // 어드민 전용 맴버정보 업데이트
     @Override
-    public int update(UpdateForm user) {
+    public int update(User user) {
         //UPDATE [테이블] SET [열] = '변경할값' WHERE [조건]
         return em.createQuery("update User u set u.id=:id, u.pw=:pw, u.name=:name,u.email =:email, u.nick=:nick, u.phone=:phone where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("id",user.getId())
@@ -47,28 +49,63 @@ public class JpaUserRepository implements UserRepository {
                 .executeUpdate();
     }
 
+    // 유저용 업데이트 : 통합..?
+    @Override
+    public int updateNick(String id, String nick){
+        return em.createQuery("update User u set u.nick=:nick where u.id=:id")
+                .setParameter("nick",nick)
+                .setParameter("id",id)
+                .executeUpdate();
+    }
+    @Override
+    public int updatePw(String id, String pw){
+        return em.createQuery("update User u set u.pw=:pw where u.id=:id")
+                .setParameter("pw",pw)
+                .setParameter("id",id)
+                .executeUpdate();
+    }
+    @Override
+    public int updateMail(String id, String mail){
+        return em.createQuery("update User u set u.email=:mail where u.id=:id")
+                .setParameter("mail",mail)
+                .setParameter("id",id)
+                .executeUpdate();
+    }
+
 
     @Override
     public Optional<User> findById(String id) {
         Optional<User> user = em.createQuery("select u from User u where u.id = :id", User.class)
                 .setParameter("id",id)
                 .getResultList().stream().findAny();
-//        User user = em.find(User.class,id); // 인자로 어떠한 엔티티를 찾을것인지, PK 총 2개의 인자를 넘겨서 select를 실행한다
         return user;
     }
 
 
     // PK 기반이 아닌 쿼리는 JPQL을 작성하여 실행해야한다 -> 하지만 이것을 해결한 것이 Spring Data JPA이다. 쿼리문의 작성을 필요로 하지 않는다.
+    // 이메일 기반 조회
     @Override
-    public Optional<User> findByName(String name){//, String email) {
-        return em.createQuery("select u from User u where u.name = :name", User.class)
+    public String findId(String name, String address){
+        System.out.println("[레포지토리][진입] 이름, 이메일을 통한 아이디 조회 : "+name+" / "+address);
+        return em.createQuery("select u.id from User u where u.name=:name and u.email = :address")
                 .setParameter("name",name)
-                .getResultList().stream().findAny();
+                .setParameter("address",address)
+                .getResultList().stream().findAny().get().toString();
+    }
+
+    // PW찾기
+    @Override
+    public String findPw(String id, String address){
+        System.out.println("[레포지토리][진입] 아이디, 이메일을 통한 PW 조회 : "+id+" / "+address);
+        return em.createQuery("select u.pw from User u where u.id=:id and u.email = :address")
+                .setParameter("id",id)
+                .setParameter("address",address)
+                .getResultList().stream().findAny().get().toString();
     }
 
     @Override
     public List<User> findAll() {
-        return em.createQuery("select u from User u", User.class).getResultList(); // JPQL을 이용
+        return em.createQuery("select u from User u", User.class).getResultList();
         // 인라인 단축키 : Ctrl + Alt + N
     }
 }

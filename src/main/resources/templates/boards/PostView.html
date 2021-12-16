@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
+  <title>Free_Board_Main</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    #container{
+      text-align: center;
+    }
+    #wrapper{
+      display: inline-block;
+    }
+    #content_table{
+      width:850px;
+    }
+    #comment{
+      width: 850px;
+      text-align: left;
+    }
+    .label{
+      margin-left:10px;
+      font-size:10pt;
+      color:#797979;
+    }
+    .label_content{
+      font-size:12pt;
+      color:#494949;
+    }
+    .tr_title{
+      border-top:2px solid #4a74bd;
+      border-bottom:1px solid #4a74bd;
+      font-size:20pt;
+      background-color:#F9F9F9;
+      height:70px;
+    }
+    list{list-style:none;}
+    #comment>div>ul{padding-left: 0; }
+    #comment_content{padding-bottom:5px;}
+    #comment_list{
+      list-style: none;
+      border-bottom: 1px solid #a8a8a8;
+    }
+    #write_comment > div{display: inline-block;}
+  </style>
+
+  <script>
+    function writeComment(){
+      if (comment_form.write_comment_content.value === "") {
+        alert("내용을 입력해주세요");
+        jcomment_form.write_comment_content.focus();
+        return false;
+      }
+      else{
+        comment_form.submit();
+      }
+    }
+
+    function checkOnlyOne(element) {
+      const checkboxes = document.getElementsByName("writer_option");
+      checkboxes.forEach((cb) => {
+        cb.checked = false;
+      })
+      element.checked = true;
+    }
+  </script>
+</head>
+<body>
+  <!--전체 width(850)는 고정 좌우 마진 오토 리사이즈 none-->
+  <div id="container">
+    <div id="wrapper">
+      <a th:text="'현재 세션 : '+${session.loginID}"></a><br>
+        <!--본문-->
+        <div id="content">
+          <table id="content_table" style="margin-top:30px;">
+            <tr class="tr_title">
+              <td colspan="2" style="text-align: left;">
+                <b style="margin-left:10px;" th:text="${title}"></b>
+              </td>
+            </tr>
+
+            <tr height="30" width="330px;" style="text-align: left;border-bottom:1px solid #A8A8A8;">
+              <td>
+                <b class="label">작성자</b>&nbsp;|&nbsp;
+                <a class="label_content" th:text="${writer}"></a>&nbsp;
+                <b class="label">조회수</b>&nbsp;|&nbsp;
+                <a class="label_content" th:text="${view_cnt}"></a>&nbsp;
+                <b class="label">댓글수</b>&nbsp;|&nbsp;
+                <a class="label_content" th:text="${comment_cnt}"></a>&nbsp;
+              </td>
+
+              <td style="width:250px;" align="right">
+                <b class="label">등록일</b>&nbsp;|
+                <a class="label_content" th:text="${reg_date}"><%=article.getReg_date()%></a>
+                &nbsp;
+              </td>
+            </tr>
+
+            <tr>
+              <td height="370px" colspan="2" style="border-bottom:1px solid #4a74bd;padding-left:25px; padding-right:15px;text-align: left;" th:text="${content}"></td>
+            </tr>
+
+            <tr height="50" style="border-bottom:2px solid #4a74bd; text-align: right;">
+              <td align="right" colspan="2">
+                <button type="button" class="btn btn-outline-dark" onclick="location.href='/freeBoard/view/main'" style="margin-right:10px;">글 목록</button>
+                <a th:if ="${session.loginID==writer} or ${session.loginID=='Admin'}" th:href="@{'/'+${from_kinds}+'/update/'+${writer}+'/'+${num}}" ><button  type="button" value="글 수정" class="btn btn-outline-dark" style="margin-right:10px">글 수정</button></a>
+                <a th:if ="${session.loginID==writer} or ${session.loginID=='Admin'}" th:href="@{'/'+${from_kinds}+'/delete/'+${num}}" ><button type="button" value="글 삭제" class="btn btn-outline-danger"  style="margin-right:10px">글 삭제</button></a>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+
+        <!--Comment-->
+        <div id="comment" style="margin-top:30px;">
+          <!--댓글 상단-->
+          <div style="border-bottom:2px solid #a8a8a8; margin-top:15px;">
+            <h5><b th:text="'댓글('+${comment_cnt}+')'"></b></h5>
+          </div>
+
+          <!--댓글 목록-->
+          <div style="margin-top:5px;margin-bottom:15px;">
+            <ul>
+              <li id="comment_list" th:each="comment:${commentList}">
+                <div id="comment_content">
+                  <div>
+                    <a th:text="${comment.fcomment_writer}" style="padding-left:5px;"/>&nbsp;(<a th:text="${comment.fcomment_reg_date}" style="padding-left:5px;"/>)
+                    <a th:if="${session.loginID==comment.fcomment_writer}" th:href="@{'/'+${from_kinds}+'/'+${num}+'/comment/delete/'+${comment.fcomment_num}}" style="float:right;">삭제</a>
+                  </div>
+                  <div>
+                    <span th:text="${comment.fcomment_content}" style="padding-left:5px;"></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!--댓글 작성-->
+          <div id="write_comment" style="height:70px;margin-top:23px;">
+            <div style="float:left;width:8%;margin-left:10px;"><!-- 로그인 유저에 한 함 -->
+              <span th:if="${session.loginID}">
+                <input type='checkbox' name='writer_option' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
+                <input type='checkbox' name='writer_option' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
+              </span>
+              <a th:unless="${session.loginID}">익명</a>
+            </div>
+
+
+            <form name="comment_form" th:action="@{'/freeBoard/'+${num}+'/comment/write'}" method="post">
+              <div style="height: 100%; float: left; width: 76%; margin-left: 10px;">
+                <textarea style="height:60px; width:670px;resize: none;" name="write_comment_content" maxlength="1000" placeholder="댓글 내용을 입력해주세요"></textarea>
+              </div>
+              <div style="float:right; height:70%;width:10%;">
+                <button style="margin-right:10px;height:60px;width:100%;font-weight:bold;font-size:13pt;" type="button" class="btn btn-primary" onclick="writeComment()">등록</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
+  <script type="text/javascript"></script>
+  <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

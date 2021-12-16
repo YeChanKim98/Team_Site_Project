@@ -8,15 +8,23 @@
 		<table>
 			<thead>
 			<tr>
-				<th>#</th>
-				<th>Name</th>
+				<td>고유번호</td>
+				<td>이름</td>
+				<td>아이디</td>
+				<td>패스워드</td>
+				<td>닉네임</td>
+				<td>이메일</td>
 			</tr>
 			</thead>
 			<tbody>
 			<!-- th 태그로 인해 리스트 안에 있는 맴버값을 뽑아서 member에 넣은 다음에 각자 돌려서 JSP의 For문을 돌린 것 같은 효과가 나옴-->
 			<tr th:each="user : ${users}">
-				<td th:text="${user.pid}"></td>
-				<td th:text="${user.name}"></td>
+				<td><a th:text="${user.pid}"></a></td>
+				<td><a th:text="${user.name}"></a></td>
+				<td><a th:href="@{'/admin/users/Update/'+${user.id}}" th:text="${user.id}"></a></td>
+				<td><a th:text="${user.pw}"></a></td>
+				<td><a th:text="${user.nick}"></a></td>
+				<td><a th:text="${user.email}"></a></td>
 			</tr>
 			</tbody>
 		</table>

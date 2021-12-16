@@ -6,35 +6,26 @@
 		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 
 		<script>
-            var sendMail = 0;
-            var chkid = 0;
 
-            function checkId(){
-                chkid = 0
-                var chkid = $('#inputid').val(); //id값이 "id"인 입력란의 값을 저장
-				if(document.getElementById('inputid').value==="") return false;
-				var url = '/users/Join/chkidover/'+document.getElementById('inputid').value
-                $.ajax({
-                    url:url, //Controller에서 인식할 주소
-                    type:'post', //POST 방식으로 전달
-                    data:{chkid:chkid}, // 넘길 인자(체크 아이디 값)
-                    success:function(res){
-                        if(res === 1){
-                            $('.over_chk_ok').css("display","inline-block");
-                            $('.over_chk_fail').css("display", "none");
-                            chkid = 1;
-						}
-                        else{
-                            $('.over_chk_fail').css("display","inline-block");
-                            $('.over_chk_ok').css("display", "none");
-                            chkid = 0;
-						}
-                    },
-                    error:function(){
-                        alert("에러발생. 올바른 값을 입력하세요");
-                    }
-                });
-            }
+			var sendMail=0
+			var chkid = 0
+
+
+			// 아이디 입력창에 값 입력시 아이디 중복체크 재검사 요구'
+			function detectChgId(){
+                chkid = 1;
+			}
+
+			// 아이디 중복 체크
+			function chkidover(){
+                var getID = document.getElementById('inputid').value;
+				var link = '/users/Join/chkidover/' + getID
+				location.href=link;
+				alert("사용가능한 아이디입니다");
+                document.getElementById('inputid').value = getID;
+                chkid = 1; // 함수 종료 후 강제 새로고침 발생으로 인한 정상 기능 불가
+				return false;
+			}
 
 			// 비밀번호 정규식 체크
             function chkreg(val){
@@ -95,8 +86,7 @@
 					join_form.inputid.focus();
 					return false;
 				}else if(chkid===0) {
-                    alert("이미 사용중인 아이디 입니다");
-                    join_form.inputid.focus();
+                    alert("아이디 중복체크를 해주세요");
                     return false;
                 }else if (join_form.pw.value === "") {
 					alert("비밀번호를 입력하세요");
@@ -145,43 +135,31 @@
                 margin-left:-225px;/*기준이 바디의 좌측이므로, 사이즈 지정 후 반을 마진으로 더해야함*/
             }
 
-            #container input{height:50px;}
+            #container input{
+                height:50px;
+            }
 
 			#container h5{
                 margin: 0 0 3px;
                 font-weight:bold;
             }
 
-            #container>div:not(#banner){
+            #container>div{ /*mail제외 직계 div만*/
                 margin-bottom:20px;
                 width:450px;
             }
 
-            #banner{
-				margin-top:35px;
-                margin-bottom: 40px;
+            #input_nick{
+				padding-top:20px;
 			}
 
-            #input_nick{padding-top:20px;}
-
-			.over_chk_ok{
-				margin-top:5px;
-				color: #4c4cff;
-				display: none;
-			}
-			.over_chk_fail{
-                margin-top:5px;
-                color: #ff6060;
-				display: none;
-			}
-
-			#inputemail{
+			#inputemail, #inputid{
                 width:320px;
                 float: left;
 				margin-right:10px;
             }
 
-			#chkemailbtn{
+			#chkemailbtn, #chkidbtn{
 				height:50px;
 				width:120px;
 				font-weight:bold;
@@ -199,20 +177,20 @@
 	</head>
 
 	<body>
+		<div id="header">
+			네비바<br><br>
+		</div>
+
 		<form id="join_form" name="join_form" class="form-group" action="/users/Join" method="post">
 			<div id="container">
-				<div id="banner">
-					<a href="/">
-						<img src="/asset/img/TestBanner.png" alt="Banner">
-					</a>
-				</div>
 				<div id="input_id">
 					<h5>아이디</h5>
 					<span>
-						<input type="text" id="inputid" class="form-control" name="id" onkeyup="checkId()">
+						<input type="text" id="inputid" class="form-control" name="id" onkeyup="detectChgId()">
 					</span>
-					<span class="over_chk_ok">사용 가능한 아이디 입니다</span>
-					<span class="over_chk_fail">사용 불가능한 아이디 입니다</span>
+					<a>
+						<button type="button" class="btn btn-primary" id="chkidbtn" onclick="chkidover()">중복확인</button>
+					</a>
 				</div>
 				<div id="input_pw">
 					<h5>비밀번호</h5>
