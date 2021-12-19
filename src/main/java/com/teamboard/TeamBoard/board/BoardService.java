@@ -23,7 +23,7 @@ public class BoardService {
     }
 
     // 메인(공지)
-    public List<notice_Board> listNoticeView(){return boardRepository.noticeView();}
+    public List<notice_Board> listNoticeView(){return boardRepository.noticeView();} // 공지사항 게시판을 고려하지 않음
 
     // 글 작성
     public free_Board writeBoard(free_Board free_board){
@@ -40,6 +40,11 @@ public class BoardService {
     // 검색(전체)
     public List<free_Board> findAllBoard(){
         return boardRepository.findAll();
+    }
+
+    // 검색(범위)
+    public List<free_Board> findRange(int start, int end){
+        return boardRepository.findRange(start, end);
     }
 
     // 검색(조건)
@@ -59,9 +64,8 @@ public class BoardService {
     }
 
     // 수정
-    public int updateBoard(WriteForm writeForm) {
-        System.out.println("게시글 수정 서비스 진입");
-        return boardRepository.update(writeForm);
+    public int updateBoard(WriteForm writeForm, String category) {
+        return boardRepository.update(writeForm, category);
     }
 
     // 삭제

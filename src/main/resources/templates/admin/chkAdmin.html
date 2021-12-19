@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-</head>
-<body>
-	<center>
-		<h1 style="color:red;">접 근 제 한</h1><br>
-		<form action="/Site/Account/Admin/Main" method="post">
-			<input type="password" name="password" placeholder="Password"><br><br>
-			<button type="submit">확인</button><br>
-		</form>
-	</center>
-</body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+	</head>
+	<body>
+		<div class="container">
+			<header th:replace="fragments/nav.html :: fragment-header"/>
+			<div th:replace="fragments/nav.html::fragment-nav"/>
+			<center>
+				<h1 style="color:red;">접 근 제 한</h1><br>
+				<form action="/Site/Account/Admin/Main" method="post">
+					<input type="password" name="password" placeholder="Password"><br><br>
+					<button type="submit">확인</button><br>
+				</form>
+			</center>
+
+		</div>
+		<footer th:replace="fragments/nav.html :: fragment-footer"/>
+	</body>
 </html>

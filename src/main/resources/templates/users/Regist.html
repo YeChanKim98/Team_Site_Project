@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head th:replace="fragments/nav.html :: top-head"/>
 	<head>
 		<meta charset="UTF-8">
 		<title>회원 가입</title>
-		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-
 		<script>
             var sendMail = 0;
             var chkid = 0;
@@ -252,13 +251,9 @@
 				<div id="join_btn">
 					<button type="button" class="btn btn-primary" id="joinbtn" onclick="Join()">회원가입</button>
 				</div>
-
+				<hr style="background-color:#6c757d;">
 			</div><!--컨테이너-->
 		</form>
-
-		<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
-		<script type="text/javascript"></script>
-		<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-		<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+		<footer th:replace="fragments/nav.html :: fragment-footer"/>
 	</body>
 </html>

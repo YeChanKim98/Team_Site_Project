@@ -114,6 +114,14 @@ public class UserController {
         return "redirect:/";
     }
 
+    // 마이 페이지
+    @GetMapping("user/{id}/MyPage")
+    public String myPage(@PathVariable String id, Model model){
+        User user = userService.findOneUser(id).get();
+        model.addAttribute("userInfo",user);
+        return "users/MyPage";
+    }
+
     // Select All User : 검색 후 바로 출력
     @PostMapping("/users/SelAll")
     @RequestMapping("/users/SelAll")
@@ -187,6 +195,8 @@ public class UserController {
             return "/";
         }
         User user = userService.findOneUser(id).get();
+        
+        // 아래사항 JS로 검증. 백엔드 복잡해짐
         if(!user.getNick().isEmpty()){
             int res = userService.updateNick(id, nick); // 업데이트 폼 JS에서 중복 검사를 할 것을 믿고 바로 업데이트 : JS에서 컨트롤러에 요청 -> 해당 아이디가 있는지..? 1반환시 빠꾸 및 정보 변경이 가능하도록 값(아직 없음) 추가
             if(res==0){
@@ -213,8 +223,6 @@ public class UserController {
         }
         return "/users/Update/"+id; // 마이페이지 업데이트 폼으로 돌아감
     }
-
-
     
     // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서 삭제
     // GetMapping은 임시용. 실제 유저는 버튼클릭 후 인증을 통해서 바로 삭제

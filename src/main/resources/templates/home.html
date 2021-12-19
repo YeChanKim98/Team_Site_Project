@@ -1,17 +1,10 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+  <head th:replace="fragments/nav.html :: top-head"/>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.1.1">
     <title>Spring Project</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="home.css" rel="stylesheet">
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -28,131 +21,45 @@
         }
       }
 
-      ul{
-        list-style:none;
-        padding-left:5px;
+      ul {
+        list-style: none;
+        padding-left: 5px;
+      }
+
+      #main-nav a:hover{
+        text-decoration-line: none;
+        font-weight: bold;
+      }
+
+      .preview_board{
+        font-weight:bold;
+        font-size:16px;
+      }
+
+      .post_preview:link, .post_preview:visited{
+        color: black;
+        text-decoration:none;
+      }
+      .post_preview:hover{
+        color: black;
+        text-decoration: underline;
       }
     </style>
-
-    <script>
-      // 엔터키 이벤트
-      function goLogin(){
-        if (window.event.keyCode == 13){
-          chk_input_accout()
-        }else {
-          return false;
-        }
-      }
-
-      <!--로그인용 스크립트-->
-      function chk_input_accout() {
-        let id = document.getElementById('recipient-id').value;
-        let pw = document.getElementById('recipient-passwd').value;
-        if(!id){
-          alert('ID를 입력하세요!');
-          document.getElementById('recipient-id').focus();
-        }else if(!pw){
-          alert('PW를 입력하세요!');
-          document.getElementById('recipient-passwd').focus();
-        }else{
-          document.getElementById('login-form').submit();
-        }
-      }
-    </script>
   </head>
 
 
   <body>
     <div class="container">
-
-      <!-- 사이트 제목(혹은 로고) -->
-      <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-          <div class="col text-center">
-            <h4 class="blog-header-logo text-dark" href="#" style="margin-bottom:20px;">Project-Site</h4>
-          </div>
-
-          <!-- '00님 환영합니다' 문구 출력 및 클릭 시 드랍다운 : 로그아웃, 마이페이지-->
-          <div th:if="${session.loginID}" class="col-1 d-flex justify-content-end align-items-center">
-            <a href="/users/Logout">Logout</a>
-          </div>
-
-          <div th:unless="${session.loginID}" class="col-1 d-flex justify-content-end align-items-center">
-            <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="modal" data-target="#exampleModal">Login</a>
-            <!-- 로그인 모달 -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-
-                <div class="modal-content">
-                  <div class="modal-header" style="border-bottom-color: white; padding-bottom:0;">
-                    <h5 class="modal-title" id="exampleModalLabel" style="margin-left:10%;font-size:2.1em;">Login</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-
-                  <div class="modal-body" style="margin:0 auto;width:80%;">
-                    <form id="login-form" action="users/Login" method="post">
-                      <div class="form-group" style="display:flex; text-align:center; margin-top:10px; margin-bottom:8px;">
-                        <input type="text" class="form-control" id="recipient-id" name="id" onKeyUp="goLogin()" placeholder="아이디">
-                      </div>
-                      <div class="form-group" style="display:flex; text-align:center;">
-                        <input type="text" class="form-control" id="recipient-passwd" name="pw" onKeyUp="goLogin()" placeholder="비밀번호">
-                      </div>
-                      <div>
-                        <button type="button" class="btn btn-primary" style="width:100%; height:35pt;font-size:1.3em;vertical-align:center;" onclick="chk_input_accout();">Login</button>
-                      </div>
-                      <div style="margin-top:15px;margin-bottom:10px;text-align:center;">
-                        <div style="border-right:3px solid gray;text-align: center;display: inline-block;">
-                          <a href="/users/FindAccount" style="font-size:1em; color:black; text-decoration-line:none;padding-right:10px;" onmouseover="this.style.fontWeight='bold'" onmouseout="this.style.fontWeight=''">계정 찾기</a>
-                        </div>
-                        <div style="text-align: center;display: inline-block;">
-                          <a href="users/Join" style="font-size:1em; color:black;text-decoration-line:none;padding-left:5px;" onmouseover="this.style.fontWeight='bold'" onmouseout="this.style.fontWeight=''">회원 가입</a>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div> <!-- 로그인 모달 -->
-          </div>
-        </div>
-      </header>
-
-      <!-- 네비 메뉴 -->
-      <div class="nav-scroller py-1 mb-2">
-        <nav class="nav d-flex justify-content-between">
-          <a class="p-2 text-muted" href="#">공지사항</a>
-          <a class="p-2 text-muted" href="freeBoard/view/main">자유 게시판</a>
-          <a class="p-2 text-muted" href="#">자료실</a>
-          <a class="p-2 text-muted" href="#">뉴스</a>
-          <a class="p-2 text-muted" href="#">예비</a>
-          <a class="p-2 text-muted" href="/Site/Account/Admin/YC">관리자 페이지</a>
-
-          <!--
-          로그인 버튼
-          <div class="col-4 d-flex justify-content-end align-items-center">
-            <a class="text-muted" href="#" aria-label="Search">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24" focusable="false"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
-            </a>
-            <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
-          </div>
-          -->
-        </nav>
-      </div>
-
-      <!-- 로그인 모달 -->
+      <header th:replace="fragments/nav.html :: fragment-header"/>
+      <div th:replace="fragments/nav.html::fragment-nav"/>
 
       <!-- 메인 소개 점보트론 -->
-      <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="padding-bottom:28px;">
+      <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="margin-top:15px; padding-bottom:28px;">
         <div class="col-md-6 px-0">
-          <h1 class="display-5 font-italic">스프링 토이프로젝트 사이트</h1><br>
-          <p class="lead my-3">스프링부트 / 그레이들 / 타임리프</p>
-          <p class="lead my-3">JAVA / HTML / CSS / JS / AJAX / SQL</p>
-          <!--
-          링크용
-          <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p>
-          -->
+          <h1 class="display-5 font-italic" style="width:600px;">스프링 토이 프로젝트 사이트</h1><br>
+          <p class="lead my-3" style="width:600px;">스프링부트 / 그레이들 / 타임리프 / JPA</p>
+          <p class="lead my-3" style="width:600px;">JAVA / HTML / CSS / JS / AJAX / JPQL</p>
+          <!-- 링크용: <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p> -->
         </div>
       </div>
 
@@ -160,41 +67,31 @@
       <div class="row mb-2">
         <!-- 게시판 종류 1 -->
         <div class="col-md-6">
-          <span>공지사항</span>
-          <span style="float:right;"><a href="freeBoard/view/main">more</a></span>
-          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="border-top: 1px solid #dee2e6;">
+          <span class="preview_board">공지사항</span>
+          <span style="float:right;"><a class="text-decoration-none" href="freeBoard/view/main" style="color:#6c757d;">more</a></span>
+          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;">
             <ul>
-              <li>001 게시물</li>
-              <li>002 게시물</li>
-              <li>003 게시물</li>
-              <li>004 게시물</li>
-              <li>005 게시물</li>
-              <li>006 게시물</li>
-              <li>007 게시물</li>
-              <li>008 게시물</li>
+              <li th:each="board:${noticeBoardList}">
+                <a class="post_preview" th:text="${board.notice_title}" th:href="'/notice/view/'+${board.notice_num}" />
+              </li>
             </ul>
           </div>
         </div>
 
         <!-- 게시판 종류 2 -->
         <div class="col-md-6">
-          <span>자유게시판</span>
-          <span style="float:right;"><a href="freeBoard/view/main">more</a></span>
-          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="border-top: 1px solid #dee2e6;">
+          <span class="preview_board">자유게시판</span>
+          <span style="float:right;"><a class="text-decoration-none" href="freeBoard/view/main" style="color:#6c757d;">more</a></span>
+          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;">
             <ul>
-              <li>001 게시물</li>
-              <li>002 게시물</li>
-              <li>003 게시물</li>
-              <li>004 게시물</li>
-              <li>005 게시물</li>
-              <li>006 게시물</li>
-              <li>007 게시물</li>
-              <li>008 게시물</li>
+              <li th:each="board:${freeBoardList}">
+                <a class="post_preview" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}" />
+              </li>
             </ul>
           </div>
         </div>
       </div>
-      <hr style="background-color:black;">
+      <hr style="background-color:#6c757d;">
     </div>
 
 
@@ -327,18 +224,13 @@
 <!--  </div>&lt;!&ndash; /.row &ndash;&gt;-->
 <!--</main>&lt;!&ndash; /.container &ndash;&gt;-->
 
-    <footer class="blog-footer" style="text-align: center;">
-      <p>Project Upload At <a href="https://github.com/YeChanKim98/">GitHub</a> by <u>김예찬</u>(KimYeChan).</p>
-      <p>
-        <a href="#">Back to top</a>
-      </p>
-    </footer>
+    <footer th:replace="fragments/nav.html :: fragment-footer"/>
 
-    <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js" style="user-select: auto;"></script>
-    <script type="text/javascript" style="user-select: auto;"></script>
-    <!-- Bootstrap core JavaScript-->
-    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+<!--    <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js" style="user-select: auto;"></script>-->
+<!--    <script type="text/javascript" style="user-select: auto;"></script>-->
+<!--    &lt;!&ndash; Bootstrap core JavaScript&ndash;&gt;-->
+<!--    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>-->
+<!--    <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>-->
 
   </body>
 </html>

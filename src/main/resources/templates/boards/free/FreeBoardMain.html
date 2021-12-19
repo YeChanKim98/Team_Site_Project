@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/nav.html :: top-head"></head>
 <head>
 	<meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
 	<title>Free_Board_Main</title>
@@ -10,10 +11,7 @@
         .container{
             text-align: center;
         }/* fboard의 크기 + 마진값 */
-        #fboard{
-            width:1010px;
-            display: inline-block;
-        }
+        #fboard{width:1110px;}
         #fboard_list > table{
             text-align:center;
             resize:none;
@@ -80,124 +78,115 @@
 	</style>
 </head>
 <body>
-<center>네비바<br></center>
-<center>
-	<a href="/">Main</a><br>
-	<a th:text="'From : '+${from}"></a><br>
-	<a th:if="${keyword}" th:text="'keyword : '+${keyword}+'&nbsp;&nbsp;&nbsp;option : '+${search_option}"></a><br>
-	<a th:text="'Now '+${page_now}+'Page / Total '+${page_total}+'Page      '"></a><br>
-	<a th:text="'Start '+${block_start}+'block to'"></a>
-	<a th:text="${block_end}+'block'"></a>
-</center>
 	<div class="container">
-		<div id="fboard">
-			<div id="fboard_list">
-				<table class="table table-hover">
-					<thead>
-					<tr id="list_head">
-						<th class="board_num" scope="col">글 번호</th>
-						<th class="board_title" scope="col">제목</th>
-						<th class="board_writer" scope="col" style="text-align: center;">작성자</th>
-						<th class="board_vcnt" scope="col">조회수</th>
-						<th class="board_ccnt" scope="col">댓글수</th>
-						<th class="board_date" scope="col">작성일</th>
-					</tr>
-					</thead>
-					<tbody class="table_body">
-					<!-- 공지 -->
-					<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
-						<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
-						<td class="board_title"><a id="notice_link" th:text="${notice.notice_title}" th:href="'/notice/view/'+${notice.notice_num}"></a></td>
-						<td class="board_writer" th:text="${notice.notice_writer}"></td>
-						<td class="board_vcnt" th:text="${notice.notice_view_count}"></td>
-						<td class="board_ccnt" th:text="${notice.notice_comment_count}"></td>
-						<td class="board_date" th:text="${notice.notice_reg_date}"></td>
-					</tr>
-
-					<!-- 일반 글 -->
-					<tr th:each="board : ${boardList}">
-						<th class="board_num" scope="row" th:text="${board.fboard_num}"></th>
-						<td class="board_title"><a id="post_link" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
-						<td class="board_writer" th:text="${board.fboard_writer}"></td>
-						<td class="board_vcnt" th:text="${board.fboard_view_count}"></td>
-						<td class="board_ccnt" th:text="${board.fboard_comment_count}"></td>
-						<td class="board_date" th:text="${board.fboard_reg_date}"></td>
-					</tr>
-					</tbody>
-
-				</table>
-			</div><!--fboard_list : 글 목록-->
-
-			<div id="fboard_util">
-
-				<div id="fboard_search">
-					<form action="/freeBoard/view/search">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-								<select id="search_option" class="custom-select" th:name="search_option">
-									<option value="all" selected>전체</option>
-									<option value="writer">작성자</option>
-									<option value="title">제목</option>
-									<option value="content">내용</option>
-								</select>
-							</div>
-							<input type="text" id="search_input" class="form-control" aria-label="Text input with segmented dropdown button" th:name="keyword">
-							<button id="search_btn" type="submit" class="btn btn-outline-primary">검색</button>
-							<!--자바스크립트를 이용한 컨트롤러와 값 송수신-->
-							<!--완전일치가 아닌, 키워드를 포함한 값 검색-->
-						</div>
-					</form>
-				</div><!--검색창 : 옵션 / 입력 / 버튼-->
-
-				<div id="fboard_write">
-					<button id="write_btn" type="button" class="btn btn-primary" onclick="location.href='/freeBoard/write'">글쓰기</button>
-				</div>
-
-			</div><!--fboard_util : 검색창 / 글쓰기-->
-
-			<div id="fboard_paging">
-				<nav aria-label="Page navigation example">
-					<ul class="pagination">
-
-						<li class="page-item">
-							<a th:if="${page_now}>5 and ${from.toString().equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
-								<span  aria-hidden="true">&laquo;</span>
-							</a>
-							<a th:if="${page_now}>5 and ${from.toString().equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_start.intValue()-1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
-								<span  aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-
-						<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
-							<a th:if="${from.toString.equals('main')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
-							<a th:if="${from.toString.equals('search')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/search/'+${page}(search_option=${search_option},keyword=${keyword})}"></a>
-							<!--현재페이지 Bold 구현 : <b>태그에 if를 통해서..-->
-						</li>
-
-						<li class="page-item">
-							<!--
-							 [ >> 조건 ]
-							 - 현재 블록의 마지막 뒤에도 페이지가 있어야함
-							 - 블록이 5개가 다 찬 상태(%5가0)여야함
-							-->
-							<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-							<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_end.intValue()+1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-
-					</ul>
-				</nav>
-			</div><!--fboard_paging-->
-
-		</div><!--fboard-->
+		<header th:replace="fragments/nav.html :: fragment-header"></header>
+		<div th:replace="fragments/nav.html::fragment-nav"></div>
 	</div>
-<center><br>푸터</center>
-	<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
-	<script type="text/javascript"></script>
-	<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+		<div class="container">
+			<div id="fboard">
+				<div id="fboard_list">
+					<table class="table table-hover">
+						<thead>
+						<tr id="list_head">
+							<th class="board_num" scope="col">글 번호</th>
+							<th class="board_title" scope="col">제목</th>
+							<th class="board_writer" scope="col" style="text-align: center;">작성자</th>
+							<th class="board_vcnt" scope="col">조회수</th>
+							<th class="board_ccnt" scope="col">댓글수</th>
+							<th class="board_date" scope="col">작성일</th>
+						</tr>
+						</thead>
+						<tbody class="table_body">
+						<!-- 공지 -->
+						<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
+							<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
+							<td class="board_title"><a id="notice_link" th:text="${notice.notice_title}" th:href="'/notice/view/'+${notice.notice_num}"></a></td>
+							<td class="board_writer" th:text="${notice.notice_writer}"></td>
+							<td class="board_vcnt" th:text="${notice.notice_view_count}"></td>
+							<td class="board_ccnt" th:text="${notice.notice_comment_count}"></td>
+							<td class="board_date" th:text="${notice.notice_reg_date}"></td>
+						</tr>
+
+						<!-- 일반 글 -->
+						<tr th:each="board : ${boardList}">
+							<th class="board_num" scope="row" th:text="${board.fboard_num}"></th>
+							<td class="board_title"><a id="post_link" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
+							<td class="board_writer" th:text="${board.fboard_writer}"></td>
+							<td class="board_vcnt" th:text="${board.fboard_view_count}"></td>
+							<td class="board_ccnt" th:text="${board.fboard_comment_count}"></td>
+							<td class="board_date" th:text="${board.fboard_reg_date}"></td>
+						</tr>
+						</tbody>
+
+					</table>
+				</div><!--fboard_list : 글 목록-->
+
+				<div id="fboard_util">
+
+					<div id="fboard_search">
+						<form action="/freeBoard/view/search">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<select id="search_option" class="custom-select" th:name="search_option">
+										<option value="all" selected>전체</option>
+										<option value="writer">작성자</option>
+										<option value="title">제목</option>
+										<option value="content">내용</option>
+									</select>
+								</div>
+								<input type="text" id="search_input" class="form-control" aria-label="Text input with segmented dropdown button" th:name="keyword">
+								<button id="search_btn" type="submit" class="btn btn-outline-primary">검색</button>
+								<!--자바스크립트를 이용한 컨트롤러와 값 송수신-->
+								<!--완전일치가 아닌, 키워드를 포함한 값 검색-->
+							</div>
+						</form>
+					</div><!--검색창 : 옵션 / 입력 / 버튼-->
+
+					<div id="fboard_write">
+						<button id="write_btn" type="button" class="btn btn-primary" onclick="location.href='/freeBoard/write'">글쓰기</button>
+					</div>
+
+				</div><!--fboard_util : 검색창 / 글쓰기-->
+
+				<div id="fboard_paging">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item">
+								<a th:if="${page_now}>5 and ${from.toString().equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_start.intValue()-1}}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+									<span  aria-hidden="true">&laquo;</span>
+								</a>
+								<a th:if="${page_now}>5 and ${from.toString().equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_start.intValue()-1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Previous"><!--th:if="${page_now}>5"-->
+									<span  aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+
+							<li class="page-item" th:each="page : ${#numbers.sequence(block_start,block_end)}">
+								<a th:if="${from.toString.equals('main')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/main/'+${page}}"></a>
+								<a th:if="${from.toString.equals('search')}" class="page-link" th:text="${page}" th:href="@{'/freeBoard/view/search/'+${page}(search_option=${search_option},keyword=${keyword})}"></a>
+							</li>
+
+							<li class="page-item">
+								<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('main')}" th:href="@{'/freeBoard/view/main/'+${block_end.intValue()+1}}" class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+								<a th:if="${(block_end%5==0 && block_end+1<=page_total)} and ${from.toString.equals('search')}" th:href="@{'/freeBoard/view/search/'+${block_end.intValue()+1}(search_option=${search_option},keyword=${keyword})}" class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div><!--fboard_paging-->
+			</div><!--fboard-->
+			<hr style="background-color:#6c757d;">
+			<footer th:replace="fragments/nav.html::fragment-footer"/>
+		</div>
+	<center style="visibility: hidden;">
+		<a href="/">Main</a><br>
+		<a th:text="'From : '+${from}"></a><br>
+		<a th:if="${keyword}" th:text="'keyword : '+${keyword}+'&nbsp;&nbsp;&nbsp;option : '+${search_option}"></a><br>
+		<a th:text="'Now '+${page_now}+'Page / Total '+${page_total}+'Page      '"></a><br>
+		<a th:text="'Start '+${block_start}+'block to'"></a>
+		<a th:text="${block_end}+'block'"></a>
+	</center>
 </body>
 </html>

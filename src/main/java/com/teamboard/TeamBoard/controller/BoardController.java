@@ -6,6 +6,7 @@ import com.teamboard.TeamBoard.board.free_Board;
 import com.teamboard.TeamBoard.board.notice_Board;
 import com.teamboard.TeamBoard.comment.CommentService;
 import com.teamboard.TeamBoard.comment.Free_comment;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,7 @@ public class BoardController {
     }
 
     // 자유게시판 메인
-    @RequestMapping({"freeBoard/view/main/{page}","freeBoard/view/main"}) // 페이지 받아서 페이징 기능 추가
+    @RequestMapping(value = {"/freeBoard/view/main/{page}","/freeBoard/view/main"}, method={RequestMethod.GET,RequestMethod.POST})
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
 
         if(page.isEmpty()){page= Optional.of(1);} // 페이지 미선택은 기본으로 1값
@@ -39,7 +40,7 @@ public class BoardController {
             page = Optional.of(pageInfo[0]); // 최고페이지 이상으로 가려고하면 강제로 마지막페이지로 이동
             pageInfo[1] = page.get();
         }
-        List<notice_Board> noticeList = boardService.listNoticeView();
+        List<notice_Board> noticeList = boardService.listNoticeView().subList(0,5);
         model.addAttribute("noticeList",noticeList);
         List<free_Board> boardList = boardService.mainView(page.get()); // 마지막 페이지보다 높은 페이지 요구하면 강제로 마지막 페이지 반환
         model.addAttribute("boardList",boardList);
@@ -61,13 +62,13 @@ public class BoardController {
     }
 
     @PostMapping("freeBoard/write")
-    public String freeWrite(@RequestParam(required = false)String setAnonymous, HttpServletRequest request, WriteForm writeForm){ // 리덱터리 리스팅 회피 : writer변수와 세션에서 받은 변수의 값이 일치하지 않으면 메인으로 리다이렉트
+    public String writePost(@RequestParam(required = false)String writer_option, HttpServletRequest request, WriteForm writeForm){ // 리덱터리 리스팅 회피 : writer변수와 세션에서 받은 변수의 값이 일치하지 않으면 메인으로 리다이렉트
+        System.out.println("글작성");
         free_Board board = new free_Board();
         HttpSession session = request.getSession();
-        System.out.println("익명성 여부 : "+setAnonymous);
         if(session.getAttribute("loginID")==null) {
             board.setFboard_writer("익명(비로그인)");
-        }else if(setAnonymous!=null){
+        }else if(writer_option.equals("anonymous")){
             board.setFboard_writer("익명(로그인)");
         }else{
             board.setFboard_writer(session.getAttribute("loginID").toString());
@@ -76,7 +77,7 @@ public class BoardController {
         board.setFboard_title(writeForm.getFboard_title());
         board.setFboard_content(writeForm.getFboard_content());
         boardService.writeBoard(board);
-        return "redirect:/freeBoard/view/main/1"; // 게시판 메인으로 이동
+        return "forward:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
     }
 
     // 삭제
@@ -97,7 +98,7 @@ public class BoardController {
     @GetMapping("{kinds}/update/{id}/{num}")
     public String boardUpdate(@PathVariable String kinds,@PathVariable String id, @PathVariable int num, Model model, HttpServletRequest request){
         if(kinds.equals("freeBoard")) {
-            if(request.getSession().getAttribute("loginID").equals(id)) {
+            if(request.getSession().getAttribute("loginID").equals(id)||request.getSession().getAttribute("loginID").equals("Admin")) {
                 free_Board board = boardService.viewBoard_free(num); // 뷰가 아닌 하나 가져오는 코드 필요 : 자주 쓰임
                 model.addAttribute("boardInfo", board);
                 model.addAttribute("kinds", kinds);
@@ -106,10 +107,15 @@ public class BoardController {
                 System.out.println("[BoardController][boardUpdate] 글 수정은 본인만 가능합니다 : 작성자 - "+id+" / 현재 로그인 : "+request.getSession().getAttribute("loginID"));
                 return "redirect:/";
             }
-        }else{
-            System.out.println("[BoardController][boardUpdate] 게시판 식별에 실패했습니다");
-            return "redirect:/";
-        }
+        }else if(kinds.equals("notice")){
+            if(request.getSession().getAttribute("loginID").equals(id)) {
+                notice_Board board = boardService.viewBoard_notice(num);
+                model.addAttribute("boardInfo", board);
+                model.addAttribute("kinds", kinds);
+                model.addAttribute("use", "update");
+            }
+            else return "redirect:/";
+        }else System.out.println("[BoardController][boardUpdate] 게시판 식별에 실패했습니다");
         System.out.println("작성폼으로 연결");
         return "boards/WriteForm";
     }
@@ -123,10 +129,11 @@ public class BoardController {
         System.out.println("수정자 : "+writeForm.getFboard_writer());
 
         if(kinds.equals("freeBoard")){
-            int res = boardService.updateBoard(writeForm);
-            System.out.println("수정결과 : "+res);
+            boardService.updateBoard(writeForm,kinds);
+        }else if(kinds.equals("notice")){
+            boardService.updateBoard(writeForm,kinds);
         }
-        return "redirect:/freeBoard/view/main/1"; // 게시판 메인으로 이동
+        return "forward:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
     }
 
 

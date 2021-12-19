@@ -1,20 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-</head>
-<body>
-	<center>
-		<h1>Admin Page(Temp)</h1><br>
-		<a href="/">메인으로</a><br>
-		<a href="/users/SelAll">전체 유저 목록</a><br>
-		<a href="/users/Delete">유저 삭제</a><br><br>
-		<form action="/Admin/postNotice" method="post">
-			<input type="text" name="title" placeholder="공지 제목"><br>
-			<textarea style="resize:none;" name="content" placeholder="공지 내용"></textarea><br>
-			<button type="submit">공지게시</button><br>
-		</form>
-	</center>
-</body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+	</head>
+
+	<body>
+		<div class="container">
+			<header th:replace="fragments/nav.html :: fragment-header"/>
+			<div th:replace="fragments/nav.html::fragment-nav"/>
+			<center>
+				<h1>Admin Page(Temp)</h1><br>
+				<a href="/">메인으로</a><br>
+				<a href="/users/SelAll">전체 유저 목록</a><br>
+				<a href="/users/Delete">유저 삭제</a><br><br>
+				<form action="/Admin/postNotice" method="post">
+					<input type="text" name="title" placeholder="공지 제목"><br>
+					<textarea style="resize:none;" name="content" placeholder="공지 내용"></textarea><br>
+					<button type="submit">공지게시</button><br>
+				</form>
+			</center>
+			<hr style="background-color:#6c757d;">
+		</div>
+		<footer th:replace="fragments/nav.html :: fragment-footer"/>
+	</body>
 </html>

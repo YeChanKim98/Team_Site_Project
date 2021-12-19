@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/nav.html :: top-head"/>
 <head>
   <meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
   <title>Free_Board_Main</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    #container{
+    .container{
       text-align: center;
     }
     #wrapper{
-      display: inline-block;
+      width:100%;
     }
     #content_table{
-      width:850px;
+      width: 100%;
+      /*width:1110px;*/
     }
     #comment{
-      width: 850px;
+      width: 100%;
+      /*width: 1110px;*/
       text-align: left;
     }
     .label{
@@ -68,12 +71,13 @@
 </head>
 <body>
   <!--전체 width(850)는 고정 좌우 마진 오토 리사이즈 none-->
-  <div id="container">
+  <div class="container">
+    <header th:replace="fragments/nav.html :: fragment-header"/>
+    <div th:replace="fragments/nav.html::fragment-nav"/>
     <div id="wrapper">
-      <a th:text="'현재 세션 : '+${session.loginID}"></a><br>
         <!--본문-->
         <div id="content">
-          <table id="content_table" style="margin-top:30px;">
+          <table id="content_table">
             <tr class="tr_title">
               <td colspan="2" style="text-align: left;">
                 <b style="margin-left:10px;" th:text="${title}"></b>
@@ -148,8 +152,8 @@
 
 
             <form name="comment_form" th:action="@{'/freeBoard/'+${num}+'/comment/write'}" method="post">
-              <div style="height: 100%; float: left; width: 76%; margin-left: 10px;">
-                <textarea style="height:60px; width:670px;resize: none;" name="write_comment_content" maxlength="1000" placeholder="댓글 내용을 입력해주세요"></textarea>
+              <div style="height: 100%; float: left; width: 80%; margin-left: 10px;">
+                <textarea style="height:60px; width:100%;resize: none;" name="write_comment_content" maxlength="1000" placeholder="댓글 내용을 입력해주세요"></textarea>
               </div>
               <div style="float:right; height:70%;width:10%;">
                 <button style="margin-right:10px;height:60px;width:100%;font-weight:bold;font-size:13pt;" type="button" class="btn btn-primary" onclick="writeComment()">등록</button>
@@ -159,11 +163,8 @@
           </div>
         </div>
       </div>
+    <hr style="background-color:#6c757d;">
   </div>
-
-  <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
-  <script type="text/javascript"></script>
-  <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-  <script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+  <footer th:replace="fragments/nav.html :: fragment-footer"/>
 </body>
 </html>

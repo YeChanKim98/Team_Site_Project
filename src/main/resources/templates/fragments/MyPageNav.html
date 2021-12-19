@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+
+	<body>
+
+		<nav th:fragment="fragment-mypage-nav" class="col-12 col-md-3 col-lg-2 navbar navbar-expand-md navbar-dark bg-dark pt-md-3 pl-md-2 pl-xl-3 d-md-block" style="height: 516px;"> <!-- d-flex -->
+			<a class="navbar-brand" href="#"><!-- 내 정보 링크 -->
+				<i class="fas fa-cog"></i> My Page
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse mt-md-1" id="sidebar">
+				<ul class="navbar-nav d-block mr-auto">
+					<li class="nav-item w-100 btn btn-dark text-left">
+						<a class="nav-link active" href="#">
+							내 정보 <!-- 기본 페이지 -->
+							<!-- <span class="sr-only">(current)</span> -->
+						</a>
+					</li>
+					<li class="nav-item w-100 btn btn-dark text-left">
+						<a class="nav-link active" href="#">정보 변경</a>
+					</li>
+					<li class="nav-item w-100 btn btn-dark text-left">
+						<a class="nav-link active" href="#">게시글 / 댓글</a>
+					</li>
+					<li class="nav-item w-100 btn btn-dark text-left">
+						<a class="nav-link" href="#">예비</a>
+					</li>
+					<li class="nav-item w-100 btn btn-dark text-left">
+						<a class="nav-link active" href="#" style="color: #fd9696;">회원탈퇴</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+	</body>
+</html>

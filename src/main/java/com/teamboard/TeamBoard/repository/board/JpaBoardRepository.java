@@ -41,21 +41,24 @@ public class JpaBoardRepository implements BoardRepository{
     }
 
     // 수정
-    public int update(WriteForm writeForm) {
-        System.out.println("게시글 수정 레포지트리 실행");
-        System.out.println(writeForm.getFboard_title());
-        System.out.println(writeForm.getFboard_content());
-        System.out.println(writeForm.getFboard_num());
-        return em.createQuery("update free_Board fb set fb.fboard_title=:fboard_title, fb.fboard_content=:fboard_content where fb.fboard_num=:fboard_num")
-                .setParameter("fboard_title",writeForm.getFboard_title())
-                .setParameter("fboard_content",writeForm.getFboard_content())
-                .setParameter("fboard_num",writeForm.getFboard_num())
+    public int update(WriteForm writeForm, String category) {
+        String JPQL = "";
+        if(category.equals("freeBoard")){
+            JPQL = "update free_Board fb set fb.fboard_title=:title, fb.fboard_content=:content where fb.fboard_num=:num";
+        }else if(category.equals("notice")){
+            JPQL = "update notice_Board nb set nb.notice_title=:title, nb.notice_content=:content where nb.notice_num=:num";
+        }
+        return em.createQuery(JPQL)
+                .setParameter("title",writeForm.getFboard_title())
+                .setParameter("content",writeForm.getFboard_content())
+                .setParameter("num",writeForm.getFboard_num())
                 .executeUpdate();
     }
 
     // 일반글 조회
     public free_Board view_free(int fboard_num) {
         // 조회 수 증가 : 현재 범용으로 가져오는 메서드가 없어서 수정시 해당 메서드를 이용하는데, 이때 뷰가 같이 증가함
+        // 단, 댓글 삽입 삭제 새로고침 시에는 제외
         em.createQuery("update free_Board fb set fb.fboard_view_count=fb.fboard_view_count+1 where fb.fboard_num=:fboard_num")
                 .setParameter("fboard_num",fboard_num)
                 .executeUpdate();
@@ -83,7 +86,14 @@ public class JpaBoardRepository implements BoardRepository{
     public List<free_Board> findAll() {
         return em.createQuery("select fb from free_Board fb",free_Board.class).getResultList();
         // 리소스 낭비가 심하므로 목록에서는 콘텐츠 내용은 제외하고 받아오기
+    }
 
+
+    public List<free_Board> findRange(int start, int end) {
+        return em.createQuery("select fb from free_Board fb",free_Board.class)
+                .setFirstResult(start)
+                .setMaxResults(end)
+                .getResultList();
     }
 
     // 검색
@@ -109,7 +119,7 @@ public class JpaBoardRepository implements BoardRepository{
     public List<free_Board> mainView(int page){
         int start = (page-1)*10;
         int showPost = 10;
-        if(page == 1) showPost = 5;
+        if(page == 1) showPost = 5; // 컨트롤러로 이동 : 섭리스트를 통한 자르기
         else start-=5;
         return  em.createQuery("select fb from free_Board fb order by fb.fboard_num desc",free_Board.class)
                 .setFirstResult(start) // 시작부터
@@ -121,7 +131,7 @@ public class JpaBoardRepository implements BoardRepository{
     // 타 게시판에서보는 공지글 출력용
     public List<notice_Board> noticeView(){
         return  em.createQuery("select nb from notice_Board nb order by nb.notice_num desc",notice_Board.class)
-                .setMaxResults(5) // 기본 10개씩 출력(단, 첫번째 페이지 최대 5개는 공지글임)
+                .setMaxResults(10) // 게시글의 출력 단위는 10을 기본으로 하며, 필요 갯수가 다를 경우 컨트롤러에서 subList를 취한다 (단, subList의 빈도가 너무 많을 경우는 낭비되는 리소스를 줄이기 위해서 레포지토리 수정)
                 .getResultList();
     }
     
