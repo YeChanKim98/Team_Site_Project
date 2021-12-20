@@ -7,7 +7,7 @@
 	<body>
 
 		<nav th:fragment="fragment-mypage-nav" class="col-12 col-md-3 col-lg-2 navbar navbar-expand-md navbar-dark bg-dark pt-md-3 pl-md-2 pl-xl-3 d-md-block" style="height: 516px;"> <!-- d-flex -->
-			<a class="navbar-brand" href="#"><!-- 내 정보 링크 -->
+			<a class="navbar-brand" href="#" style="margin-left:6px;"><!-- 내 정보 링크 -->
 				<i class="fas fa-cog"></i> My Page
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,14 +15,14 @@
 			</button>
 			<div class="navbar-collapse collapse mt-md-1" id="sidebar">
 				<ul class="navbar-nav d-block mr-auto">
-					<li class="nav-item w-100 btn btn-dark text-left">
-						<a class="nav-link active" href="#">
+					<li class="nav-item w-100 btn btn-dark text-left"><!-- btn-dark : 호버 - 백그라운드 다크 -->
+						<a class="nav-link active" th:href="'/user/'+${session.loginID}+'/MyPage/info'">
 							내 정보 <!-- 기본 페이지 -->
 							<!-- <span class="sr-only">(current)</span> -->
 						</a>
 					</li>
 					<li class="nav-item w-100 btn btn-dark text-left">
-						<a class="nav-link active" href="#">정보 변경</a>
+						<a class="nav-link active" th:href="'/user/'+${session.loginID}+'/MyPage/chginfo'">정보 변경</a>
 					</li>
 					<li class="nav-item w-100 btn btn-dark text-left">
 						<a class="nav-link active" href="#">게시글 / 댓글</a>

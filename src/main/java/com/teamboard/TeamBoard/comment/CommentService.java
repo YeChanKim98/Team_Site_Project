@@ -32,4 +32,8 @@ public class CommentService {
     public List<Free_comment> comment_view(int target_board){
         return commentRepository.comment_view(target_board);
     }
+
+    public long getCntComment(String option, String keyword){
+        return commentRepository.getCntComment(option, keyword);
+    }
 }

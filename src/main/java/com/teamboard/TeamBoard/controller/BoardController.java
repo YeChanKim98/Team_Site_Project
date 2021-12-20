@@ -6,7 +6,6 @@ import com.teamboard.TeamBoard.board.free_Board;
 import com.teamboard.TeamBoard.board.notice_Board;
 import com.teamboard.TeamBoard.comment.CommentService;
 import com.teamboard.TeamBoard.comment.Free_comment;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

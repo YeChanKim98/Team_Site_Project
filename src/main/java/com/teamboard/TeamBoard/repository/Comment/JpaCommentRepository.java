@@ -49,4 +49,15 @@ public class JpaCommentRepository implements CommentRepository {
                 .getResultList();
     }
 
+    public Long getCntComment(String option, String keyword){
+        String findQuery="";
+        if(option.equals("writer")){
+            findQuery = "select count(fc) from Free_comment fc where fc.fcomment_writer=:keyword";
+        } else if(option.equals("board")){
+            findQuery = "select count(fc) from Free_comment fc where fc.target_board=:keyword";
+        }
+        return (Long)em.createQuery(findQuery)
+                .setParameter("keyword",keyword)
+                .getSingleResult();
+    }
 }

@@ -5,30 +5,9 @@
 		<meta charset="UTF-8">
 		<title>마이 페이지</title>
 		<style>
-			/*구버전
-            .MenuList{
-				margin-top: 15px;
-				height:40px;
-			}
-			#userName{
-            	border-bottom:1px solid black;
-				padding-top: 15px;
-				padding-bottom: 15px;
-				padding-left: 10px;
-				background-color: white;
-			}
-            .Menu{
-                font-size:18px;
-                padding-left: 10px;
-			}
-            .Menu:link, .Menu:visited{
-                color: white;
-                text-decoration:none;
-            }
-            .Menu:hover{
-                cursor: pointer;
-                font-weight: bold;
-            }*/
+			#user_name{padding:15px 0px 15px 15px;}
+            #user_date_mail{padding: 15px 15px 15px 0px;}
+			#basic_info{border-bottom:1px solid black;}
 		</style>
 	</head>
 	<body>
@@ -47,74 +26,29 @@
 						<!-- 내용 -->
 						<main role="main" class="col-12 col-md-9 col-lg-10 px-4">
 
-							<div style="margin-top:20px;margin-bottom:20px;">
-								<div style="float: left;height:60px;width:100%;">
-									<a th:text="${session.loginID}+'님'" style="font-size:36px;padding-left:5px;"/>
+							<div id="basic_info" class="row mb-2">
+								<div id="user_name" class="col-md-3 align-self-center" style="text-align:center">
+									<h2 th:text="${session.loginID}+'님'"/>
 								</div>
-								<div style="float: left;height:60px;width:100%;">
+								<div id="user_date_mail" class="col-md-5 align-self-center">
 									<div th:text="' 가입일 : '+${#temporals.format(userInfo.date, 'yyyy-MM-dd')}"/>
 									<div th:text="'등록 이메일 : '+${userInfo.email}"/>
 								</div>
-
-								<div style="border-bottom:1px solid black;padding-bottom:20px;height:60px;">
-									<a th:text="'a'"/>
-								</div>
 							</div>
 
-							<div>
-								<div>
-									<span>
-										내가 쓴 글
-										<a th:text="40개" href="#"></a>
-									</span>
+							<div class="row mb-2" style="margin-top:15px;">
+								<div class="col-md-4 align-self-center" style="text-align:center">
+									<h5 th:text="'내가 작성한 게시글 : '+${cntPost}+'개'"/>
 								</div>
-								<div>
-									<span>
-										내가 쓴 댓글
-										<a th:text="40개" href="#"></a>
-									</span>
+								<div class="col-md-4 align-self-center" style="text-align:center">
+									<h5 th:text="'내가 작성한 댓글 : '+${cntComment}+'개'"/>
 								</div>
 							</div>
-
-
-
-
 						</main>
 					</div>
 				</div>
 			</div>
 		</div>
 		<footer th:replace="fragments/nav.html :: fragment-footer"/>
-
-		<!-- 구 버전 -->
-		<!--
-		<div class="col-md-2" style="border-right: 1px solid #6c757d;border-left: 1px solid #6c757d;padding: 0px; background-color: #6c757d">
-			<div id="userName">
-				<a th:text="${session.loginID}+'님'" style="font-size:24px;padding-left:5px;"/><br>
-				<span th:text="'가입일 : '+${#temporals.format(userInfo.date, 'yyyy-MM-dd')}"></span>
-			</div>
-
-			<div class="MenuList">
-				<a class="Menu" href="">내 정보</a>
-			</div>
-
-			<div class="MenuList" >
-				<a class="Menu" href="">정보 변경</a>
-			</div>
-
-			<div class="MenuList" >
-				<a class="Menu" href="">게시글 / 댓글</a>
-			</div>
-
-			<div class="MenuList" >
-				<a class="Menu" href="">예비</a>
-			</div>
-		</div>
-
-		<div class="col-md-10">
-		</div>
-	</div>
-	-->
-
 	</body>
 </html>

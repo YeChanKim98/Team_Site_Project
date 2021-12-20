@@ -1,11 +1,12 @@
 package com.teamboard.TeamBoard.controller;
 
+import com.teamboard.TeamBoard.board.BoardService;
+import com.teamboard.TeamBoard.comment.CommentService;
 import com.teamboard.TeamBoard.mail.Chk_MailService;
 import com.teamboard.TeamBoard.mail.EmailService;
 import com.teamboard.TeamBoard.user.form.JoinForm;
 import com.teamboard.TeamBoard.user.User;
 import com.teamboard.TeamBoard.user.UserService;
-import com.teamboard.TeamBoard.user.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,8 @@ public class UserController {
 
     // 성공 후 반환에 대한 전반적인 재작성 필요
     private final UserService userService;
+    private final BoardService boardService;
+    private final CommentService commentService;
     private final EmailService emailService;
     private final Chk_MailService chk_MailService;
 //    private String updateId;
@@ -31,10 +34,13 @@ public class UserController {
 //    private HttpServletRequest request;
 
     @Autowired
-    public UserController(UserService userService, EmailService emailService, Chk_MailService chk_mailService) {
+    public UserController(UserService userService, BoardService boardService, CommentService commentService, EmailService emailService, Chk_MailService chk_mailService) {
         this.userService = userService;
+        this.boardService = boardService;
+        this.commentService = commentService;
         this.emailService = emailService;
         this.chk_MailService = chk_mailService;
+
     }
 
     // Join : ID / PW / 이름 / 이메일(인증필요) / 닉네임
@@ -114,13 +120,74 @@ public class UserController {
         return "redirect:/";
     }
 
-    // 마이 페이지
-    @GetMapping("user/{id}/MyPage")
-    public String myPage(@PathVariable String id, Model model){
+    // 마이 페이지 : 기본정보
+    @RequestMapping(value = "user/{id}/MyPage/info",method={RequestMethod.GET,RequestMethod.POST})
+    public String myPage_info(@PathVariable String id, Model model, HttpServletRequest request){
+       if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){ // 비로그인 혹은 세션과 접속요청 ID가 다를 경우
+           System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
+           return "/";
+       }
         User user = userService.findOneUser(id).get();
         model.addAttribute("userInfo",user);
+        model.addAttribute("cntPost",boardService.search_post_cnt("writer", id));
+        model.addAttribute("cntComment",commentService.getCntComment("writer",id));
         return "users/MyPage";
     }
+
+    // 마이 페이지 : 정보 수정(유저 업데이트)
+    @GetMapping("user/{id}/MyPage/chginfo")
+    public String myPage_Change(@PathVariable String id, Model model, HttpServletRequest request){
+        if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){
+            System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
+            return "/";
+        }
+        User user = userService.findOneUser(id).get();
+        model.addAttribute("user",user);
+        return "users/MyPage_chg";
+    }
+
+    // 마이 페이지 : 정보 수정(유저 업데이트)
+    @PostMapping({"user/{id}/MyPage/chginfo"}) // 첫번째 파라미터는 어드민 및 테스트용
+    public String infoChange(@PathVariable String id, @RequestParam String nick, @RequestParam String pw, @RequestParam String email, HttpServletRequest request){
+        System.out.println("접근 성공");
+        if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){
+            System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
+            return "/";
+        }
+
+        User user = userService.findOneUser(id).get();
+
+        // 아래사항 JS로 검증. 백엔드 복잡해짐
+        if(!user.getNick().isEmpty()){
+            int res = userService.updateNick(id, nick); // 업데이트 폼 JS에서 중복 검사를 할 것을 믿고 바로 업데이트 : JS에서 컨트롤러에 요청 -> 해당 아이디가 있는지..? 1반환시 빠꾸 및 정보 변경이 가능하도록 값(아직 없음) 추가
+            if(res==0){
+                System.out.println("닉네임 업데이트 실패!");
+                return "user/"+id+"/MyPage/info";
+            }
+            System.out.println("닉네임 업데이트 성공!");
+        }
+        if(!user.getPw().isEmpty()){
+            int res = userService.updatePw(id, pw);
+            if(res==0){
+                System.out.println("패스워드 업데이트 실패!");
+                return "user/"+id+"/MyPage/info";
+            }
+            System.out.println("패스워드 업데이트 성공!");
+        }
+        if(!user.getEmail().isEmpty()){
+            int res = userService.updateMail(id, email);
+            if(res==0){
+                System.out.println("이메일 업데이트 실패!");
+                return "user/"+id+"/MyPage/info";
+            }
+            System.out.println("이메일 업데이트 성공!");
+        }
+        return "user/"+id+"/MyPage/info"; // 마이페이지 업데이트 폼으로 돌아감
+    }
+    
+
+
+
 
     // Select All User : 검색 후 바로 출력
     @PostMapping("/users/SelAll")
@@ -173,55 +240,6 @@ public class UserController {
             out.close();
             return "/";
         }
-    }
-
-    // 유저용
-    @GetMapping({"/users/Update","/users/Update/{updateId}"}) // 첫번째 파라미터는 어드민 및 테스트용
-    public String userUpdateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
-        if(updateId.isEmpty()){
-            HttpSession session = request.getSession();
-            User user = userService.findOneUser((String) session.getAttribute("loginID")).get();
-        }
-        User user = userService.findOneUser(updateId).get();
-        model.addAttribute("userInfo",user);
-        return "/"; // 마이페이지 업데이트 폼
-    }
-
-    @PostMapping({"/users/Update","/users/Update/{id}"}) // 첫번째 파라미터는 어드민 및 테스트용
-    public String userUpdateForm(@PathVariable String id, @RequestParam String nick, @RequestParam String pw, @RequestParam String mail, HttpServletRequest request){
-        System.out.println("유저용 업데이트 컨트롤러 진입.. 확인중..");
-        if(!request.getSession().getAttribute("longinId").equals(id)) {
-            System.out.println("올바르지 않은 접근입니다");
-            return "/";
-        }
-        User user = userService.findOneUser(id).get();
-        
-        // 아래사항 JS로 검증. 백엔드 복잡해짐
-        if(!user.getNick().isEmpty()){
-            int res = userService.updateNick(id, nick); // 업데이트 폼 JS에서 중복 검사를 할 것을 믿고 바로 업데이트 : JS에서 컨트롤러에 요청 -> 해당 아이디가 있는지..? 1반환시 빠꾸 및 정보 변경이 가능하도록 값(아직 없음) 추가
-            if(res==0){
-                System.out.println("닉네임 업데이트 실패!");
-                return "/users/Update/"+id;
-            }
-            System.out.println("닉네임 업데이트 성공!");
-        }
-        if(!user.getPw().isEmpty()){
-            int res = userService.updatePw(id, pw);
-            if(res==0){
-                System.out.println("패스워트 업데이트 실패!");
-                return "/users/Update/"+id;
-            }
-            System.out.println("닉네임 업데이트 성공!");
-        }
-        if(!user.getEmail().isEmpty()){
-            int res = userService.updateMail(id, mail);
-            if(res==0){
-                System.out.println("이메일 업데이트 실패!");
-                return "/users/Update/"+id;
-            }
-            System.out.println("닉네임 업데이트 성공!");
-        }
-        return "/users/Update/"+id; // 마이페이지 업데이트 폼으로 돌아감
     }
     
     // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서 삭제

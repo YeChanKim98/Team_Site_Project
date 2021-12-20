@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+		<meta charset="UTF-8">
+		<title>마이 페이지</title>
+
+		<script>
+            // 비밀번호 정규식 체크
+            function chkreg(val){
+                var rgx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,12}$/;
+                if(!rgx.test(val.value)){
+                    document.getElementById('pw_notice').innerHTML="8~12자에 특수문자, 문자, 숫자가 포함되어야합니다";
+                    document.getElementById('pw_notice').style.color="red";
+                    return false;
+                }
+                else{
+                    document.getElementById('pw_notice').innerHTML="조건에 만족하는 패스워드입니다";
+                    document.getElementById('pw_notice').style.color="green";
+                    return false;
+                }
+            }
+
+            // 비밀번호 재입력 체크
+            function chkpwd(){
+                pw = update_form.pw.value;
+                chk = update_form.pwchk.value;
+                if(pw !== chk){
+                    document.getElementById('chkpw_notice').innerHTML="비밀번호가 일치하지 않습니다";
+                    document.getElementById('chkpw_notice').style.color="red";
+                    return false;
+                }
+                else{
+                    document.getElementById('chkpw_notice').innerHTML="비밀번호가 일치합니다";
+                    document.getElementById('chkpw_notice').style.color="blue";
+                    return false;
+                }
+            }
+
+            function Update() {
+                if (update_form.pw.value === "") {
+                    alert("비밀번호를 입력하세요");
+                    update_form.pw.focus();
+                    return false;
+                } else if (update_form.pw.value.length < 6 || update_form.pw.value.length > 12) {
+                    alert("비밀번호는 8~12자리만 가능합니다");
+                    update_form.pw.focus();
+                    return false;
+                } else if (update_form.pwchk.value === "") {
+                    alert("비밀번호 재확인을 해주세요");
+                    update_form.pwchk.focus();
+                    return false;
+                } else if (update_form.nick.value === "") {
+                    alert("닉네임을 입력하세요");
+                    update_form.nick.focus();
+                    return false;
+                } else if (update_form.email.value === "") {
+                    alert("이메일을 입력하세요");
+                    update_form.email.focus();
+                    return false;
+                } else if (update_form.email.value !== "[[${user.email}]]") { // 타임리프가 받은 모델값을 변수로 사용
+                    alert("이메일 인증을 먼저 해주세요");
+                    update_form.email.focus();
+                    return false;
+                }
+                else if (update_form.pw.value !== update_form.pwchk.value) {
+                    alert("비밀번호를 다시 확인해주세요");
+                    update_form.pwchk.focus();
+                    return false;
+                } else {
+                    update_form.submit(); // 이동
+                    return false;
+                }
+            }
+
+
+		</script>
+
+		<style>
+			#container input{width:25%;}
+			.input_lable{
+				height:100%;
+				width:15%;
+				float:left;
+			}
+			#update_form{
+				margin-top:20px;
+				padding-left:5%;
+				vertical-align: center;
+			}
+			#container>div{margin-bottom:25px;}
+			#inputemail{
+				float:left;
+				margin-right: 15px;
+			}
+            #update_btn{
+				padding-left: 15%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header th:replace="fragments/nav.html :: fragment-header"/>
+			<div th:replace="fragments/nav.html::fragment-nav"/>
+
+			<div class="row mb-2" style="margin: 0px;">
+
+				<!-- 메뉴 -->
+				<div class="container-fluid">
+					<div class="row">
+						<!-- 사이드바 -->
+						<nav th:replace="fragments/MyPageNav.html :: fragment-mypage-nav"/>
+
+						<!-- 내용 -->
+						<main role="main" class="col-12 col-md-9 col-lg-10 px-4">
+
+							<form id="update_form" name="join_form" class="form-group" th:action="'/user/'+${user.id}+'/MyPage/chginfo'" method="post">
+								<div id="container">
+
+									<div id="input_id">
+										<span class="input_lable">아이디</span>
+										<span>
+											<input type="text" class="form-control" th:value="${user.id}" disabled>
+										</span>
+									</div>
+
+									<div id="input_pw">
+										<span class="input_lable">비밀번호 A!123asd</span>
+										<span>
+											<input type="password" id="inputpw" class="form-control" name="pw" onkeyup="chkreg(this)">
+										</span>
+										<span id="pw_notice"></span>
+									</div>
+
+									<div id="input_pwchk">
+										<span class="input_lable">비밀번호 재입력</span>
+										<span>
+											<input type="password" id="inputpwchk" class="form-control" name="pwchk" onkeyup="chkpwd()">
+										</span>
+										<span id="chkpw_notice"></span>
+									</div>
+
+									<div id="input_nick">
+										<span class="input_lable">닉네임</span>
+										<span>
+											<input type="text" class="form-control" th:value="${user.nick}" name="nick">
+										</span>
+									</div>
+
+									<div id="input_name">
+										<span class="input_lable">이름</span>
+										<span>
+											<input type="text" class="form-control" th:value="${user.name}" disabled>
+										</span>
+									</div>
+
+									<div id="input_mail">
+										<span class="input_lable">이메일</span>
+										<span>
+											<input type="email" id="inputemail" class="form-control" th:value="${user.email}" name="email">
+										</span>
+										<a>
+											<button type="button" class="btn btn-primary" id="chkemailbtn" onclick="goCheck()">이메일 인증</button>
+										</a>
+									</div>
+
+									<div id="update_btn" style="">
+										<button type="button" class="btn btn-primary" id="joinbtn" style="width:30%;" onclick="Update()" >정보 수정</button>
+									</div>
+
+								</div><!--컨테이너-->
+							</form>
+
+
+						</main>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer th:replace="fragments/nav.html :: fragment-footer"/>
+	</body>
+</html>
