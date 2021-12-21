@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;  charset=UTF-8">
+		<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+		<title>Free_Board_Main</title>
+		<style>
+
+			.container{width:70%;}
+			#fboard_list > table{
+                text-align:center;
+                resize:none;
+                border-top:3px solid #4a74bd;
+                border-bottom:3px solid #4a74bd;
+			}
+			#list_head{
+				font-weight:bold;
+				font-size:18px;
+			}
+			#list_head th{border-bottom:2px solid #4a74bd;}
+            .board_num{width:110px;}
+            .board_title{
+                width:340px;
+                padding-left:5px;
+            }
+			.board_title > a:link{text-decoration-color:black;} /*적용 안 됨*/
+			.board_title > a:hover{text-decoration:underline;}
+            .board_writer{width:150px;}
+            .board_vcnt{width:100px;}
+            .board_ccnt{width:100px;}
+            .board_date{width:210px;}
+			#fboard_util > div{display: inline-block;}
+
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header th:replace="fragments/nav.html :: fragment-header"/>
+			<div th:replace="fragments/nav.html::fragment-nav"/>
+			<article id="fboard">
+				<div id="fboard_list">
+					<table class="table table-hover">
+						<thead>
+						<tr id="list_head">
+							<th class="board_num" scope="col">글 번호</th>
+							<th class="board_title" scope="col">제목</th>
+							<th class="board_writer" scope="col">작성자</th>
+							<th class="board_vcnt" scope="col">조회수</th>
+							<th class="board_ccnt" scope="col">댓글수</th>
+							<th class="board_date" scope="col">작성일</th>
+						</tr>
+						</thead>
+
+						<tbody class="table_body">
+							<td colspan="6">
+								<h4>결과가 없어요</h4><br>
+								<img src="/asset/img/NoRes.jpg" alt="No_Result">
+							</td>
+						</tbody>
+					</table>
+					<form action="/freeBoard/view/main/1">
+						<button type="submit" class="btn btn-primary" style="margin-left:85%;">게시판 목록으로</button>
+					</form>
+				</div><!--fboard_list : 글 목록-->
+			</article><!--fboard-->
+			<hr style="background-color:#6c757d;">
+			<footer th:replace="fragments/nav.html :: fragment-footer"/>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+	</head>
+	<body>
+		<div class="container">
+			<header th:replace="fragments/nav.html :: fragment-header"/>
+			<div th:replace="fragments/nav.html::fragment-nav"/>
+
+			<div class="row mb-2" style="margin: 0px;">
+
+				<!-- 메뉴 -->
+				<div class="container-fluid">
+					<div class="row">
+						<!-- 사이드바 -->
+						<nav th:replace="fragments/MyPageNav.html :: fragment-mypage-nav"/>
+
+						<!-- 내용 -->
+						<main th:replace="fragments/MyPageContent.html :: own"/>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer th:replace="fragments/nav.html :: fragment-footer"/>
+	</body>
+</html>

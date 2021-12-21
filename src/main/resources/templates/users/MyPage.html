@@ -4,47 +4,21 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>마이 페이지</title>
-		<style>
-			#user_name{padding:15px 0px 15px 15px;}
-            #user_date_mail{padding: 15px 15px 15px 0px;}
-			#basic_info{border-bottom:1px solid black;}
-		</style>
+		<th:block th:if="${menu}=='info'" th:insert="fragments/MyPageContent.html :: info_style"></th:block>
+		<th:block th:if="${menu}=='chginfo'" th:insert="fragments/MyPageContent.html :: chginfo_style"></th:block>
+		<th:block th:if="${menu}=='chginfo'" th:insert="fragments/MyPageContent.html :: chginfo_script"></th:block>
 	</head>
 	<body>
 		<div class="container">
 			<header th:replace="fragments/nav.html :: fragment-header"/>
 			<div th:replace="fragments/nav.html::fragment-nav"/>
-
 			<div class="row mb-2" style="margin: 0px;">
-
-				<!-- 메뉴 -->
 				<div class="container-fluid">
 					<div class="row">
 						<!-- 사이드바 -->
 						<nav th:replace="fragments/MyPageNav.html :: fragment-mypage-nav"/>
-
 						<!-- 내용 -->
-						<main role="main" class="col-12 col-md-9 col-lg-10 px-4">
-
-							<div id="basic_info" class="row mb-2">
-								<div id="user_name" class="col-md-3 align-self-center" style="text-align:center">
-									<h2 th:text="${session.loginID}+'님'"/>
-								</div>
-								<div id="user_date_mail" class="col-md-5 align-self-center">
-									<div th:text="' 가입일 : '+${#temporals.format(userInfo.date, 'yyyy-MM-dd')}"/>
-									<div th:text="'등록 이메일 : '+${userInfo.email}" style="width:250px;"/>
-								</div>
-							</div>
-
-							<div class="row mb-2" style="margin-top:15px;">
-								<div class="col-md-4 align-self-center" style="text-align:center">
-									<h5 th:text="'내가 작성한 게시글 : '+${cntPost}+'개'"/>
-								</div>
-								<div class="col-md-4 align-self-center" style="text-align:center">
-									<h5 th:text="'내가 작성한 댓글 : '+${cntComment}+'개'"/>
-								</div>
-							</div>
-						</main>
+						<th:block th:insert="fragments/MyPageContent.html :: ${menu}"></th:block>
 					</div>
 				</div>
 			</div>

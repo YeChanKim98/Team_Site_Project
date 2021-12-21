@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+	<head>
+		<style th:fragment="info_style">
+			#user_name{padding:15px 0px 15px 15px;}
+			#user_date_mail{padding: 15px 15px 15px 0px;}
+			#basic_info{border-bottom:1px solid black;}
+		</style>
+		<style th:fragment="chginfo_style">
+            #container input{width:25%;}
+            .input_lable{
+                height:100%;
+                width:15%;
+                float:left;
+            }
+            #update_form{
+                margin-top:20px;
+                padding-left:5%;
+                vertical-align: center;
+            }
+            #container>div{margin-bottom:25px;}
+            #inputemail{
+                float:left;
+                margin-right: 15px;
+            }
+            #update_btn{
+                padding-left: 15%;
+            }
+		</style>
+		<script th:fragment="chginfo_script">
+            // 비밀번호 정규식 체크
+            function chkreg(val){
+                var rgx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,12}$/;
+                if(!rgx.test(val.value)){
+                    document.getElementById('pw_notice').innerHTML="8~12자에 특수문자, 문자, 숫자가 포함되어야합니다";
+                    document.getElementById('pw_notice').style.color="red";
+                    return false;
+                }
+                else{
+                    document.getElementById('pw_notice').innerHTML="조건에 만족하는 패스워드입니다";
+                    document.getElementById('pw_notice').style.color="green";
+                    return false;
+                }
+            }
+
+            // 비밀번호 재입력 체크
+            function chkpwd(){
+                pw = update_form.pw.value;
+                chk = update_form.pwchk.value;
+                if(pw !== chk){
+                    document.getElementById('chkpw_notice').innerHTML="비밀번호가 일치하지 않습니다";
+                    document.getElementById('chkpw_notice').style.color="red";
+                    return false;
+                }
+                else{
+                    document.getElementById('chkpw_notice').innerHTML="비밀번호가 일치합니다";
+                    document.getElementById('chkpw_notice').style.color="blue";
+                    return false;
+                }
+            }
+
+            function Update() {
+                if (update_form.pw.value === "") {
+                    alert("비밀번호를 입력하세요");
+                    update_form.pw.focus();
+                    return false;
+                } else if (update_form.pw.value.length < 6 || update_form.pw.value.length > 12) {
+                    alert("비밀번호는 8~12자리만 가능합니다");
+                    update_form.pw.focus();
+                    return false;
+                } else if (update_form.pwchk.value === "") {
+                    alert("비밀번호 재확인을 해주세요");
+                    update_form.pwchk.focus();
+                    return false;
+                } else if (update_form.nick.value === "") {
+                    alert("닉네임을 입력하세요");
+                    update_form.nick.focus();
+                    return false;
+                } else if (update_form.email.value === "") {
+                    alert("이메일을 입력하세요");
+                    update_form.email.focus();
+                    return false;
+                } else if (update_form.email.value !== "[[${user.email}]]") { // 타임리프가 받은 모델값을 변수로 사용
+                    alert("이메일 인증을 먼저 해주세요");
+                    update_form.email.focus();
+                    return false;
+                }
+                else if (update_form.pw.value !== update_form.pwchk.value) {
+                    alert("비밀번호를 다시 확인해주세요");
+                    update_form.pwchk.focus();
+                    return false;
+                } else {
+                    update_form.submit(); // 이동
+                    return false;
+                }
+            }
+		</script>
+	</head>
+
+	<body>
+
+		<!-- INFO -->
+		<main th:fragment="info" role="main" class="col-12 col-md-9 col-lg-10 px-4">
+			<div id="basic_info" class="row mb-2">
+				<div id="user_name" class="col-md-3 align-self-center" style="text-align:center">
+					<h2 th:text="${session.loginID}+'님'"/>
+				</div>
+				<div id="user_date_mail" class="col-md-5 align-self-center">
+					<div th:text="' 가입일 : '+${#temporals.format(userInfo.date, 'yyyy-MM-dd')}"/>
+					<div th:text="'등록 이메일 : '+${userInfo.email}" style="width:250px;"/>
+				</div>
+			</div>
+
+			<div class="row mb-2" style="margin-top:15px;">
+				<div class="col-md-4 align-self-center" style="text-align:center">
+					<h5 th:text="'내가 작성한 게시글 : '+${cntPost}+'개'"/>
+				</div>
+				<div class="col-md-4 align-self-center" style="text-align:center">
+					<h5 th:text="'내가 작성한 댓글 : '+${cntComment}+'개'"/>
+				</div>
+			</div>
+		</main>
+
+		<!-- CHANGE -->
+		<main th:fragment="chginfo" role="main" class="col-12 col-md-9 col-lg-10 px-4">
+			<form id="update_form" name="join_form" class="form-group" th:action="'/user/'+${user.id}+'/MyPage/chginfo'" method="post">
+				<div id="container">
+
+					<div id="input_id">
+						<span class="input_lable">아이디</span>
+						<span>
+							<input type="text" class="form-control" th:value="${user.id}" disabled>
+						</span>
+					</div>
+
+					<div id="input_pw">
+						<span class="input_lable">비밀번호</span>
+						<span>
+							<input type="password" id="inputpw" class="form-control" name="pw" onkeyup="chkreg(this)">
+						</span>
+						<span id="pw_notice"></span>
+					</div>
+
+					<div id="input_pwchk">
+						<span class="input_lable">비밀번호 재입력</span>
+						<span>
+							<input type="password" id="inputpwchk" class="form-control" name="pwchk" onkeyup="chkpwd()">
+						</span>
+						<span id="chkpw_notice"></span>
+					</div>
+
+					<div id="input_nick">
+						<span class="input_lable">닉네임</span>
+						<span>
+							<input type="text" class="form-control" th:value="${user.nick}" name="nick">
+						</span>
+					</div>
+
+					<div id="input_name">
+						<span class="input_lable">이름</span>
+						<span>
+							<input type="text" class="form-control" th:value="${user.name}" disabled>
+						</span>
+					</div>
+
+					<div id="input_mail">
+						<span class="input_lable">이메일</span>
+						<span>
+							<input type="email" id="inputemail" class="form-control" th:value="${user.email}" name="email">
+						</span>
+						<a>
+							<button type="button" class="btn btn-primary" id="chkemailbtn" onclick="goCheck()">이메일 인증</button>
+						</a>
+					</div>
+
+					<div id="update_btn" style="">
+						<button type="button" class="btn btn-primary" id="joinbtn" style="width:30%;" onclick="Update()" >정보 수정</button>
+					</div>
+				</div><!--컨테이너-->
+			</form>
+		</main>
+
+		<!--OWN-->
+		<main th:fragment="own" role="main" class="col-12 col-md-9 col-lg-10 px-4">
+			<div class="row mb-2" style="margin-top:20px;">
+				<!-- 게시글 목록 -->
+				<div class="col-md-6">
+					<span><h5>내 게시글</h5></span>
+					<div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;margin-bottom:5px;">
+
+						<table class="table table-hover">
+							<thead>
+							<tr>
+								<th nowrap>게시판</th>
+								<th nowrap>제목</th>
+								<th nowrap>조회/댓글</th>
+								<th nowrap>작성일</th>
+							</tr>
+							</thead>
+							<tbody class="table_body">
+							<!-- 자유 게시판 글 -->
+							<tr th:if="${freeBoard}" th:each="board : ${freeBoard}">
+								<td nowrap>자유</td>
+								<td nowrap><a class="overflow-hidden" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}"></a></td>
+								<td nowrap th:text="${board.fboard_view_count}+'/'+${board.fboard_comment_count}"></td>
+								<td nowrap class="overflow-hidden" th:text="${board.fboard_reg_date}"></td>
+							</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+				<!-- 댓글목록 -->
+				<div class="col-md-6">
+					<span><h5>내 댓글</h5></span>
+					<div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;margin-bottom:5px;">
+
+						<table class="table table-hover">
+							<thead>
+							<tr>
+								<th nowrap>게시판</th>
+								<th nowrap>게시글</th>
+								<th nowrap>내용</th>
+								<th nowrap>작성일</th>
+							</tr>
+							</thead>
+							<tbody class="table_body">
+							<!-- 자유 게시판 댓글 -->
+							<tr th:if="${freeComment}" th:each=" comment : ${freeComment}">
+								<td nowrap>자유</td>
+								<td nowrap th:text="${comment.target_board}"></td>
+								<td nowrap ><a class="overflow-hidden" th:text="${comment.fcomment_content}" th:href="'/freeBoard/view/'+${comment.target_board}"></a></td>
+								<td nowrap class="overflow-hidden" th:text="${comment.fcomment_reg_date}"></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!--WITHDRAWAL-->
+		<main th:fragment="withdrawal" role="main" class="col-12 col-md-9 col-lg-10 px-4">
+			<div style="margin-top:30px;text-align: center;">
+				<form th:action="'/user/'+${session.loginID}+'/MyPage/withdrawal'" method="post">
+					<h4>비밀번호를 입력해주세요</h4>
+					<input type="password" name="pw" style="width:20%;margin-top:15px;">
+					<input type="submit" class="btn-danger" value="탈퇴">
+				</form>
+			</div>
+		</main>
+
+	</body>
+</html>

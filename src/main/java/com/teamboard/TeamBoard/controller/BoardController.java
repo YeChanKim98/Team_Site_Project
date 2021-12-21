@@ -30,7 +30,7 @@ public class BoardController {
     }
 
     // 자유게시판 메인
-    @RequestMapping(value = {"/freeBoard/view/main/{page}","/freeBoard/view/main"}, method={RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = {"/freeBoard/view/main/{page}","/freeBoard/view/main"})
     public String freeBoardMain(@PathVariable(required=false) Optional<Integer> page, Model model){
 
         if(page.isEmpty()){page= Optional.of(1);} // 페이지 미선택은 기본으로 1값
@@ -75,7 +75,7 @@ public class BoardController {
         board.setFboard_title(writeForm.getFboard_title());
         board.setFboard_content(writeForm.getFboard_content());
         boardService.writeBoard(board);
-        return "redirect:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
+        return "forward:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
     }
 
     // 삭제
@@ -119,15 +119,15 @@ public class BoardController {
     }
 
     @PostMapping("{kinds}/update/{id}/{num}")
-    public String boardUpdate(@PathVariable String kinds, WriteForm writeForm){
+    public String boardUpdate(@PathVariable String kinds, WriteForm writeForm, HttpServletRequest request){
         System.out.println("게시글 수정을 시작합니다");
-
+        System.out.println("메소드 : "+request.getPathInfo());
         if(kinds.equals("freeBoard")){
             boardService.updateBoard(writeForm,kinds);
         }else if(kinds.equals("notice")){
             boardService.updateBoard(writeForm,kinds);
         }
-        return "redirect:/freeBoard/view/main/1";
+        return "redirect:/freeBoard/view/main";
     }
 
 
@@ -189,7 +189,7 @@ public class BoardController {
             pageInfo[1] = page.get();
         }
         if(boardList.isEmpty()){
-            return "boards/free/NoResult";
+            return "boards/NoResult";
         }
         if(page.get()>max){return "redirect:/freeBoard/view/search/"+pageInfo[2];}
         model.addAttribute("boardList",boardList);

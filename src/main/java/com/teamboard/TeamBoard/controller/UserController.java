@@ -101,13 +101,13 @@ public class UserController {
                 session.setAttribute("loginID", id);
                 return "redirect:/";
             }else{
-                out.println("<script>alert('비밀번호를 다시 확인해 주세요');</script>");
+                out.println("<script>alert('비밀번호를 다시 확인해 주세요');location.href='/';</script>");
                 out.flush();
                 out.close();
                 return "redirect:"+ request.getHeader("Referer");
             }
         }else{
-            out.println("<script>alert('존재하지 않는 계정입니다');</script>");
+            out.println("<script>alert('존재하지 않는 계정입니다');location.href='/';</script>");
             out.flush();
             out.close();
             return "redirect:"+ request.getHeader("Referer");
@@ -123,34 +123,40 @@ public class UserController {
     }
 
     // 마이 페이지 : 기본정보
-    @RequestMapping(value = "user/{id}/MyPage/info")//,method={RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping("user/{id}/MyPage/info")
     public String myPage_info(@PathVariable String id, Model model, HttpServletRequest request){
+        System.out.println("마이페이지1");
        if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){ // 비로그인 혹은 세션과 접속요청 ID가 다를 경우
            System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
            return "/";
        }
         User user = userService.findOneUser(id).get();
         model.addAttribute("userInfo",user);
+        model.addAttribute("menu","info");
         model.addAttribute("cntPost",boardService.search_post_cnt("writer", id));
         model.addAttribute("cntComment",commentService.getCntComment("writer",id));
+        System.out.println("마이페이지2");
         return "users/MyPage";
     }
 
-    // 마이 페이지 : 정보 수정(유저 업데이트)
+    // 마이 페이지 : 정보 수정폼(유저 업데이트)
     @RequestMapping("user/{id}/MyPage/chginfo")
     public String myPage_Change(@PathVariable String id, Model model, HttpServletRequest request){
+        System.out.println("여기Request");
         if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){
             System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
             return "/";
         }
         User user = userService.findOneUser(id).get();
+        model.addAttribute("menu","chginfo");
         model.addAttribute("user",user);
-        return "users/MyPage_chg";
+        return "users/MyPage";
     }
 
-    // 마이 페이지 : 정보 수정(유저 업데이트)
-    @PostMapping({"user/{id}/MyPage/chginfo"}) // 첫번째 파라미터는 어드민 및 테스트용
+    // 마이 페이지 : 정보 수정동작(유저 업데이트)
+    @PostMapping("user/{id}/MyPage/chginfo") // 첫번째 파라미터는 어드민 및 테스트용
     public String infoChange(@PathVariable String id, @RequestParam String nick, @RequestParam String pw, @RequestParam String email, HttpServletRequest request){
+        System.out.println("여기POST");
         System.out.println("접근 성공");
         if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){
             System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
@@ -189,31 +195,35 @@ public class UserController {
     }
     
     // 마이페이지 : 내가 쓴 글
-    @GetMapping("user/{id}/MyPage/own")
+    @RequestMapping("user/{id}/MyPage/own")
     public String getOwn(@PathVariable String id, Model model){
-
+        System.out.println("내가 쓴 글 조회 시작");
         List<free_Board> fboardList = boardService.findBoard("writer",id,1);
         if(fboardList.size() > 10) fboardList = fboardList.subList(0,10);
 
         List<Free_comment> fcommentList = commentService.findComment("writer",id);
         if(fcommentList.size() > 10) fcommentList = fcommentList.subList(0,10);
 
+        model.addAttribute("menu","own");
         model.addAttribute("freeBoard",fboardList);
         model.addAttribute("freeComment",fcommentList);
         System.out.println("내 게시글");
-        return "users/MyPage_own";
+        return "users/MyPage";
     }
 
 
     // 마이페이지 : 계정 탈퇴
     @GetMapping("user/{id}/MyPage/withdrawal")
-    public String deleteForm_User(){
-        return "users/MyPage_delete";
+    public String deleteForm_User(Model model){
+        model.addAttribute("menu","withdrawal");
+        return "users/MyPage";
     }
+
     @PostMapping("user/{id}/MyPage/withdrawal")
     public String deleteUser(@RequestParam String pw, HttpServletRequest request){
         HttpSession session = request.getSession();
         String id = session.getAttribute("loginID").toString();
+        if(id.equals("Admin")) return "redirect:/";
         String getPw = userService.findOneUser(id).get().getPw();
         if(getPw.equals(pw)){
             userService.deleteUser(pw);
@@ -221,7 +231,7 @@ public class UserController {
             return "redirect:/";
         }else{
             System.out.println("PW불일치");
-            return "redirect:user/"+id+"/MyPage/withdrawal";
+            return "redirect:/user/"+id+"/MyPage/info";
         }
     }
     

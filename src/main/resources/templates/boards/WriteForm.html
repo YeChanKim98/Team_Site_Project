@@ -68,8 +68,8 @@
 				</table>
 			</form>
 
-			업데이트
-			<form th:if="${use}=='update'" th:target="'/'+${kinds}+'/update/'+${session.loginID}+'/'+${boardInfo.fboard_num}" method="post">
+			<!--업데이트-->
+			<form th:if="${use}=='update'" th:action="'/'+${kinds}+'/update/'+${session.loginID}+'/'+${boardInfo.fboard_num}" method="post">
 				<table class="table">
 					<tr>
 						<td style="width:80px;vertical-align: middle;padding-left:16px;">작성자</td>
