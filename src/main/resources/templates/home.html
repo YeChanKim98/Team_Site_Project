@@ -56,7 +56,7 @@
       <!-- 메인 소개 점보트론 -->
       <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="margin-top:15px; padding-bottom:28px;">
         <div class="col-md-6 px-0">
-          <h1 class="display-5 font-italic" style="width:600px;">스프링 토이 프로젝트 사이트</h1><br>
+          <h1 class="display-5 font-italic" style="width:600px;">스프링 토이 프로젝트</h1><br>
           <p class="lead my-3" style="width:600px;">스프링부트 / 그레이들 / 타임리프 / JPA</p>
           <p class="lead my-3" style="width:600px;">JAVA / HTML / CSS / JS / AJAX / JPQL</p>
           <!-- 링크용: <p class="lead mb-0"><a href="#" class="text-white font-weight-bold">Continue reading...</a></p> -->
@@ -68,8 +68,8 @@
         <!-- 게시판 종류 1 -->
         <div class="col-md-6">
           <span class="preview_board">공지사항</span>
-          <span style="float:right;"><a class="text-decoration-none" href="freeBoard/view/main" style="color:#6c757d;">more</a></span>
-          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;">
+          <span style="float:right;"><a class="text-decoration-none" href="freeBoard/view/main" style=" color:#6c757d;">more</a></span>
+          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;margin-bottom:5px;">
             <ul>
               <li th:each="board:${noticeBoardList}">
                 <a class="post_preview" th:text="${board.notice_title}" th:href="'/notice/view/'+${board.notice_num}" />
@@ -82,7 +82,7 @@
         <div class="col-md-6">
           <span class="preview_board">자유게시판</span>
           <span style="float:right;"><a class="text-decoration-none" href="freeBoard/view/main" style="color:#6c757d;">more</a></span>
-          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;">
+          <div class="row no-gutters rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative" style="border-top: 1px solid #dee2e6;margin-bottom:5px;">
             <ul>
               <li th:each="board:${freeBoardList}">
                 <a class="post_preview" th:text="${board.fboard_title}" th:href="'/freeBoard/view/'+${board.fboard_num}" />
@@ -93,7 +93,6 @@
       </div>
       <hr style="background-color:#6c757d;">
     </div>
-
 
 <!-- 게시판 노출 원본 -->
 <!--    <div class="col-md-6">-->

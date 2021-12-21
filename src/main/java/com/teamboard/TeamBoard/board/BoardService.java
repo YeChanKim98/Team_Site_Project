@@ -81,6 +81,4 @@ public class BoardService {
         Long res = boardRepository.search_post_cnt(search_option, keyword);
         return res;
     }
-
-
 }

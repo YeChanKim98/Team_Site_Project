@@ -1,7 +1,9 @@
 package com.teamboard.TeamBoard.controller;
 
 import com.teamboard.TeamBoard.board.BoardService;
+import com.teamboard.TeamBoard.board.free_Board;
 import com.teamboard.TeamBoard.comment.CommentService;
+import com.teamboard.TeamBoard.comment.Free_comment;
 import com.teamboard.TeamBoard.mail.Chk_MailService;
 import com.teamboard.TeamBoard.mail.EmailService;
 import com.teamboard.TeamBoard.user.form.JoinForm;
@@ -121,7 +123,7 @@ public class UserController {
     }
 
     // 마이 페이지 : 기본정보
-    @RequestMapping(value = "user/{id}/MyPage/info",method={RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "user/{id}/MyPage/info")//,method={RequestMethod.GET,RequestMethod.POST})
     public String myPage_info(@PathVariable String id, Model model, HttpServletRequest request){
        if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){ // 비로그인 혹은 세션과 접속요청 ID가 다를 경우
            System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
@@ -135,7 +137,7 @@ public class UserController {
     }
 
     // 마이 페이지 : 정보 수정(유저 업데이트)
-    @GetMapping("user/{id}/MyPage/chginfo")
+    @RequestMapping("user/{id}/MyPage/chginfo")
     public String myPage_Change(@PathVariable String id, Model model, HttpServletRequest request){
         if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){
             System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
@@ -162,7 +164,7 @@ public class UserController {
             int res = userService.updateNick(id, nick); // 업데이트 폼 JS에서 중복 검사를 할 것을 믿고 바로 업데이트 : JS에서 컨트롤러에 요청 -> 해당 아이디가 있는지..? 1반환시 빠꾸 및 정보 변경이 가능하도록 값(아직 없음) 추가
             if(res==0){
                 System.out.println("닉네임 업데이트 실패!");
-                return "user/"+id+"/MyPage/info";
+                return "redirect:user/"+id+"/MyPage/info";
             }
             System.out.println("닉네임 업데이트 성공!");
         }
@@ -170,7 +172,7 @@ public class UserController {
             int res = userService.updatePw(id, pw);
             if(res==0){
                 System.out.println("패스워드 업데이트 실패!");
-                return "user/"+id+"/MyPage/info";
+                return "redirect:user/"+id+"/MyPage/info";
             }
             System.out.println("패스워드 업데이트 성공!");
         }
@@ -178,17 +180,51 @@ public class UserController {
             int res = userService.updateMail(id, email);
             if(res==0){
                 System.out.println("이메일 업데이트 실패!");
-                return "user/"+id+"/MyPage/info";
+                return "redirect:user/"+id+"/MyPage/info";
             }
             System.out.println("이메일 업데이트 성공!");
         }
-        return "user/"+id+"/MyPage/info"; // 마이페이지 업데이트 폼으로 돌아감
+        System.out.println("정보변경성공 : user/"+id+"/MyPage/info");
+        return "redirect:/user/"+id+"/MyPage/info"; // 마이페이지 업데이트 폼으로 돌아감
     }
     
+    // 마이페이지 : 내가 쓴 글
+    @GetMapping("user/{id}/MyPage/own")
+    public String getOwn(@PathVariable String id, Model model){
+
+        List<free_Board> fboardList = boardService.findBoard("writer",id,1);
+        if(fboardList.size() > 10) fboardList = fboardList.subList(0,10);
+
+        List<Free_comment> fcommentList = commentService.findComment("writer",id);
+        if(fcommentList.size() > 10) fcommentList = fcommentList.subList(0,10);
+
+        model.addAttribute("freeBoard",fboardList);
+        model.addAttribute("freeComment",fcommentList);
+        System.out.println("내 게시글");
+        return "users/MyPage_own";
+    }
 
 
-
-
+    // 마이페이지 : 계정 탈퇴
+    @GetMapping("user/{id}/MyPage/withdrawal")
+    public String deleteForm_User(){
+        return "users/MyPage_delete";
+    }
+    @PostMapping("user/{id}/MyPage/withdrawal")
+    public String deleteUser(@RequestParam String pw, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String id = session.getAttribute("loginID").toString();
+        String getPw = userService.findOneUser(id).get().getPw();
+        if(getPw.equals(pw)){
+            userService.deleteUser(pw);
+            session.removeAttribute("loginID");
+            return "redirect:/";
+        }else{
+            System.out.println("PW불일치");
+            return "redirect:user/"+id+"/MyPage/withdrawal";
+        }
+    }
+    
     // Select All User : 검색 후 바로 출력
     @PostMapping("/users/SelAll")
     @RequestMapping("/users/SelAll")
@@ -240,20 +276,6 @@ public class UserController {
             out.close();
             return "/";
         }
-    }
-    
-    // Delete User : 로그인 상태에서 동작을 가정. 현재 접속중인 세션의 ID를 받아서 삭제
-    // GetMapping은 임시용. 실제 유저는 버튼클릭 후 인증을 통해서 바로 삭제
-    @GetMapping("/users/Delete")
-    public String deleteForm(){
-        return "/users/tmp/form/DeleteForm";
-    }
-
-    @PostMapping("/users/Delete") 
-    public String delete(@RequestParam("id") String id){
-        int res = userService.deleteUser(id);
-        if (res==1) return "redirect:/users/SelAll";
-        else return "Fail";
     }
 
     // 어드민용

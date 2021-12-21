@@ -24,19 +24,6 @@
             })
             element.checked = true;
         }
-
-        function writePost(){
-            var check = document.getElementsByName("writer_option");
-            for (var i = 0; i < check.length; i++) {
-                alert(check[i].checked+'  '+check[i].value);
-                if (check[i].checked && check[i].value==="notice") {
-                    document.write_form.action="/Admin/postNotice";
-
-                }
-            }
-            alert(document.getElementById('write_form').action);
-            document.getElementById('write_form').submit();
-		}
 	</script>
 </head>
 <body>
@@ -57,7 +44,6 @@
 						<td style="vertical-align:middle;">
 							<label th:if="${session.loginID}" style="font-size:12pt;float:left;margin-bottom:0px;">
 								<input type="checkbox" id="anonymous" name='writer_option' value="anonymous" onclick='checkOnlyOne(this)'>익명&nbsp;
-								<input th:if="${session.loginID}=='Admin'" type="checkbox" id="notice" name='writer_option' value="notice" onclick='checkOnlyOne(this)'>공지
 							</label>
 						</td>
 					</tr>
@@ -76,43 +62,42 @@
 
 						<td colspan="3"  class="text-center">
 							<button type="button"  class="btn btn-primary" onclick="location.href='/freeBoard/view/main/1'" style="float:left;" >글 목록</button>
-							<button type="button" class="btn btn-success" style="float: right;" onclick="writePost()">글쓰기</button>
-<!--							<input type="submit" class="btn btn-success"  value="글쓰기" style="float: right;">-->
+							<input type="submit" class="btn btn-success"  value="글쓰기" style="float: right;">
 						</td>
 					</tr>
 				</table>
 			</form>
 
-			<!--업데이트-->
-<!--			<form th:if="${use}=='update'" th:target="'/'+${kinds}+'/update/'+${session.loginID}+'/'+${boardInfo.fboard_num}" method="post">-->
-<!--				<table class="table">-->
-<!--					<tr>-->
-<!--						<td style="width:80px;vertical-align: middle;padding-left:16px;">작성자</td>-->
-<!--							<input type="hidden" th:value="${boardInfo.fboard_num}" name="fboard_num">-->
-<!--						<td style="padding-left:0px;">-->
-<!--							<input style="width:250px;" type="text" class="form-control" name="fboard_writer" th:value="${session.loginID}" disabled>-->
-<!--						</td>-->
-<!--					</tr>-->
+			업데이트
+			<form th:if="${use}=='update'" th:target="'/'+${kinds}+'/update/'+${session.loginID}+'/'+${boardInfo.fboard_num}" method="post">
+				<table class="table">
+					<tr>
+						<td style="width:80px;vertical-align: middle;padding-left:16px;">작성자</td>
+							<input type="hidden" th:value="${boardInfo.fboard_num}" name="fboard_num">
+						<td style="padding-left:0px;">
+							<input style="width:250px;" type="text" class="form-control" name="fboard_writer" th:value="${session.loginID}" disabled>
+						</td>
+					</tr>
 
-<!--					<tr>-->
-<!--						<td style="width:80px;vertical-align: middle;padding-left:16px;">제 목</td>-->
-<!--						<td colspan="3" style="padding-left:0px;">-->
-<!--							<input type="text" class="form-control" name="fboard_title" th:value="${boardInfo.fboard_title}">-->
-<!--						</td>-->
-<!--					</tr>-->
+					<tr>
+						<td style="width:80px;vertical-align: middle;padding-left:16px;">제 목</td>
+						<td colspan="3" style="padding-left:0px;">
+							<input type="text" class="form-control" name="fboard_title" th:value="${boardInfo.fboard_title}">
+						</td>
+					</tr>
 
-<!--					<tr>-->
-<!--						<td colspan="3"><textarea rows="10" cols="50" name="fboard_content" class="form-control" th:text="${boardInfo.fboard_content}" style="resize:none;"></textarea></td>-->
-<!--					</tr>-->
-<!--					<tr>-->
+					<tr>
+						<td colspan="3"><textarea rows="10" cols="50" name="fboard_content" class="form-control" th:text="${boardInfo.fboard_content}" style="resize:none;"></textarea></td>
+					</tr>
+					<tr>
 
-<!--						<td colspan="3"  class="text-center">-->
-<!--							<button type="button"  class="btn btn-primary" style="float:left;"  onclick="history.back()">취소</button>-->
-<!--							<input type="submit" value="글수정" class="btn btn-success" style="float: right">-->
-<!--						</td>-->
-<!--					</tr>-->
-<!--				</table>-->
-<!--			</form>-->
+						<td colspan="3"  class="text-center">
+							<button type="button"  class="btn btn-primary" style="float:left;"  onclick="history.back()">취소</button>
+							<input type="submit" value="글수정" class="btn btn-success" style="float: right">
+						</td>
+					</tr>
+				</table>
+			</form>
 
 		</div>
 		<hr style="background-color:#6c757d;">

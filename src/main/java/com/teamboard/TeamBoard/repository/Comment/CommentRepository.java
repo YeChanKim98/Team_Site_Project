@@ -9,5 +9,6 @@ public interface CommentRepository {
     int delete(int fcomment_num, String userId);
     int delete(int fcomment_num);
     Long getCntComment(String option, String keyword);
-    public List<Free_comment> comment_view(int target_board);
+    List<Free_comment> comment_view(int target_board);
+    List<Free_comment> findComment(String search_option, String keyword);
 }

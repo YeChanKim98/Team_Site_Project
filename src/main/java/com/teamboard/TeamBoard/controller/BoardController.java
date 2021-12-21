@@ -67,16 +67,15 @@ public class BoardController {
         HttpSession session = request.getSession();
         if(session.getAttribute("loginID")==null) {
             board.setFboard_writer("익명(비로그인)");
-        }else if(writer_option.equals("anonymous")){
+        }else if(writer_option!=null){
             board.setFboard_writer("익명(로그인)");
         }else{
             board.setFboard_writer(session.getAttribute("loginID").toString());
         }
-
         board.setFboard_title(writeForm.getFboard_title());
         board.setFboard_content(writeForm.getFboard_content());
         boardService.writeBoard(board);
-        return "forward:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
+        return "redirect:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
     }
 
     // 삭제
@@ -120,19 +119,15 @@ public class BoardController {
     }
 
     @PostMapping("{kinds}/update/{id}/{num}")
-    public String boardUpdate(@PathVariable String kinds, @PathVariable String id, @PathVariable int num, WriteForm writeForm){
+    public String boardUpdate(@PathVariable String kinds, WriteForm writeForm){
         System.out.println("게시글 수정을 시작합니다");
-        System.out.println("수정 제목 : "+writeForm.getFboard_title());
-        System.out.println("수정 내용 : "+writeForm.getFboard_content());
-        System.out.println("수정 번호 : "+writeForm.getFboard_num());
-        System.out.println("수정자 : "+writeForm.getFboard_writer());
 
         if(kinds.equals("freeBoard")){
             boardService.updateBoard(writeForm,kinds);
         }else if(kinds.equals("notice")){
             boardService.updateBoard(writeForm,kinds);
         }
-        return "forward:/freeBoard/view/main/1"; // 리다이렉트시, 받는곳과 현재 내 메서드가 달라서 새창으로 감. 이를 위해서 받는 곳에서 Post를 받을 수 있게하고 포워드로 보냄
+        return "redirect:/freeBoard/view/main/1";
     }
 
 

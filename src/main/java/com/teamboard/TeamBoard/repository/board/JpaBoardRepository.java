@@ -90,7 +90,7 @@ public class JpaBoardRepository implements BoardRepository{
 
 
     public List<free_Board> findRange(int start, int end) {
-        return em.createQuery("select fb from free_Board fb",free_Board.class)
+        return em.createQuery("select fb from free_Board fb order by fb.fboard_num desc",free_Board.class)
                 .setFirstResult(start)
                 .setMaxResults(end)
                 .getResultList();

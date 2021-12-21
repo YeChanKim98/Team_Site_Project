@@ -25,13 +25,13 @@
 						<a class="nav-link active" th:href="'/user/'+${session.loginID}+'/MyPage/chginfo'">정보 변경</a>
 					</li>
 					<li class="nav-item w-100 btn btn-dark text-left">
-						<a class="nav-link active" href="#">게시글 / 댓글</a>
+						<a class="nav-link active" th:href="'/user/'+${session.loginID}+'/MyPage/own'">내 게시글/댓글</a>
 					</li>
 					<li class="nav-item w-100 btn btn-dark text-left">
 						<a class="nav-link" href="#">예비</a>
 					</li>
 					<li class="nav-item w-100 btn btn-dark text-left">
-						<a class="nav-link active" href="#" style="color: #fd9696;">회원탈퇴</a>
+						<a class="nav-link active" th:href="'/user/'+${session.loginID}+'/MyPage/withdrawal'" style="color: #fd9696;">회원탈퇴</a>
 					</li>
 				</ul>
 			</div>

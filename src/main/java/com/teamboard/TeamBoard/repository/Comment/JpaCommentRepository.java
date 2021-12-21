@@ -1,6 +1,9 @@
 package com.teamboard.TeamBoard.repository.Comment;
 
+import com.teamboard.TeamBoard.board.free_Board;
 import com.teamboard.TeamBoard.comment.Free_comment;
+import lombok.Builder;
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -59,5 +62,20 @@ public class JpaCommentRepository implements CommentRepository {
         return (Long)em.createQuery(findQuery)
                 .setParameter("keyword",keyword)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<Free_comment> findComment(String search_option, String keyword) {
+        String findQuery="select distinct fc from Free_comment fc where fc.fcomment_writer like CONCAT('%',:keyword,'%') or fc.target_board=:keyword or fc.fcomment_content like CONCAT('%',:keyword,'%') order by fc.fcomment_num desc ";
+        if(search_option.equals("writer")){
+            findQuery = "select fc from Free_comment fc where fc.fcomment_writer like CONCAT('%',:keyword,'%') order by fc.fcomment_num desc ";
+        } else if(search_option.equals("target_board")){
+            findQuery = "select fc from Free_comment fc where fc.target_board=:keyword order by fc.fcomment_num desc ";
+        }else if(search_option.equals("content")){
+            findQuery = "select fc from Free_comment fc where fc.fcomment_content like CONCAT('%',:keyword,'%') order by fc.fcomment_num desc ";
+        }
+        return em.createQuery(findQuery, Free_comment.class)
+                .setParameter("keyword",keyword)
+                .getResultList();
     }
 }

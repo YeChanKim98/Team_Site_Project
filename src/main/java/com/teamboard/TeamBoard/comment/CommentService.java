@@ -33,6 +33,10 @@ public class CommentService {
         return commentRepository.comment_view(target_board);
     }
 
+    public List<Free_comment> findComment(String search_option, String keyword){
+        return commentRepository.findComment(search_option, keyword);
+    }
+
     public long getCntComment(String option, String keyword){
         return commentRepository.getCntComment(option, keyword);
     }
