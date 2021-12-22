@@ -41,7 +41,7 @@ public class AdminController {
         if(password.equals("0000")){
             System.out.println("HELLO ADMIN-!!");
             if(user==null) session.setAttribute("loginID", "Admin");
-            return "/admin/AdminMain";
+            return "redirect:/admin/user/userList";
         }else{
             System.out.println("[어드민 접근 체크]어림없지");
             return "redirect:/";
@@ -54,12 +54,12 @@ public class AdminController {
         if(request.getSession().getAttribute("loginID").equals("Admin")){
             notice_Board notice = new notice_Board();
             notice.setNotice_writer("Admin");
-            notice.setNotice_title("[공지] " + title);
+            notice.setNotice_title(title);
             notice.setNotice_content(content);
             int res = boardService.writeNotice(notice);
             if(res==1){
                 System.out.println("공지 작성 완료!!");
-                return "/admin/AdminMain"; // 리턴받고 새로고침하면 이전 이전값을 기억하고 다시 입력됨
+                return "redirect:/admin/user/userList";
             }
             else{
                 System.out.println("공지 작성 실패!!");

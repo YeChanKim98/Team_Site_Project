@@ -34,12 +34,16 @@ public class JpaBoardRepository implements BoardRepository{
 
     // 삭제
     public int delete(int fboard_num) {
-
         return em.createQuery("delete from free_Board fb where fb.fboard_num=:fboard_num")
                 .setParameter("fboard_num",fboard_num)
                 .executeUpdate();
     }
 
+    public int deleteNotice(int num) {
+        return em.createQuery("delete from notice_Board nb where nb.notice_num=:num")
+                .setParameter("num",num)
+                .executeUpdate();
+    }
     // 수정
     public int update(WriteForm writeForm, String category) {
         String JPQL = "";

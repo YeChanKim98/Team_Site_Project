@@ -8,7 +8,7 @@
 		<div class="container">
 			<header th:replace="fragments/nav.html :: fragment-header"/>
 			<div th:replace="fragments/nav.html::fragment-nav"/>
-			<table class="table table-hover" style="margin-top:35px;">
+			<table class="table table-hover" style="margin-top:35px;border-bottom:1px dashed black;text-align:center;">
 				<thead style="border-bottom: 1px solid black;">
 				<tr>
 					<td>고유번호</td>
@@ -31,11 +31,32 @@
 					<td><a th:text="${user.email}"></a></td>
 					<td>
 						<a th:href="@{'/admin/user/'+${user.id}+'/update'}">수정</a>
-						<a th:href="@{'/admin/user/'+${user.id}+'/update'}">삭제</a>
+						<a th:href="@{'/admin/user/'+${user.id}+'/delete'}">삭제</a>
 					</td>
 				</tr>
 				</tbody>
 			</table>
+
+			<form action="/Admin/postNotice" method="post" >
+				<table class="table">
+					<tr>
+						<td style="width:80px;vertical-align: middle;padding-left:16px;">제 목</td>
+						<td colspan="3" style="padding-left:0px;">
+							<input type="text" class="form-control" name="title" placeholder="공지 제목">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<textarea rows="10" cols="50" name="content" class="form-control" placeholder="공지 내용" style="resize:none;"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3"  class="text-center">
+							<input type="submit" class="btn btn-success"  value="글쓰기" style="float: right;">
+						</td>
+					</tr>
+				</table>
+			</form>
 			<hr style="background-color:#6c757d;">
 		</div>
 		<footer th:replace="fragments/nav.html :: fragment-footer"/>

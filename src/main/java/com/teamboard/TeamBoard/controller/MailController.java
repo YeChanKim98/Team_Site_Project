@@ -1,5 +1,8 @@
-package com.teamboard.TeamBoard.mail;
+package com.teamboard.TeamBoard.controller;
 
+import com.teamboard.TeamBoard.mail.Chk_Mail;
+import com.teamboard.TeamBoard.mail.Chk_MailService;
+import com.teamboard.TeamBoard.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,27 +50,34 @@ public class MailController {
         mail.setAddress(address);
         mail.setKey(key);
         int res = chk_MailService.regist(mail);
-
-        String content = "<a href='127.0.0.1:8080/check/mail/"+address+"/"+key+"'>인증을 위해 해당 링크를 눌러주세요</a>";
-        emailService.sendSimpleMessage(address,"가입인증메일입니다",content);
-        System.out.println("인증 메일 발송완료 ");
-        String referer = request.getHeader("Referer");
-        return "redirect:"+ referer;
+        if(res==1) {
+            String content = "<html><body>인증을 위해 <a href='http://127.0.0.1:8080/check/mail/" + address + "/" + key + "'>" +
+                    "링크</a>를 눌러주세요</body></html>";
+            emailService.sendSimpleMessage(address, "가입인증메일입니다", content);
+            System.out.println("인증 메일 발송완료 ");
+            String referer = request.getHeader("Referer");
+            return "redirect:"+ referer;
+        }
+        return "redirect:/";
     }
 
     // 인증메일 확인 과정
     @GetMapping("/check/mail/{address}/{key}")
-    public String check(@PathVariable String address, @PathVariable int key){
-        System.out.println("메일 컨트롤러 진입"+address+"\t"+key);
-
+    public String check(@PathVariable String address, @PathVariable int key, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("메일인증요청 : "+address+"\t"+key);
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
         int res = chk_MailService.checkMail(address, key);
         if(res==1){
             System.out.println("메일 인증 완료");
-            return "home";
+            out.println("<script>alert('메일인증에 성공했습니다.');history.go(-1);</script>");
+            out.flush();
+            out.close();
+            return "redirect:/";
         }
         else{
             System.out.println("메일 인증 실패");
-            return "home";
+            return "redirect:"+request.getHeader("Referer");
         }
     }
 }

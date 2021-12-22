@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,9 +30,6 @@ public class UserController {
     private final CommentService commentService;
     private final EmailService emailService;
     private final Chk_MailService chk_MailService;
-//    private String updateId;
-//    private Model model;
-//    private HttpServletRequest request;
 
     @Autowired
     public UserController(UserService userService, BoardService boardService, CommentService commentService, EmailService emailService, Chk_MailService chk_mailService) {
@@ -78,15 +74,6 @@ public class UserController {
             return "";
         }
     }
-    
-    // ID중복체크
-    @PostMapping("/users/Join/chkidover/{chkid}")
-    @ResponseBody
-    public int chkidover(@PathVariable String chkid){
-        int res = userService.chkidover(chkid);
-        System.out.println("중복 체크 결과 (중복:0 / 비중복:1) : " + res);
-        return res;
-    }
 
     // 로그인
     @PostMapping("/users/Login")
@@ -121,6 +108,18 @@ public class UserController {
         session.removeAttribute("loginID");
         return "redirect:"+ request.getHeader("Referer");
     }
+
+    // ID중복체크
+    @PostMapping("/users/Join/chkidover/{chkid}")
+    @ResponseBody
+    public int chkidover(@PathVariable String chkid){
+        int res = userService.chkidover(chkid);
+        System.out.println("중복 체크 결과 (중복:0 / 비중복:1) : " + res);
+        return res;
+    }
+
+
+
 
     // 마이 페이지 : 기본정보
     @RequestMapping("user/{id}/MyPage/info")
@@ -209,7 +208,6 @@ public class UserController {
         return "users/MyPage";
     }
 
-
     // 마이페이지 : 계정 탈퇴
     @GetMapping("user/{id}/MyPage/withdrawal")
     public String deleteForm_User(Model model){
@@ -217,13 +215,15 @@ public class UserController {
         return "users/MyPage";
     }
 
+    // 유저용
     @PostMapping("user/{id}/MyPage/withdrawal")
     public String deleteUser(@RequestParam String pw, HttpServletRequest request){
         HttpSession session = request.getSession();
         String id = session.getAttribute("loginID").toString();
         if(id.equals("Admin")) return "redirect:/";
-        String getPw = userService.findOneUser(id).get().getPw();
-        if(getPw.equals(pw)){
+        User user = userService.findOneUser(id).get();
+        if(user.getPw().equals(pw)){
+            chk_MailService.deleteMail(user.getEmail()); // 메일 인증정보 삭제
             userService.deleteUser(pw);
             session.removeAttribute("loginID");
             return "redirect:/";
@@ -232,14 +232,47 @@ public class UserController {
             return "redirect:/user/"+id+"/MyPage/info";
         }
     }
-    
-    // Select All User : 검색 후 바로 출력
+
+
+
+
+
+    // 어드민용 유저 목록 출력
     @RequestMapping("admin/user/userList")
     public String findAllUser(Model userList){
         List<User> users = userService.findAllUser();
         userList.addAttribute("users",users);
-        return "admin/user/userList";
+        return "admin/AdminMain";
     }
+
+    // 어드민용 유저 업데이트 폼
+    @GetMapping("/admin/user/{id}/update")
+    public String adminUpdateForm(@PathVariable String id, Model model){
+        User user = userService.findOneUser(id).get();
+        model.addAttribute("userInfo",user);
+        return "admin/userUpdate";
+    }
+
+    // 어드민용 유저 업데이트 로직
+    @PostMapping("/admin/user/{id}/update")
+    public String Adminupdate(User user){
+        int res  = userService.update(user);
+        if(res==1) System.out.println("계정정보 업데이트 성공!");
+        else System.out.println("계정정보 업데이트 실패!");
+        return "redirect:/admin/user/userList";
+    }
+
+    // 어드민용 유저 삭제
+    @RequestMapping("/admin/user/{id}/delete")
+    public String AdminDelete(@PathVariable String id){
+        chk_MailService.deleteMail(userService.findOneUser(id).get().getEmail()); // 메일 인증정보 삭제
+        userService.deleteUser(id);
+        return "redirect:/admin/user/userList";
+    }
+
+
+
+
 
     // 계정 찾기
     @GetMapping("/users/FindAccount")
@@ -259,7 +292,7 @@ public class UserController {
             System.out.println("[ID찾기]메일 발송 완료 : "+content);
             return "redirect:/";
         }else{ // 계정없을시
-            out.println("<script>alert('이름혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
+            out.println("<script>alert('이름혹은 이메일을 다시 확인해 주세요');location.href='/';</script>");
             out.flush();
             out.close();
             return "/";
@@ -278,31 +311,11 @@ public class UserController {
             System.out.println("[PW찾기]메일 발송 완료 : "+content);
             return "redirect:/";
         }else{
-            out.println("<script>alert('아이디혹은 이메일을 다시 확인해 주세요');location,href='/';</script>");
+            out.println("<script>alert('아이디혹은 이메일을 다시 확인해 주세요');location.href='/';</script>");
             out.flush();
             out.close();
             return "/";
         }
-    }
-
-    // 어드민용
-    // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
-    // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
-    @GetMapping("/admin/user/{id}/update")
-    public String adminUpdateForm(@PathVariable String id, Model model, HttpServletRequest request){
-        User user = userService.findOneUser(id).get();
-        System.out.println("검색 유저 : "+user.getId());
-        model.addAttribute("userInfo",user);
-        return "admin/user/Update";
-    }
-
-    // 어드민용
-    @PostMapping("/admin/user/{id}/update")//{updateId}")
-    public String Adminupdate(User user){
-        int res  = userService.update(user); // 1성공 0실패
-        if(res==1) System.out.println("계정정보 업데이트 성공!");
-        else System.out.println("계정정보 업데이트 실패!");
-        return "redirect:/admin/user/userList";
     }
 
 }

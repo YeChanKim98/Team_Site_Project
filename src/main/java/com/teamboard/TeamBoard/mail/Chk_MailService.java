@@ -31,4 +31,6 @@ public class Chk_MailService {
         System.out.println("서비스에서 받은 Auth값 : "+auth);
         return auth;
     }
+
+    public void deleteMail(String address){chk_mailRepository.deleteMail(address);}
 }

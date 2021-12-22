@@ -1,27 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-	<head th:replace="fragments/nav.html :: top-head"/>
-	<head>
-		<meta charset="UTF-8">
-		<title>Title</title>
-	</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/nav.html :: top-head"/>
+<head>
+	<title>User List(Admin)</title>
+</head>
+<body>
+<div class="container">
+	<header th:replace="fragments/nav.html :: fragment-header"/>
+	<div th:replace="fragments/nav.html::fragment-nav"/>
+	<table class="table table-hover" style="margin-top:35px;border-bottom:1px dashed black;text-align:center;">
+		<thead style="border-bottom: 1px solid black;">
+		<tr>
+			<td>고유번호</td>
+			<td>이름</td>
+			<td>아이디</td>
+			<td>패스워드</td>
+			<td>닉네임</td>
+			<td>이메일</td>
+			<td>수정/삭제</td>
+		</tr>
+		</thead>
+		<tbody>
+		<!-- th 태그로 인해 리스트 안에 있는 맴버값을 뽑아서 member에 넣은 다음에 각자 돌려서 JSP의 For문을 돌린 것 같은 효과가 나옴-->
+		<tr th:each="user : ${users}">
+			<td><a th:text="${user.pid}"></a></td>
+			<td><a th:text="${user.name}"></a></td>
+			<td><a th:text="${user.id}"></a></td>
+			<td><a th:text="${user.pw}"></a></td>
+			<td><a th:text="${user.nick}"></a></td>
+			<td><a th:text="${user.email}"></a></td>
+			<td>
+				<a th:href="@{'/admin/user/'+${user.id}+'/update'}">수정</a>
+				<a th:href="@{'/admin/user/'+${user.id}+'/delete'}">삭제</a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
 
-	<body>
-		<div class="container">
-			<header th:replace="fragments/nav.html :: fragment-header"/>
-			<div th:replace="fragments/nav.html::fragment-nav"/>
-			<center>
-				<h1 style="margin-top:35px;">Admin Page(Temp)</h1><br>
-				<a href="/admin/user/userList">전체 유저 목록</a><br>
-				<a href="/admin/user/Delete">유저 삭제</a><br><br>
-				<form action="/Admin/postNotice" method="post">
-					<input type="text" name="title" placeholder="공지 제목"><br>
-					<textarea style="resize:none;" name="content" placeholder="공지 내용"></textarea><br>
-					<button type="submit">공지게시</button><br>
-				</form>
-			</center>
-			<hr style="background-color:#6c757d;">
-		</div>
-		<footer th:replace="fragments/nav.html :: fragment-footer"/>
-	</body>
+	<form action="/Admin/postNotice" method="post" >
+		<table class="table">
+			<tr>
+				<td style="width:80px;vertical-align: middle;padding-left:16px;">제 목</td>
+				<td colspan="3" style="padding-left:0px;">
+					<input type="text" class="form-control" name="title" placeholder="공지 제목">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<textarea rows="10" cols="50" name="content" class="form-control" placeholder="공지 내용" style="resize:none;"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3"  class="text-center">
+					<input type="submit" class="btn btn-success"  value="글쓰기" style="float: right;">
+				</td>
+			</tr>
+		</table>
+	</form>
+	<hr style="background-color:#6c757d;">
+</div>
+<footer th:replace="fragments/nav.html :: fragment-footer"/>
+</body>
 </html>

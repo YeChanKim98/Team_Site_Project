@@ -41,4 +41,12 @@ public class JpaChk_MailRepository implements Chk_MailRepository{
         System.out.println(address+"의 Auth값 : "+Auth);
         return Auth;
     }
+
+    @Override
+    public void deleteMail(String address){
+        em.createQuery("delete from Chk_Mail cm where cm.address=:address") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
+                .setParameter("address", address)
+                .executeUpdate();
+    }
+
 }

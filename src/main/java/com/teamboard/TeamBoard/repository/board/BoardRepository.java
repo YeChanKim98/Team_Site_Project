@@ -12,6 +12,7 @@ public interface BoardRepository {
     int write_notice(notice_Board noticeBoard);
     List<notice_Board> noticeView(); // 타 게시판 공지 노출용
     int delete(int fboard_num);
+    int deleteNotice(int num);
     int update(WriteForm writeForm, String category);
     free_Board view_free(int fboard_num);
     notice_Board view_notice(int fboard_num);

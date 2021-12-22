@@ -80,16 +80,21 @@ public class BoardController {
 
     // 삭제
     @GetMapping("{kinds}/delete/{num}")
-    public void freeDelete(@PathVariable String kinds,@PathVariable int num, HttpServletResponse response) throws IOException {
+    public String freeDelete(@PathVariable String kinds,@PathVariable int num, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
             if(kinds.equals("freeBoard")) {
-                PrintWriter out = response.getWriter();
                 boardService.deleteBoard(num);
                 commentService.deleteComment(num);
                 out.println("<script>alert('게시글 삭제 완료');location.href='/freeBoard/view/main/1';</script>");
                 out.flush();
                 out.close();
             }
+        if(kinds.equals("notice")) {
+            boardService.deleteNotice(num);
+            return "redirect:/freeBoard/view/main/1";
+        }
+        return "redirect:/freeBoard/view/main/1";
     }
 
     // 수정

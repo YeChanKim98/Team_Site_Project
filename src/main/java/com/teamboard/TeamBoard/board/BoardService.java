@@ -62,6 +62,11 @@ public class BoardService {
     public notice_Board viewBoard_notice(int notice_num){
         return boardRepository.view_notice(notice_num);
     }
+    
+    // 공지 삭제
+    public int deleteNotice(int notice_num){
+        return boardRepository.deleteNotice(notice_num);
+    }
 
     // 수정
     public int updateBoard(WriteForm writeForm, String category) {
