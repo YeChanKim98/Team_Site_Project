@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+		<title>User List(Admin)</title>
+	</head>
+	<body>
+		<div class="container">
+			<header th:replace="fragments/nav.html :: fragment-header"/>
+			<div th:replace="fragments/nav.html::fragment-nav"/>
+			<table class="table table-hover" style="margin-top:35px;">
+				<thead style="border-bottom: 1px solid black;">
+				<tr>
+					<td>고유번호</td>
+					<td>이름</td>
+					<td>아이디</td>
+					<td>패스워드</td>
+					<td>닉네임</td>
+					<td>이메일</td>
+					<td>수정/삭제</td>
+				</tr>
+				</thead>
+				<tbody>
+				<!-- th 태그로 인해 리스트 안에 있는 맴버값을 뽑아서 member에 넣은 다음에 각자 돌려서 JSP의 For문을 돌린 것 같은 효과가 나옴-->
+				<tr th:each="user : ${users}">
+					<td><a th:text="${user.pid}"></a></td>
+					<td><a th:text="${user.name}"></a></td>
+					<td><a th:text="${user.id}"></a></td>
+					<td><a th:text="${user.pw}"></a></td>
+					<td><a th:text="${user.nick}"></a></td>
+					<td><a th:text="${user.email}"></a></td>
+					<td>
+						<a th:href="@{'/admin/user/'+${user.id}+'/update'}">수정</a>
+						<a th:href="@{'/admin/user/'+${user.id}+'/update'}">삭제</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<hr style="background-color:#6c757d;">
+		</div>
+		<footer th:replace="fragments/nav.html :: fragment-footer"/>
+	</body>
+</html>

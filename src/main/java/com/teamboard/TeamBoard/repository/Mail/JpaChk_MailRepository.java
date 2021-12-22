@@ -35,7 +35,6 @@ public class JpaChk_MailRepository implements Chk_MailRepository{
     // 인증여부값 반환
     @Override
     public int getAuth(String address) {
-        System.out.println("레포지토리 어서티케이션 진입");
         int Auth = (int)em.createQuery("select cm.auth from Chk_Mail cm where cm.address=:address") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("address", address)
                 .getSingleResult();

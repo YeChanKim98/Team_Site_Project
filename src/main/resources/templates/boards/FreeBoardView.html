@@ -36,99 +36,94 @@
     }
   </script>
 </head>
-<body>
+  <body>
 
-<!--전체 width(850)는 고정 좌우 마진 오토 리사이즈 none-->
-<div id="container">
+  <div id="container">
 
-  <!--본문-->
-  <div id="content">
-    <table align="center" style="margin-top:30px;width:50%;">
-      <tr class="tr_title">
-        <td colspan="2">
-          <b style="margin-left:10px;" th:text="${view.fboard_title}"></b>
-        </td>
-      </tr>
+    <!--본문-->
+    <div id="content">
+      <table align="center" style="margin-top:30px;width:50%;">
+        <tr class="tr_title">
+          <td colspan="2">
+            <b style="margin-left:10px;" th:text="${view.fboard_title}"></b>
+          </td>
+        </tr>
 
-      <tr height="30" width="40%" style="border-bottom:1px solid #A8A8A8;">
-        <td>
-          <b class="label">작성자</b>&nbsp;|&nbsp;
-          <a class="label_content" th:text="${view.fboard_writer}"></a>
-          <b class="label">조회수</b>&nbsp;|&nbsp;&nbsp;&nbsp;
-          <a class="label_content" th:text="${view.fboard_view_count}"></a>
-          <b class="label">댓글수</b>&nbsp;|&nbsp;
-          <a class="label_content" th:text="${view.fboard_comment_count}"></a>
-        </td>
+        <tr height="30" width="40%" style="border-bottom:1px solid #A8A8A8;">
+          <td>
+            <b class="label">작성자</b>&nbsp;|&nbsp;
+            <a class="label_content" th:text="${view.fboard_writer}"></a>
+            <b class="label">조회수</b>&nbsp;|&nbsp;&nbsp;&nbsp;
+            <a class="label_content" th:text="${view.fboard_view_count}"></a>
+            <b class="label">댓글수</b>&nbsp;|&nbsp;
+            <a class="label_content" th:text="${view.fboard_comment_count}"></a>
+          </td>
 
-        <td style="width:60%;" align="right">
-          <b class="label">등록일</b>&nbsp;|
-          <a class="label_content" th:text="${view.fboard_reg_date}"><%=article.getReg_date()%></a>
-        </td>
-      </tr>
+          <td style="width:60%;" align="right">
+            <b class="label">등록일</b>&nbsp;|
+            <a class="label_content" th:text="${view.fboard_reg_date}"><%=article.getReg_date()%></a>
+          </td>
+        </tr>
 
-      <tr>
-        <td height="370px" colspan="2" style="border-bottom:1px solid #4a74bd;padding-left:15px; padding-right:15px;" th:text="${view.fboard_content}"></td>
-      </tr>
+        <tr>
+          <td height="370px" colspan="2" style="border-bottom:1px solid #4a74bd;padding-left:15px; padding-right:15px;" th:text="${view.fboard_content}"></td>
+        </tr>
 
-      <tr height="50" style="border-bottom:2px solid #4a74bd; text-align: right;">
-        <td align="right" colspan="2">
-          <button type="button" class="btn btn-outline-dark" onclick="location.href='/freeBoard/view/main'" style="margin-right:10px;">글 목록</button>
-          <a th:if ="${session.loginID==view.fboard_writer}" th:href="@{'/freeBoard/Update/'+${view.fboard_writer}+'/'+${view.fboard_num}}" ><button  type="button" value="글 수정" class="btn btn-outline-dark" style="margin-right:10px">글 수정</button></a>
-          <a th:if ="${session.loginID==view.fboard_writer}" th:href="@{'/freeBoard/delete/'+${view.fboard_num}}" ><button type="button" value="글 삭제" class="btn btn-outline-danger"  style="margin-right:10px">글 삭제</button></a>
-        </td>
-      </tr>
-    </table>
-  </div>
-
-
-  <!--Comment-->
-  <div id="comment" style="margin-top:30px;margin-right:auto; margin-left:auto; width:50%;">
-    <!--댓글 상단-->
-    <div style="border-bottom:2px solid #a8a8a8; margin-top:15px;">
-      <h5><b th:text="'댓글('+${view.fboard_comment_count}+')'"></b></h5>
+        <tr height="50" style="border-bottom:2px solid #4a74bd; text-align: right;">
+          <td align="right" colspan="2">
+            <button type="button" class="btn btn-outline-dark" onclick="location.href='/freeBoard/view/main'" style="margin-right:10px;">글 목록</button>
+            <a th:if ="${session.loginID==view.fboard_writer}" th:href="@{'/freeBoard/Update/'+${view.fboard_writer}+'/'+${view.fboard_num}}" ><button  type="button" value="글 수정" class="btn btn-outline-dark" style="margin-right:10px">글 수정</button></a>
+            <a th:if ="${session.loginID==view.fboard_writer}" th:href="@{'/freeBoard/delete/'+${view.fboard_num}}" ><button type="button" value="글 삭제" class="btn btn-outline-danger"  style="margin-right:10px">글 삭제</button></a>
+          </td>
+        </tr>
+      </table>
     </div>
 
-    <!--댓글 목록-->
-    <div style="border-bottom:1px solid #a8a8a8;margin-top:5px;margin-bottom:15px;">
-      <ul>
-        <li> <!-- 타임리프를 통해서 반복 실행 -->
-          <div>
-            <div>
-              댓글 작성자 | 작성일
-            </div>
-            <div>
-              댓글 내용
-              for문을 통해서 댓글정보를 받아온 후 th:each로 게시글 메인과 같은 메커니즘으로 적용 : 페이징이 빡셈
-              CSS+JS는 나중에
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
 
-    <!--댓글 작성-->
-    <div id="write_comment" style="height:70px;">
-      <div style="float:left;width:8%;margin-left:10px;">
-        <input  type='checkbox' name='comment_writer' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
-        <input type='checkbox' name='comment_writer' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
+    <!--Comment-->
+    <div id="comment" style="margin-top:30px;margin-right:auto; margin-left:auto; width:50%;">
+      <!--댓글 상단-->
+      <div style="border-bottom:2px solid #a8a8a8; margin-top:15px;">
+        <h5><b th:text="'댓글('+${view.fboard_comment_count}+')'"></b></h5>
       </div>
 
-      <form th:action="@{'/fboard/'+${view.fboard_num}+'/comment/write'}" method="post">
-        <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
-          <input style="height:100%;width:100%;" type="text" name="content">
-        </div>
-        <div style="float:right; height:70%;width:10%;">
-          <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary">등록</button>
-        </div>
-      </form>
+      <!--댓글 목록-->
+      <div style="border-bottom:1px solid #a8a8a8;margin-top:5px;margin-bottom:15px;">
+        <ul>
+          <li> <!-- 타임리프를 통해서 반복 실행 -->
+            <div>
+              <div>
+                댓글 작성자 | 작성일
+              </div>
+              <div>
+                댓글 내용
+                for문을 통해서 댓글정보를 받아온 후 th:each로 게시글 메인과 같은 메커니즘으로 적용 : 페이징이 빡셈
+                CSS+JS는 나중에
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
 
+      <!--댓글 작성-->
+      <div id="write_comment" style="height:70px;">
+        <div style="float:left;width:8%;margin-left:10px;">
+          <input  type='checkbox' name='comment_writer' value='anonymous' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;익명</a><br>
+          <input type='checkbox' name='comment_writer' value='nickname' onclick='checkOnlyOne(this)'/><a style="font-size:12pt;">&nbsp;아이디</a>
+        </div>
+
+        <form th:action="@{'/fboard/'+${view.fboard_num}+'/comment/write'}" method="post">
+          <div style="height: 70%; float: left; width: 80%; margin-left: 10px;">
+            <input style="height:100%;width:100%;" type="text" name="content">
+          </div>
+          <div style="float:right; height:70%;width:10%;">
+            <button style="margin-right:10px;height:100%;width:100%;font-weight:bold;font-size:13pt;" type="submit" class="btn btn-primary">등록</button>
+          </div>
+        </form>
+
+      </div>
     </div>
   </div>
-</div>
-
-<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.js"></script>
-<script type="text/javascript"></script>
-<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-</body>
+  <footer th:replace="fragments/nav.html :: fragment-footer"/>
+  </body>
 </html>

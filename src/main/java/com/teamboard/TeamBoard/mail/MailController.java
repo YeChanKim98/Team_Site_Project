@@ -26,10 +26,9 @@ public class MailController {
     // 발송
     @PostMapping("/mail")
     public String send(@RequestParam String address, @RequestParam String title, @RequestParam String content){
-        System.out.println("컨트롤러 진입"+address+title+content);
         emailService.sendSimpleMessage(address, title, content);
         System.out.println("발송완료");
-        return "home_old";
+        return "home";
     }
     
     // 인증메일 전송
@@ -45,11 +44,10 @@ public class MailController {
         mail.setAddress(address);
         mail.setKey(key);
         int res = chk_MailService.regist(mail);
-        System.out.println("인증 메일 등록 결과 : "+res);
 
         String content = "<a href='127.0.0.1:8080/check/mail/"+address+"/"+key+"'>인증을 위해 해당 링크를 눌러주세요</a>";
         emailService.sendSimpleMessage(address,"가입인증메일입니다",content);
-        System.out.println("인증 메일 발송완료 : "+content);
+        System.out.println("인증 메일 발송완료 ");
         String referer = request.getHeader("Referer");
         return "redirect:"+ referer;
     }
@@ -57,16 +55,16 @@ public class MailController {
     // 인증메일 확인 과정
     @GetMapping("/check/mail/{address}/{key}")
     public String check(@PathVariable String address, @PathVariable int key){
-        System.out.println("인증과정 컨트롤러 진입"+address+"\t"+key);
+        System.out.println("메일 컨트롤러 진입"+address+"\t"+key);
 
         int res = chk_MailService.checkMail(address, key);
         if(res==1){
             System.out.println("메일 인증 완료");
-            return "home_old";
+            return "home";
         }
         else{
             System.out.println("메일 인증 실패");
-            return "home_old";
+            return "home";
         }
     }
 }

@@ -10,13 +10,13 @@
 			<header th:replace="fragments/nav.html :: fragment-header"/>
 			<div th:replace="fragments/nav.html::fragment-nav"/>
 			<center>
-				<h1 style="color:red;">접 근 제 한</h1><br>
+				<h1 style="margin-top:30px;">관리페이지 비밀번호를 입력해주세요</h1><br>
 				<form action="/Site/Account/Admin/Main" method="post">
-					<input type="password" name="password" placeholder="Password"><br><br>
+					<input type="password" name="password" placeholder="Password">
 					<button type="submit">확인</button><br>
 				</form>
 			</center>
-
+			<hr style="background-color:#6c757d;">
 		</div>
 		<footer th:replace="fragments/nav.html :: fragment-footer"/>
 	</body>

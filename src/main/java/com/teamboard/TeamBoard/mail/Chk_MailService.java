@@ -27,7 +27,6 @@ public class Chk_MailService {
     }
 
     public int checkAuth(String address){
-        System.out.println("체크 어서티케이션 서비스 진입");
         int auth = chk_mailRepository.getAuth(address);
         System.out.println("서비스에서 받은 Auth값 : "+auth);
         return auth;

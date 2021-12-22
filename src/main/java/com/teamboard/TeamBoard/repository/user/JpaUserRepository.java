@@ -41,7 +41,7 @@ public class JpaUserRepository implements UserRepository {
         //UPDATE [테이블] SET [열] = '변경할값' WHERE [조건]
         return em.createQuery("update User u set u.id=:id, u.pw=:pw, u.name=:name,u.email =:email, u.nick=:nick, u.phone=:phone where u.id=:id") // 반환할 객체가 필요 없으므로 User.class는 필요 없음
                 .setParameter("id",user.getId())
-                .setParameter("pw","Update Pass")
+                .setParameter("pw",user.getPw())
                 .setParameter("name",user.getName())
                 .setParameter("email",user.getEmail())
                 .setParameter("nick",user.getNick())
@@ -96,7 +96,6 @@ public class JpaUserRepository implements UserRepository {
     // PW찾기
     @Override
     public String findPw(String id, String address){
-        System.out.println("[레포지토리][진입] 아이디, 이메일을 통한 PW 조회 : "+id+" / "+address);
         return em.createQuery("select u.pw from User u where u.id=:id and u.email = :address")
                 .setParameter("id",id)
                 .setParameter("address",address)

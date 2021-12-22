@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="fragments/nav.html :: top-head"/>
+	<head>
+		<title>User Update(Admin)</title>
+		<style>
+			.form-group input{
+				width:30%;
+				margin-bottom:20px;
+			}
+			.form-group label {
+				width:10%;
+				float:left;
+			}
+		</style>
+	</head>
+	<body>
+	<div class="container">
+		<header th:replace="fragments/nav.html :: fragment-header"/>
+		<div th:replace="fragments/nav.html::fragment-nav"/>
+		<form th:action="'/admin/user/'+${userInfo.id}+'/update'" method="post" style="margin:30px 0px 30px 0px;">
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input type="text" id="name" name="name" class="form-control" th:value="${userInfo.name}">
+				<label for="nick">닉네임</label>
+				<input type="text" id="nick" name="nick" class="form-control" th:value="${userInfo.nick}">
+				<label for="id">ID</label>
+				<input type="text" id="id" name="id" class="form-control" th:value="${userInfo.id}">
+				<label for="id">PW</label>
+				<input type="text" id="pw" name="pw" class="form-control" th:value="${userInfo.pw}">
+				<label for="id">Email</label>
+				<input type="text" id="email" name="email" class="form-control" th:value="${userInfo.email}">
+			</div>
+			<button type="submit" class="btn btn-primary">계정 수정</button>
+			<button type="submit" class="btn btn-primary">계정 삭제</button>
+		</form>
+	<hr style="background-color:#6c757d;">
+	</div>
+	<footer th:replace="fragments/nav.html :: fragment-footer"/>
+	</body>
+</html>
+

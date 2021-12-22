@@ -30,9 +30,7 @@ public class AdminController {
         if(ConnectUser.equals("YC")||ConnectUser.equals("ES")||ConnectUser.equals("NH")){
             return "/admin/chkAdmin";
         }
-
-        System.out.println("[어드민 접근]어림없지");
-        return "/";
+        return "redirect:/";
     }
 
     // 어드민 접근 체크 및 승인
@@ -58,20 +56,16 @@ public class AdminController {
             notice.setNotice_writer("Admin");
             notice.setNotice_title("[공지] " + title);
             notice.setNotice_content(content);
-            System.out.print("공지작성중 : ");
             int res = boardService.writeNotice(notice);
             if(res==1){
-                System.out.println("완료!!");
+                System.out.println("공지 작성 완료!!");
                 return "/admin/AdminMain"; // 리턴받고 새로고침하면 이전 이전값을 기억하고 다시 입력됨
             }
             else{
-                System.out.println("실패!!");
-                return "/Site/Account/Admin/YC";
+                System.out.println("공지 작성 실패!!");
+                return "redirect:/Site/Account/Admin/YC";
             }
-        }else{
-            System.out.println("[어드민 공지작성]어림없지");
-            return "/";
-        }
+        }else return "redirect:/";
     }
 
 }

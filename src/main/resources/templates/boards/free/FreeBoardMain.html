@@ -94,10 +94,10 @@
 							<th class="board_date" scope="col">작성일</th>
 						</tr>
 						</thead>
-						<tbody class="table_body">
+						<tbody>
 						<!-- 공지 -->
 						<tr th:if="${page_now==1}" id="notice_area" th:each="notice : ${noticeList}">
-							<th class="board_num" scope="row" th:text="${notice.notice_num}"></th>
+							<th class="board_num" scope="row" th:text="'[공지] '+${notice.notice_num}"></th>
 							<td class="board_title"><a id="notice_link" th:text="${notice.notice_title}" th:href="'/notice/view/'+${notice.notice_num}"></a></td>
 							<td class="board_writer" th:text="${notice.notice_writer}"></td>
 							<td class="board_vcnt" th:text="${notice.notice_view_count}"></td>

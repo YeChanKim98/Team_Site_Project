@@ -119,13 +119,12 @@ public class UserController {
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         session.removeAttribute("loginID");
-        return "redirect:/";
+        return "redirect:"+ request.getHeader("Referer");
     }
 
     // 마이 페이지 : 기본정보
     @RequestMapping("user/{id}/MyPage/info")
     public String myPage_info(@PathVariable String id, Model model, HttpServletRequest request){
-        System.out.println("마이페이지1");
        if(!request.getSession().getAttribute("loginID").equals(id) || request.getSession().getAttribute("loginID") == null){ // 비로그인 혹은 세션과 접속요청 ID가 다를 경우
            System.out.println("잘못된 접근시도..!(비로그인 혹은 세션불일치)");
            return "/";
@@ -135,7 +134,6 @@ public class UserController {
         model.addAttribute("menu","info");
         model.addAttribute("cntPost",boardService.search_post_cnt("writer", id));
         model.addAttribute("cntComment",commentService.getCntComment("writer",id));
-        System.out.println("마이페이지2");
         return "users/MyPage";
     }
 
@@ -236,12 +234,11 @@ public class UserController {
     }
     
     // Select All User : 검색 후 바로 출력
-    @PostMapping("/users/SelAll")
-    @RequestMapping("/users/SelAll")
+    @RequestMapping("admin/user/userList")
     public String findAllUser(Model userList){
         List<User> users = userService.findAllUser();
         userList.addAttribute("users",users);
-        return "users/tmp/SelAll";
+        return "admin/user/userList";
     }
 
     // 계정 찾기
@@ -291,24 +288,21 @@ public class UserController {
     // 어드민용
     // Update User Data : 로그인이 있는 유저를 기준으로 Update실시
     // 중복데이터 업데이트를 활성화하여 join으로 대체할 수 있는지 확인
-    @GetMapping({"/admin/users/Update","/admin/users/Update/{updateId}"})
-    public String adminUpdateForm(@PathVariable(required = false)String updateId, Model model, HttpServletRequest request){
-        if(updateId.isEmpty()){
-            HttpSession session = request.getSession();
-            User user = userService.findOneUser((String) session.getAttribute("loginID")).get();
-        }
-        User user = userService.findOneUser(updateId).get();
+    @GetMapping("/admin/user/{id}/update")
+    public String adminUpdateForm(@PathVariable String id, Model model, HttpServletRequest request){
+        User user = userService.findOneUser(id).get();
+        System.out.println("검색 유저 : "+user.getId());
         model.addAttribute("userInfo",user);
-        return "users/tmp/form/Update";
+        return "admin/user/Update";
     }
 
     // 어드민용
-    @PostMapping("/admin/users/Update")//{updateId}")
+    @PostMapping("/admin/user/{id}/update")//{updateId}")
     public String Adminupdate(User user){
         int res  = userService.update(user); // 1성공 0실패
         if(res==1) System.out.println("계정정보 업데이트 성공!");
         else System.out.println("계정정보 업데이트 실패!");
-        return "redirect:/users/SelAll"; // 새로고침. 이때 변경 정보가 반영된 것이 확인 되야함
+        return "redirect:/admin/user/userList";
     }
 
 }

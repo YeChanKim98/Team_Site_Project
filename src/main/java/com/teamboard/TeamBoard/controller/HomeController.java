@@ -20,19 +20,11 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model){
-        List<free_Board> freeBoardList = boardService.findRange(0,8);
-        List<notice_Board> noticeBoardList = boardService.listNoticeView().subList(0,8);
-        model.addAttribute("freeBoardList",freeBoardList);
-        model.addAttribute("noticeBoardList",noticeBoardList);
+    public String home(Model model) {
+        List<free_Board> freeBoardList = boardService.findRange(0, 8);
+        List<notice_Board> noticeBoardList = boardService.listNoticeView().subList(0, 8);
+        model.addAttribute("freeBoardList", freeBoardList);
+        model.addAttribute("noticeBoardList", noticeBoardList);
         return "home";
     }
-
-    @GetMapping("/test")
-    public String testMapping(){
-        System.out.println("Test");
-        return "fragments/MyPage/MyPageMain";
-    }
-
-
 }

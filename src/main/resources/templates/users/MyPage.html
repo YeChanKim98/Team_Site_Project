@@ -4,9 +4,9 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>마이 페이지</title>
-		<th:block th:if="${menu}=='info'" th:insert="fragments/MyPageContent.html :: info_style"></th:block>
-		<th:block th:if="${menu}=='chginfo'" th:insert="fragments/MyPageContent.html :: chginfo_style"></th:block>
-		<th:block th:if="${menu}=='chginfo'" th:insert="fragments/MyPageContent.html :: chginfo_script"></th:block>
+		<th:block th:if="${menu}=='info'" th:insert="fragments/MyPage/MyPageContent.html :: info_style"></th:block>
+		<th:block th:if="${menu}=='chginfo'" th:insert="fragments/MyPage/MyPageContent.html :: chginfo_style"></th:block>
+		<th:block th:if="${menu}=='chginfo'" th:insert="fragments/MyPage/MyPageContent.html :: chginfo_script"></th:block>
 	</head>
 	<body>
 		<div class="container">
@@ -16,9 +16,9 @@
 				<div class="container-fluid">
 					<div class="row">
 						<!-- 사이드바 -->
-						<nav th:replace="fragments/MyPageNav.html :: fragment-mypage-nav"/>
+						<nav th:replace="fragments/MyPage/MyPageNav.html:: fragment-mypage-nav"/>
 						<!-- 내용 -->
-						<th:block th:insert="fragments/MyPageContent.html :: ${menu}"></th:block>
+						<th:block th:insert="fragments/MyPage/MyPageContent.html :: ${menu}"></th:block>
 					</div>
 				</div>
 			</div>

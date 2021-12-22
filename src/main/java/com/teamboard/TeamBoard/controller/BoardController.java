@@ -134,13 +134,9 @@ public class BoardController {
     // 조회
     @GetMapping("{kinds}/view/{num}")
     public String viewBoard(@PathVariable String kinds, @PathVariable int num, Model model){
-        System.out.println("[viewBoard]["+kinds+"] 진입 : "+num);
-
-        // 컨텐츠 정보
         if(kinds.equals("freeBoard")){
             System.out.println("[viewBoard][freeBoard] 서비스 호출");
             free_Board post = boardService.viewBoard_free(num);
-            System.out.println("[viewBoard][freeBoard] 조건에 맞는 대상 검색 완료");
             model.addAttribute("num",post.getFboard_num());
             model.addAttribute("writer",post.getFboard_writer());
             model.addAttribute("title",post.getFboard_title());
@@ -149,15 +145,10 @@ public class BoardController {
             model.addAttribute("comment_cnt",post.getFboard_comment_count());
             model.addAttribute("reg_date",post.getFboard_reg_date());
             model.addAttribute("from_kinds",kinds);
-            System.out.println("[viewBoard][freeBoard] 해당 글에 대한 댓글 조회");
             List<Free_comment> comment = commentService.comment_view(num);
             model.addAttribute("commentList",comment);
-            System.out.println("[viewBoard][freeBoard] 댓글 조회 완료");
-            System.out.println("[viewBoard][freeBoard] 뷰에 전달할 모델 생성 완료");
         }else if(kinds.equals("notice")){
-            System.out.println("[viewBoard][notice] 서비스 호출");
             notice_Board post = boardService.viewBoard_notice(num);
-            System.out.println("[viewBoard][notice] 조건에 맞는 대상 찾기 완료");
             model.addAttribute("num",post.getNotice_num());
             model.addAttribute("writer",post.getNotice_writer());
             model.addAttribute("title",post.getNotice_title());
@@ -166,7 +157,6 @@ public class BoardController {
             model.addAttribute("comment_cnt",post.getNotice_comment_count());
             model.addAttribute("reg_date",post.getNotice_reg_date());
             model.addAttribute("from_kinds",kinds);
-            System.out.println("[viewBoard][notice] 뷰에 전달할 모델 생성 완료");
         }else{
             System.out.println("[viewBoard][Get]잘못된 페이지 요청");
             return "/freeBoard/view/main/1";
