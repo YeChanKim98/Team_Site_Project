@@ -21,9 +21,6 @@ public class free_Board {
     private String fboard_content=null; // 입력, not null
     private int fboard_view_count; // 자동, default 0
     private int fboard_comment_count; // 자동, default 0
-    // @Column(updatable = false, nullable = false) 값과 상관없이 일단 넣어줌, 낫널
-//    @CreatedDate
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private String fboard_reg_date;//=null; // 자동
 
 

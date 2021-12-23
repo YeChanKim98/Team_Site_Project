@@ -49,7 +49,7 @@ public class JpaUserRepository implements UserRepository {
                 .executeUpdate();
     }
 
-    // 유저용 업데이트 : 통합..?
+    // 유저용 업데이트
     @Override
     public int updateNick(String id, String nick){
         return em.createQuery("update User u set u.nick=:nick where u.id=:id")

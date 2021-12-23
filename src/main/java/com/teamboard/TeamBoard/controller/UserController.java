@@ -86,7 +86,7 @@ public class UserController {
             if(pw.equals(findpw)){
                 HttpSession session = request.getSession();
                 session.setAttribute("loginID", id);
-                return "redirect:/";
+                return "redirect:"+ request.getHeader("Referer");
             }else{
                 out.println("<script>alert('비밀번호를 다시 확인해 주세요');location.href='/';</script>");
                 out.flush();
@@ -106,6 +106,8 @@ public class UserController {
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         session.removeAttribute("loginID");
+        if(request.getHeader("Referer").contains("MyPage"))return "redirect:/";
+        System.out.println(request.getPathInfo());
         return "redirect:"+ request.getHeader("Referer");
     }
 

@@ -70,7 +70,7 @@ public class MailController {
         int res = chk_MailService.checkMail(address, key);
         if(res==1){
             System.out.println("메일 인증 완료");
-            out.println("<script>alert('메일인증에 성공했습니다.');history.go(-1);</script>");
+            out.println("<script>alert('메일인증에 성공했습니다.');location.href='http://127.0.0.1:8080';</script>");
             out.flush();
             out.close();
             return "redirect:/";
